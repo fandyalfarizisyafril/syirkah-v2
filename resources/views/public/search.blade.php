@@ -1,0 +1,6 @@
+@extends('layouts.public')
+@section('title', 'Pencarian | Artomoro')
+@section('content')
+<section class="container page-intro"><p class="eyebrow">PENCARIAN</p><h1>Temukan kebutuhan Anda.</h1><form method="get" class="search-form"><x-field name="q" label="Cari produk, kategori, brand, atau industri" :value="$term" maxlength="150"/><button type="submit" class="button"><x-icon name="search"/> Cari</button></form></section>
+<section class="container catalog-section">@foreach($results as $label => $entries)@if($entries->isNotEmpty())<h2>{{ $label }}</h2><div class="search-links">@foreach($entries as $entry)<a href="{{ route(match($label) {'Kategori' => 'products.category', 'Brand' => 'brands.show', default => 'industries.show'}, $entry->slug) }}">{{ $entry->name }} <x-icon name="arrow-up-right"/></a>@endforeach</div>@endif @endforeach<h2>Produk</h2><div class="product-grid">@forelse($products as $product)@include('partials.product-card')@empty<div class="empty-state"><p>Tidak ada produk yang sesuai. Coba kata kunci lain atau hubungi tim kami.</p><a class="text-link" href="{{ route('contact') }}">Hubungi Kami <x-icon name="arrow-up-right"/></a></div>@endforelse</div>{{ $products->links() }}</section>
+@endsection

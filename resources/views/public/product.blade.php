@@ -1,0 +1,16 @@
+@extends('layouts.public')
+@section('title', ($product->meta_title ?: $product->name).' | Artomoro')
+@section('description', $product->meta_description ?: $product->short_description)
+@section('og_image', $product->image_url)
+@section('content')
+<section class="container section">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="{{ route('products.index') }}">Produk</a><span>/</span><a href="{{ route('products.category', $product->category->slug) }}">{{ $product->category->name }}</a><span>/</span><span>{{ $product->name }}</span></nav>
+    <div class="product-detail"><div><img class="product-main-image" id="product-main-image" src="{{ $product->image_url }}" alt="{{ $product->image_alt ?: ($product->image ? $product->name : 'Gambar produk belum tersedia') }}" width="700" height="600"><div class="gallery">@foreach(array_filter(array_merge([$product->image], $product->gallery ?? [])) as $path)<button type="button" class="gallery-thumb" data-gallery-src="{{ asset('storage/'.$path) }}" aria-label="Lihat gambar {{ $loop->iteration }}"><img src="{{ asset('storage/'.$path) }}" alt="{{ $product->name }}, gambar {{ $loop->iteration }}" width="80" height="80"></button>@endforeach</div></div>
+    <div><a class="eyebrow" href="{{ route('brands.show', $product->brand->slug) }}">{{ $product->brand->name }}</a><h1>{{ $product->name }}</h1>@if($product->model_or_series)<p class="muted">Seri {{ $product->model_or_series }}</p>@endif<p class="lead">{{ $product->short_description }}</p><div class="actions"><a class="button" href="{{ route('contact', ['product' => $product->id]) }}">Request Inquiry <x-icon name="arrow-up-right"/></a>@if($product->datasheet_file)<a class="button secondary" href="{{ asset('storage/'.$product->datasheet_file) }}" target="_blank" rel="noopener"><x-icon name="download"/> Datasheet PDF</a>@endif</div><p class="prose">{{ $product->description }}</p>@if(!$product->datasheet_file)<p class="muted">Hubungi tim kami untuk informasi datasheet.</p>@endif</div></div>
+    <div class="detail-sections">@if($product->benefits)<div><h2>Keunggulan</h2><ul>@foreach($product->benefits as $benefit)<li>{{ $benefit }}</li>@endforeach</ul></div>@endif @if($product->applications)<div><h2>Aplikasi</h2><ul>@foreach($product->applications as $application)<li>{{ $application }}</li>@endforeach</ul></div>@endif</div>
+    @if($product->specifications)<section class="section"><h2>Spesifikasi Teknis</h2><div class="table-wrap"><table class="spec-table"><tbody>@foreach($product->specifications as $spec)<tr><th scope="row">{{ $spec['label'] }}</th><td>{{ $spec['value'] }} {{ $spec['unit'] ?? '' }}</td></tr>@endforeach</tbody></table></div></section>@endif
+    @if($product->industries->isNotEmpty())<section class="section"><h2>Industri Terkait</h2><div class="actions">@foreach($product->industries as $industry)<a class="text-link" href="{{ route('industries.show', $industry->slug) }}">{{ $industry->name }} <x-icon name="arrow-up-right"/></a>@endforeach</div></section>@endif
+    @if($related->isNotEmpty())<section class="section"><h2>Produk Terkait</h2><div class="product-grid">@foreach($related as $product)@include('partials.product-card')@endforeach</div></section>@endif
+</section>
+@include('partials.inquiry-cta')
+@endsection
