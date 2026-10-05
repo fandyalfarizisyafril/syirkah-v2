@@ -53,6 +53,8 @@ Spesifikasi menggunakan pasangan parameter/nilai. Relasi industri dan produk dap
 
 Logo perusahaan dapat diunggah melalui Pengaturan. Header publik menggunakan logo asli (`public/images/company-logo.png`) dengan nama perusahaan dan tagline sebagai teks di sampingnya. Susunan horizontal menjaga header ringkas (76 px pada desktop dan 70 px pada mobile, di luar utility bar dan border). Logo yang diunggah melalui CMS tetap diprioritaskan. Logo principal belum disertakan; nama brand ditampilkan sebagai teks.
 
+Footer menggunakan logo khusus yang diberikan pada 2026-10-06 (`public/images/company-logo-footer.png`). PNG asli dipertahankan; ruang transparan dibatasi lewat CSS. Latar footer terang menjaga logo biru dan tagline hitam terbaca, dengan navigasi, kontak, alamat, kategori produk, dan bar copyright gelap. Tampilan dan tautan footer diperiksa pada lebar 320, 390, 768, 901, 1024, dan 1440 px.
+
 ## Inquiry dan Email
 
 Inquiry disimpan sebelum notifikasi email diproses. Kegagalan email dicatat tanpa menggagalkan penyimpanan inquiry. Status: new, contacted, qualified, closed, spam. Catatan internal hanya tersedia bagi administrator/sales.

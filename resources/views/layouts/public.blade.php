@@ -44,13 +44,43 @@
 <main id="main">@yield('content')</main>
 <footer class="site-footer">
     <div class="container footer-grid">
-        <div><a href="{{ route('home') }}" class="footer-brand">ARTOMORO<span>.</span></a><p>{{ $settings['company_name'] }}</p><p>{{ $settings['tagline'] }}</p></div>
-        <div><h2>Jelajahi</h2><a href="{{ route('about') }}">Tentang Kami</a><a href="{{ route('products.index') }}">Produk & Solusi</a><a href="{{ route('brands.index') }}">Brands & Principals</a><a href="{{ route('industries.index') }}">Industri</a></div>
-        <div><h2>Hubungi Kami</h2><a href="tel:{{ preg_replace('/[^+0-9]/', '', $settings['phone']) }}">{{ $settings['phone'] }}</a><a href="mailto:{{ $settings['email'] }}">{{ $settings['email'] }}</a>@if($settings['sales_email'])<a href="mailto:{{ $settings['sales_email'] }}">{{ $settings['sales_email'] }}</a>@endif</div>
-        <div><h2>Kantor</h2><p>{{ $settings['address'] }}</p>@if($settings['map_url'])<a href="{{ $settings['map_url'] }}" target="_blank" rel="noopener noreferrer">Lihat peta <x-icon name="arrow-up-right"/></a>@endif</div>
+        <div class="footer-identity">
+            <a href="{{ route('home') }}" class="footer-logo" aria-label="{{ $settings['company_name'] }}, beranda">
+                <img src="{{ asset('images/company-logo-footer.png') }}" alt="SMART - Equipment & Parts Solutions" width="500" height="500" loading="lazy">
+            </a>
+            <p class="footer-company-name">{{ $settings['company_name'] }}</p>
+            <p class="footer-company-tagline">{{ $settings['tagline'] }}</p>
+            @if($settings['whatsapp_number'])
+                <a class="footer-whatsapp" href="https://wa.me/{{ $settings['whatsapp_number'] }}" target="_blank" rel="noopener noreferrer"><x-icon name="message-circle"/>Hubungi via WhatsApp<x-icon name="arrow-up-right"/></a>
+            @endif
+        </div>
+        <div class="footer-navigation">
+            <h2>Jelajahi</h2>
+            <nav aria-label="Navigasi footer">
+                <a href="{{ route('about') }}">Tentang Kami</a>
+                <a href="{{ route('products.index') }}">Produk & Solusi</a>
+                <a href="{{ route('brands.index') }}">Brands & Principals</a>
+                <a href="{{ route('industries.index') }}">Industri</a>
+                <a href="{{ route('contact') }}">Kontak</a>
+            </nav>
+        </div>
+        <div class="footer-contact">
+            <h2>Hubungi Kami</h2>
+            <a class="footer-contact-link" href="tel:{{ preg_replace('/[^+0-9]/', '', $settings['phone']) }}"><x-icon name="phone"/><span><span class="footer-label">Telepon</span>{{ $settings['phone'] }}</span></a>
+            <a class="footer-contact-link" href="mailto:{{ $settings['email'] }}"><x-icon name="mail"/><span><span class="footer-label">Email</span>{{ $settings['email'] }}</span></a>
+            @if($settings['sales_email'])<a class="footer-contact-link" href="mailto:{{ $settings['sales_email'] }}"><x-icon name="mail"/><span><span class="footer-label">Sales</span>{{ $settings['sales_email'] }}</span></a>@endif
+        </div>
+        <div class="footer-office">
+            <h2>Kantor</h2>
+            <div class="footer-address"><x-icon name="map-pin"/><address>{{ $settings['address'] }}</address></div>
+            @if($settings['map_url'])<a class="text-link" href="{{ $settings['map_url'] }}" target="_blank" rel="noopener noreferrer">Lihat peta <x-icon name="arrow-up-right"/></a>@endif
+            <a class="text-link" href="{{ route('contact') }}">Diskusikan Kebutuhan <x-icon name="arrow-up-right"/></a>
+        </div>
     </div>
-    <div class="container footer-categories"><h2>Kategori Produk</h2><nav aria-label="Kategori produk">@foreach($footerCategories as $category)<a href="{{ route('products.category', $category->slug) }}">{{ $category->name }}</a>@endforeach</nav></div>
-    <div class="container footer-bottom"><span>&copy; {{ date('Y') }} {{ $settings['company_name'] }}</span><div class="actions">@if($settings['legal_information'])<a href="{{ route('about') }}#legal">Informasi Legal</a>@endif<a href="{{ route('privacy') }}">Kebijakan Privasi</a></div></div>
+    @if($footerCategories->isNotEmpty())
+        <div class="container footer-categories"><h2>Produk & Solusi</h2><nav aria-label="Kategori produk">@foreach($footerCategories as $category)<a href="{{ route('products.category', $category->slug) }}">{{ $category->name }}<x-icon name="arrow-up-right"/></a>@endforeach</nav></div>
+    @endif
+    <div class="footer-base"><div class="container footer-bottom"><span>&copy; 2026 Fandy Alfarizi Syafril.</span><div class="actions">@if($settings['legal_information'])<a href="{{ route('about') }}#legal">Informasi Legal</a>@endif<a href="{{ route('privacy') }}">Kebijakan Privasi</a></div></div></div>
 </footer>
 @stack('scripts')
 </body>
