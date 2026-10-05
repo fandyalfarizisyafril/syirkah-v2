@@ -36,7 +36,7 @@ Task ini perlu dikonfirmasi seawal mungkin karena memengaruhi konten, konfiguras
 - [ ] **P0** Konfirmasi email penerima inquiry utama.
 - [ ] **P0** Konfirmasi nomor WhatsApp yang digunakan untuk CTA.
 - [ ] **P0** Konfirmasi informasi legal yang boleh ditampilkan publik.
-- [ ] **P0** Kumpulkan logo resmi perusahaan.
+- [x] **P0** Kumpulkan logo resmi perusahaan. Logo diterima dan dipasang pada header publik pada 2026-10-05.
 - [ ] **P0** Kumpulkan logo brand/principal yang boleh dipublikasikan.
 - [ ] **P0** Kumpulkan foto produk atau gambar kategori yang berizin.
 - [ ] **P0** Kumpulkan daftar produk/model awal untuk tujuh kategori utama.

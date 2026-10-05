@@ -51,7 +51,7 @@ Produk publik membutuhkan status published pada produk, kategori, dan brand seka
 
 Spesifikasi menggunakan pasangan parameter/nilai. Relasi industri dan produk dapat diatur dari kedua form. Galeri, gambar utama, dan datasheet PDF dapat diperbarui lewat CMS. Gambar dibatasi JPG/PNG/WebP maksimal 4 MB; PDF maksimal 10 MB. Sesuaikan batas PHP `upload_max_filesize` (minimal 10M) dan `post_max_size` (misalnya 64M) agar mendukung batas aplikasi. File lama tetap disimpan untuk mencegah penghapusan file yang masih dirujuk. Pembersihan file yatim belum dijadwalkan.
 
-Logo perusahaan dapat diunggah melalui Pengaturan. Sebelum tersedia, header menggunakan wordmark sementara. Logo principal belum disertakan; nama brand ditampilkan sebagai teks.
+Logo perusahaan dapat diunggah melalui Pengaturan. Header publik menggunakan logo asli (`public/images/company-logo.png`) dengan nama perusahaan dan tagline sebagai teks di sampingnya. Susunan horizontal menjaga header ringkas (76 px pada desktop dan 70 px pada mobile, di luar utility bar dan border). Logo yang diunggah melalui CMS tetap diprioritaskan. Logo principal belum disertakan; nama brand ditampilkan sebagai teks.
 
 ## Inquiry dan Email
 

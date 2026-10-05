@@ -18,7 +18,19 @@
 <div class="utility"><div class="container utility-inner"><span><x-icon name="map-pin"/> Pekanbaru, Indonesia</span><div><a href="mailto:{{ $settings['email'] }}">{{ $settings['email'] }}</a><a href="tel:{{ preg_replace('/[^+0-9]/', '', $settings['phone']) }}">{{ $settings['phone'] }}</a></div></div></div>
 <header class="site-header">
     <div class="container header-inner">
-        <a href="{{ route('home') }}" class="wordmark" aria-label="Artomoro, beranda">@if($settings['logo'])<img class="company-logo" src="{{ asset('storage/'.$settings['logo']) }}" alt="{{ $settings['company_name'] }}" width="200" height="55">@else<span class="wordmark-symbol">A<span>.</span></span><span>ARTOMORO<small>SYIRKAH MANDIRI</small></span>@endif</a>
+        <a href="{{ route('home') }}" class="wordmark" aria-label="{{ $settings['company_name'] }}, beranda">
+            @if($settings['logo'])
+                <img class="company-logo" src="{{ asset('storage/'.$settings['logo']) }}" alt="{{ $settings['company_name'] }}" width="200" height="55">
+            @else
+                <span class="company-signature">
+                    <img class="signature-image" src="{{ asset('images/company-logo.png') }}" alt="SMART" width="530" height="151">
+                    <span class="signature-copy">
+                        <span class="signature-name">{{ $settings['company_name'] }}</span>
+                        <span class="signature-tagline">Equipment & Parts Solutions</span>
+                    </span>
+                </span>
+            @endif
+        </a>
         <button class="icon-button menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="primary-nav" title="Navigasi"><x-icon name="menu"/></button>
         <nav id="primary-nav" class="primary-nav" aria-label="Navigasi utama">
             @foreach(['home' => 'Beranda', 'about' => 'Tentang Kami', 'products.index' => 'Produk', 'brands.index' => 'Brand', 'industries.index' => 'Industri'] as $route => $label)
