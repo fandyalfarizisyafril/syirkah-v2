@@ -97,6 +97,12 @@ a.category-item:hover { background:var(--surface); }
 .category-item h3 { max-width:290px; font-size:20px; }
 .category-item p { font-size:13px; color:var(--muted); margin-bottom:30px; }
 .category-item>.icon { position:absolute; bottom:22px; right:25px; color:var(--primary); }
+.category-intro { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); align-items:center; gap:48px; }
+.category-intro-copy { min-width:0; }
+.category-intro .lead { margin-bottom:0; }
+.category-detail-image { width:100%; height:auto; aspect-ratio:8 / 5; object-fit:contain; background:var(--surface); padding:20px; }
+@media(max-width:900px) { .category-intro { gap:24px; } .category-intro h1 { font-size:36px; } }
+@media(max-width:640px) { .category-intro { grid-template-columns:1fr; } .category-intro h1 { font-size:34px; } }
 .company-band { background:var(--surface); border-block:1px solid var(--border); }
 .company-grid { display:grid; grid-template-columns:1fr 1.2fr; gap:80px; }
 .company-grid .lead { font-size:18px; }

@@ -49,7 +49,27 @@ Tujuh kategori dan tujuh brand dari PRD dimasukkan sebagai data awal. Tujuh cont
 
 Produk publik membutuhkan status published pada produk, kategori, dan brand sekaligus. Aturan ini berlaku pada daftar, detail, pencarian, sitemap, dan pilihan produk di form inquiry. Menghapus kategori atau brand yang masih memiliki produk akan ditolak.
 
+Kartu kategori di beranda dan daftar kategori `/produk` hanya menampilkan nomor, nama, deskripsi, dan link, meskipun kategori memiliki gambar. Gambar kategori dari CMS hanya ditampilkan pada halaman detail `/produk/{category}`, di sebelah kanan judul/deskripsi pada desktop dan tablet, lalu bertumpuk pada mobile (640 px ke bawah). Filter dan daftar produk berada di bawah pengantar tersebut. Kategori tanpa gambar tetap menampilkan judul/deskripsi dan daftar produknya.
+
+`categories.image` adalah media representasi kategori. `products.image` dan `products.gallery` merupakan media setiap produk; produk terkait melalui `products.category_id`. Media kategori tidak menjadi item produk dan tidak menggantikan gambar produk. Jumlah hasil hanya menghitung produk yang lolos filter dan berstatus published (termasuk kategori dan brand-nya). Karena itu, kategori yang memiliki gambar tetapi seluruh produknya masih draft tetap menampilkan `0 produk`. Perubahan penempatan ini tidak memublikasikan atau mengubah data produk.
+
 Spesifikasi menggunakan pasangan parameter/nilai. Relasi industri dan produk dapat diatur dari kedua form. Galeri, gambar utama, dan datasheet PDF dapat diperbarui lewat CMS. Gambar dibatasi JPG/PNG/WebP maksimal 4 MB; PDF maksimal 10 MB. Sesuaikan batas PHP `upload_max_filesize` (minimal 10M) dan `post_max_size` (misalnya 64M) agar mendukung batas aplikasi. File lama tetap disimpan untuk mencegah penghapusan file yang masih dirujuk. Pembersihan file yatim belum dijadwalkan.
+
+### Ilustrasi Media Seluruh Kategori
+
+Seluruh tujuh kategori menggunakan template detail yang sama: pengantar di kiri, media kategori di kanan, lalu filter dan daftar produk di bawahnya. Pada layar 640 px ke bawah, pengantar dan gambar bertumpuk. Gambar Electric Motors & Generators tetap menggunakan unggahan asli.
+
+Enam ilustrasi kategori lainnya dibuat dengan tool image generation bawaan pada 2026-10-06, tanpa logo atau klaim model resmi. Aset sumber berada di `public/images/categories/`. Daftar aset dan prompt lengkap tersedia di `docs/category-image-prompts.md`. Ilustrasi ini bukan foto produk resmi dan perlu persetujuan perusahaan sebelum launch.
+
+Jalankan `php artisan db:seed --class=CategoryMediaSeeder` untuk mengisi media yang kosong pada enam kategori yang sudah ada. Seeder menyalin aset ke public storage `catalog/categories/`, tidak membuat kategori baru, tidak menimpa gambar/alt yang sudah diunggah, dan tidak mengubah status kategori maupun data produk. Seeder dijalankan secara eksplisit, bukan otomatis melalui DatabaseSeeder. Media dapat diganti dari Admin > Kategori > Media seperti unggahan biasa. Kartu daftar kategori tetap tanpa gambar.
+
+### Pratinjau Data Produk
+
+`php artisan db:seed --class=CategoryPreviewSeeder` menambahkan tiga produk published bertanda `(Contoh)` untuk masing-masing dari tujuh kategori (total 21) di lingkungan local/testing saja. Seeder ini tidak dipanggil oleh DatabaseSeeder dan tidak mengubah produk draft yang sudah ada. Slug berawalan `demo-` dipakai untuk mencegah duplikasi; menjalankannya kembali tidak menimpa perubahan CMS, termasuk tiga contoh motor yang sudah ada. Semua kategori dan brand terkait harus sudah published; seeder tidak memublikasikan kategori atau brand secara otomatis.
+
+Contoh motor memakai salinan foto produk motor yang sudah diunggah. Enam kategori lainnya memakai salinan ilustrasi media kategorinya ke `catalog/demo/`, sehingga penggantian media kategori tidak mengubah gambar contoh produk. Jalankan CategoryMediaSeeder sebelum CategoryPreviewSeeder untuk instalasi baru; tanpa media, contoh memakai placeholder. Gambar merupakan ilustrasi sementara, bukan foto model resmi atau klaim spesifikasi/brand yang telah diverifikasi. Detail produk, pencarian, filter, dan pagination menggunakan alur katalog biasa. Data contoh juga muncul di daftar publik lainnya karena berstatus published. Sebelum launch, hapus semua item `(Contoh)` melalui Admin > Produk atau ubah menjadi draft, lalu masukkan katalog resmi. Foto kategori dan produk asli tidak diubah.
+
+Contoh yang ditambahkan: external/screen/internal vibrator; chemical/water treatment/process dosing pump; peristaltic/slurry/sludge hose pump; process/braided/flanged hose; screw/tank mounted compressor dan air dryer; containment boom, absorbent pads, dan spill kit. Nama dan aplikasi hanya untuk peninjauan tampilan, bukan katalog resmi brand terkait.
 
 Logo perusahaan dapat diunggah melalui Pengaturan. Header publik menggunakan logo asli (`public/images/company-logo.png`) dengan nama perusahaan dan tagline sebagai teks di sampingnya. Susunan horizontal menjaga header ringkas (76 px pada desktop dan 70 px pada mobile, di luar utility bar dan border). Logo yang diunggah melalui CMS tetap diprioritaskan. Logo principal belum disertakan; nama brand ditampilkan sebagai teks.
 

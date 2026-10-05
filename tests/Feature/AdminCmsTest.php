@@ -120,6 +120,39 @@ class AdminCmsTest extends TestCase
         $this->post('/admin/catalog/brands', $data + ['website_url' => 'javascript:alert(1)'])->assertSessionHasErrors('website_url');
     }
 
+    public function test_category_image_upload_and_replacement_are_visible_only_on_category_detail(): void
+    {
+        Storage::fake('public');
+        $admin = $this->user();
+        $category = Category::factory()->create(['image' => null]);
+        $data = ['name' => $category->name, 'slug' => $category->slug, 'status' => 'published', 'sort_order' => 0, 'image_alt' => 'Motor listrik industri'];
+        $previousPath = null;
+
+        foreach (['first.png', 'replacement.png'] as $filename) {
+            $upload = UploadedFile::fake()->createWithContent($filename, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl6cS8AAAAASUVORK5CYII='));
+            $this->actingAs($admin)->put('/admin/catalog/categories/'.$category->id, $data + ['image' => $upload])
+                ->assertSessionHasNoErrors()->assertRedirect('/admin/catalog/categories');
+            $category->refresh();
+            Storage::disk('public')->assertExists($category->image);
+            $this->assertNotSame($previousPath, $category->image);
+            $this->app['auth']->forgetGuards();
+
+            foreach (['/', '/produk'] as $path) {
+                $this->get($path)->assertOk()->assertDontSee('src="'.$category->image_url.'"', false);
+            }
+            $response = $this->get('/produk/'.$category->slug)->assertOk()
+                ->assertSee('src="'.$category->image_url.'"', false)
+                ->assertSee('alt="Motor listrik industri"', false);
+            if ($previousPath) {
+                $response->assertDontSee('src="'.asset('storage/'.$previousPath).'"', false);
+            }
+            $previousPath = $category->image;
+        }
+
+        $this->actingAs($admin)->put('/admin/catalog/categories/'.$category->id, $data)->assertSessionHasNoErrors();
+        $this->assertSame($previousPath, $category->fresh()->image);
+    }
+
     public function test_industry_editor_can_attach_and_detach_products(): void
     {
         $product = Product::factory()->create();
