@@ -1,0 +1,381 @@
+[
+  {
+    "slug": "demo-induction-motor",
+    "category": "electric-motors-generators",
+    "brand": "wolong",
+    "preview": true,
+    "name": "Motor Induksi Berkaki dengan Poros Horizontal (Contoh)",
+    "short_description": "Motor listrik bersirip dengan dudukan kaki, poros horizontal, dan kotak terminal di atas rumah motor. Ilustrasi contoh.",
+    "description": "Motor listrik bersirip dengan dudukan kaki, poros horizontal, dan kotak terminal di atas rumah motor. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi motor induksi berkaki dengan poros horizontal, bukan foto model resmi",
+    "asset": "images/products/demo-induction-motor.png",
+    "applications": [
+      "Penggerak pompa dan kipas"
+    ]
+  },
+  {
+    "slug": "demo-permanent-magnet-motor",
+    "category": "electric-motors-generators",
+    "brand": "wolong",
+    "preview": true,
+    "name": "Motor Sinkron Magnet Permanen Berflensa (Contoh)",
+    "short_description": "Motor magnet permanen berdesain kompak dengan flensa pemasangan dan poros pendek untuk integrasi penggerak. Ilustrasi contoh.",
+    "description": "Motor magnet permanen berdesain kompak dengan flensa pemasangan dan poros pendek untuk integrasi penggerak. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi motor sinkron magnet permanen berflensa, bukan foto model resmi",
+    "asset": "images/products/demo-permanent-magnet-motor.png",
+    "applications": [
+      "Integrasi sistem penggerak"
+    ]
+  },
+  {
+    "slug": "demo-industrial-generator",
+    "category": "electric-motors-generators",
+    "brand": "wolong",
+    "preview": true,
+    "name": "Alternator Industri dengan Rumah Berventilasi (Contoh)",
+    "short_description": "Alternator dengan rumah berventilasi, kotak terminal besar, dan kaki pemasangan untuk rangka pembangkit. Ilustrasi contoh.",
+    "description": "Alternator dengan rumah berventilasi, kotak terminal besar, dan kaki pemasangan untuk rangka pembangkit. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi alternator industri dengan rumah berventilasi, bukan foto model resmi",
+    "asset": "images/products/demo-industrial-generator.png",
+    "applications": [
+      "Rangka pembangkit listrik"
+    ]
+  },
+  {
+    "slug": "demo-external-vibrator",
+    "category": "vibration-technology",
+    "brand": "oli",
+    "preview": true,
+    "name": "Motor Vibrator Eksternal Berkaki (Contoh)",
+    "short_description": "Motor vibrator dengan penutup pemberat di kedua ujung dan kaki baut untuk pemasangan pada hopper. Ilustrasi contoh.",
+    "description": "Motor vibrator dengan penutup pemberat di kedua ujung dan kaki baut untuk pemasangan pada hopper. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi motor vibrator eksternal berkaki, bukan foto model resmi",
+    "asset": "images/products/demo-external-vibrator.png",
+    "applications": [
+      "Hopper dan silo"
+    ]
+  },
+  {
+    "slug": "demo-screen-vibrator",
+    "category": "vibration-technology",
+    "brand": "oli",
+    "preview": true,
+    "name": "Unit Penggetar Ayakan dengan Pemberat Eksentrik (Contoh)",
+    "short_description": "Unit penggetar mekanis dengan rumah gearbox dan pemberat eksentrik di ujung poros untuk ayakan getar. Ilustrasi contoh.",
+    "description": "Unit penggetar mekanis dengan rumah gearbox dan pemberat eksentrik di ujung poros untuk ayakan getar. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi unit penggetar ayakan dengan pemberat eksentrik, bukan foto model resmi",
+    "asset": "images/products/demo-screen-vibrator.png",
+    "applications": [
+      "Ayakan getar"
+    ]
+  },
+  {
+    "slug": "demo-internal-vibrator",
+    "category": "vibration-technology",
+    "brand": "oli",
+    "preview": true,
+    "name": "Vibrator Beton Internal dengan Selang Fleksibel (Contoh)",
+    "short_description": "Vibrator beton dengan kepala jarum logam, selang fleksibel panjang, dan unit penggerak portabel. Ilustrasi contoh.",
+    "description": "Vibrator beton dengan kepala jarum logam, selang fleksibel panjang, dan unit penggerak portabel. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi vibrator beton internal dengan selang fleksibel, bukan foto model resmi",
+    "asset": "images/products/demo-internal-vibrator.png",
+    "applications": [
+      "Pemadatan beton"
+    ]
+  },
+  {
+    "slug": "demo-chemical-dosing-pump",
+    "category": "chemical-metering-pump",
+    "brand": "qdos",
+    "preview": true,
+    "name": "Pompa Dosing Diafragma dengan Pengatur Putar (Contoh)",
+    "short_description": "Pompa dosing diafragma kompak dengan pengatur putar serta sambungan masuk dan keluar pada kepala pompa. Ilustrasi contoh.",
+    "description": "Pompa dosing diafragma kompak dengan pengatur putar serta sambungan masuk dan keluar pada kepala pompa. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi pompa dosing diafragma dengan pengatur putar, bukan foto model resmi",
+    "asset": "images/products/demo-chemical-dosing-pump.png",
+    "applications": [
+      "Penakaran bahan kimia"
+    ]
+  },
+  {
+    "slug": "demo-water-treatment-dosing-pump",
+    "category": "chemical-metering-pump",
+    "brand": "qdos",
+    "preview": true,
+    "name": "Pompa Dosing Digital dengan Kepala Peristaltik (Contoh)",
+    "short_description": "Pompa dosing dengan panel digital dan kepala peristaltik transparan yang memperlihatkan jalur selang. Ilustrasi contoh.",
+    "description": "Pompa dosing dengan panel digital dan kepala peristaltik transparan yang memperlihatkan jalur selang. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi pompa dosing digital dengan kepala peristaltik, bukan foto model resmi",
+    "asset": "images/products/demo-water-treatment-dosing-pump.png",
+    "applications": [
+      "Dosing cairan"
+    ]
+  },
+  {
+    "slug": "demo-process-metering-pump",
+    "category": "chemical-metering-pump",
+    "brand": "qdos",
+    "preview": true,
+    "name": "Pompa Metering Diafragma Bermotor (Contoh)",
+    "short_description": "Pompa diafragma dengan motor vertikal, gearbox, dan kepala pompa logam untuk penakaran cairan proses. Ilustrasi contoh.",
+    "description": "Pompa diafragma dengan motor vertikal, gearbox, dan kepala pompa logam untuk penakaran cairan proses. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi pompa metering diafragma bermotor, bukan foto model resmi",
+    "asset": "images/products/demo-process-metering-pump.png",
+    "applications": [
+      "Penakaran cairan proses"
+    ]
+  },
+  {
+    "slug": "demo-peristaltic-hose-pump",
+    "category": "hose-pump",
+    "brand": "bredel",
+    "preview": true,
+    "name": "Pompa Selang Peristaltik dengan Tutup Transparan (Contoh)",
+    "short_description": "Pompa selang dengan tutup transparan yang memperlihatkan rotor dan lintasan selang di dalam rumah pompa. Ilustrasi contoh.",
+    "description": "Pompa selang dengan tutup transparan yang memperlihatkan rotor dan lintasan selang di dalam rumah pompa. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi pompa selang peristaltik dengan tutup transparan, bukan foto model resmi",
+    "asset": "images/products/demo-peristaltic-hose-pump.png",
+    "applications": [
+      "Transfer cairan"
+    ]
+  },
+  {
+    "slug": "demo-slurry-hose-pump",
+    "category": "hose-pump",
+    "brand": "bredel",
+    "preview": true,
+    "name": "Pompa Selang Slurry dengan Sambungan Flange (Contoh)",
+    "short_description": "Pompa selang berumah besar dengan dua sambungan flange dan motor pada rangka untuk transfer slurry. Ilustrasi contoh.",
+    "description": "Pompa selang berumah besar dengan dua sambungan flange dan motor pada rangka untuk transfer slurry. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi pompa selang slurry dengan sambungan flange, bukan foto model resmi",
+    "asset": "images/products/demo-slurry-hose-pump.png",
+    "applications": [
+      "Transfer slurry"
+    ]
+  },
+  {
+    "slug": "demo-sludge-transfer-pump",
+    "category": "hose-pump",
+    "brand": "bredel",
+    "preview": true,
+    "name": "Pompa Selang Lumpur pada Troli (Contoh)",
+    "short_description": "Pompa selang pada troli beroda dengan pegangan dorong untuk penempatan unit transfer lumpur. Ilustrasi contoh.",
+    "description": "Pompa selang pada troli beroda dengan pegangan dorong untuk penempatan unit transfer lumpur. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi pompa selang lumpur pada troli, bukan foto model resmi",
+    "asset": "images/products/demo-sludge-transfer-pump.png",
+    "applications": [
+      "Pemindahan lumpur"
+    ]
+  },
+  {
+    "slug": "demo-ptfe-process-hose",
+    "category": "industrial-hose",
+    "brand": "aflex",
+    "preview": true,
+    "name": "Selang PTFE Bergelombang dengan Ujung Ulir (Contoh)",
+    "short_description": "Selang PTFE berprofil bergelombang dengan ujung sambungan berulir, ditampilkan sebagai rakitan melengkung. Ilustrasi contoh.",
+    "description": "Selang PTFE berprofil bergelombang dengan ujung sambungan berulir, ditampilkan sebagai rakitan melengkung. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi selang ptfe bergelombang dengan ujung ulir, bukan foto model resmi",
+    "asset": "images/products/demo-ptfe-process-hose.png",
+    "applications": [
+      "Koneksi jalur proses"
+    ]
+  },
+  {
+    "slug": "demo-braided-ptfe-hose",
+    "category": "industrial-hose",
+    "brand": "aflex",
+    "preview": true,
+    "name": "Selang PTFE Anyaman Baja dengan Kopling Saniter (Contoh)",
+    "short_description": "Selang berlapis anyaman baja dengan kopling saniter di kedua ujung untuk koneksi jalur proses. Ilustrasi contoh.",
+    "description": "Selang berlapis anyaman baja dengan kopling saniter di kedua ujung untuk koneksi jalur proses. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi selang ptfe anyaman baja dengan kopling saniter, bukan foto model resmi",
+    "asset": "images/products/demo-braided-ptfe-hose.png",
+    "applications": [
+      "Koneksi saniter"
+    ]
+  },
+  {
+    "slug": "demo-flanged-hose-assembly",
+    "category": "industrial-hose",
+    "brand": "aflex",
+    "preview": true,
+    "name": "Selang Industri Berjaket Hitam dengan Flange (Contoh)",
+    "short_description": "Rakitan selang berjaket hitam dengan flange logam berlubang baut pada kedua ujungnya. Ilustrasi contoh.",
+    "description": "Rakitan selang berjaket hitam dengan flange logam berlubang baut pada kedua ujungnya. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi selang industri berjaket hitam dengan flange, bukan foto model resmi",
+    "asset": "images/products/demo-flanged-hose-assembly.png",
+    "applications": [
+      "Koneksi flange"
+    ]
+  },
+  {
+    "slug": "demo-rotary-screw-compressor",
+    "category": "air-compressor",
+    "brand": "tecbell",
+    "preview": true,
+    "name": "Kompresor Screw Kabinet Berdiri (Contoh)",
+    "short_description": "Unit kompresor screw dalam kabinet berdiri dengan kisi ventilasi dan panel kendali di sisi depan. Ilustrasi contoh.",
+    "description": "Unit kompresor screw dalam kabinet berdiri dengan kisi ventilasi dan panel kendali di sisi depan. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi kompresor screw kabinet berdiri, bukan foto model resmi",
+    "asset": "images/products/demo-rotary-screw-compressor.png",
+    "applications": [
+      "Suplai udara bertekanan"
+    ]
+  },
+  {
+    "slug": "demo-tank-mounted-compressor",
+    "category": "air-compressor",
+    "brand": "tecbell",
+    "preview": true,
+    "name": "Kompresor Piston dengan Tangki Horizontal (Contoh)",
+    "short_description": "Kompresor piston dengan kepala silinder, pelindung sabuk, dan tangki udara horizontal. Ilustrasi contoh.",
+    "description": "Kompresor piston dengan kepala silinder, pelindung sabuk, dan tangki udara horizontal. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi kompresor piston dengan tangki horizontal, bukan foto model resmi",
+    "asset": "images/products/demo-tank-mounted-compressor.png",
+    "applications": [
+      "Peralatan pneumatik"
+    ]
+  },
+  {
+    "slug": "demo-refrigerated-air-dryer",
+    "category": "air-compressor",
+    "brand": "tecbell",
+    "preview": true,
+    "name": "Pengering Udara Refrigerasi Kabinet Kompak (Contoh)",
+    "short_description": "Pengering udara bertekanan dengan kabinet kompak, ventilasi depan, dan sambungan pipa di bagian belakang. Ilustrasi contoh.",
+    "description": "Pengering udara bertekanan dengan kabinet kompak, ventilasi depan, dan sambungan pipa di bagian belakang. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi pengering udara refrigerasi kabinet kompak, bukan foto model resmi",
+    "asset": "images/products/demo-refrigerated-air-dryer.png",
+    "applications": [
+      "Pengeringan udara tekan"
+    ]
+  },
+  {
+    "slug": "demo-oil-containment-boom",
+    "category": "oil-spill-response-prevention",
+    "brand": "blu-c",
+    "preview": true,
+    "name": "Oil Containment Boom dengan Rok Pemberat (Contoh)",
+    "short_description": "Pembatas tumpahan dengan pelampung kuning dan rok hitam berpemberat untuk membatasi penyebaran minyak. Ilustrasi contoh.",
+    "description": "Pembatas tumpahan dengan pelampung kuning dan rok hitam berpemberat untuk membatasi penyebaran minyak. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi oil containment boom dengan rok pemberat, bukan foto model resmi",
+    "asset": "images/products/demo-oil-containment-boom.png",
+    "applications": [
+      "Pembatasan tumpahan minyak"
+    ]
+  },
+  {
+    "slug": "demo-oil-absorbent-pads",
+    "category": "oil-spill-response-prevention",
+    "brand": "blu-c",
+    "preview": true,
+    "name": "Lembaran Absorben Minyak Berperforasi (Contoh)",
+    "short_description": "Lembaran absorben putih dengan pola bertekstur dan garis perforasi untuk penanganan tumpahan minyak. Ilustrasi contoh.",
+    "description": "Lembaran absorben putih dengan pola bertekstur dan garis perforasi untuk penanganan tumpahan minyak. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi lembaran absorben minyak berperforasi, bukan foto model resmi",
+    "asset": "images/products/demo-oil-absorbent-pads.png",
+    "applications": [
+      "Penyerapan tumpahan minyak"
+    ]
+  },
+  {
+    "slug": "demo-oil-spill-response-kit",
+    "category": "oil-spill-response-prevention",
+    "brand": "blu-c",
+    "preview": true,
+    "name": "Spill Kit Portabel dalam Tas (Contoh)",
+    "short_description": "Paket penanganan tumpahan dalam tas portabel, dengan lembaran absorben, absorbent socks, sarung tangan, dan kantong limbah. Ilustrasi contoh.",
+    "description": "Paket penanganan tumpahan dalam tas portabel, dengan lembaran absorben, absorbent socks, sarung tangan, dan kantong limbah. Ilustrasi contoh. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi spill kit portabel dalam tas, bukan foto model resmi",
+    "asset": "images/products/demo-oil-spill-response-kit.png",
+    "applications": [
+      "Kesiapan penanganan tumpahan"
+    ]
+  },
+  {
+    "slug": "wolong-electric-motor",
+    "category": "electric-motors-generators",
+    "brand": "wolong",
+    "preview": false,
+    "name": "Motor Listrik dengan Tampilan Komponen Terurai (Ilustrasi)",
+    "short_description": "Tampilan terurai motor listrik yang memperlihatkan poros, rotor, stator, rumah bersirip, dan penutup belakang. Ilustrasi, bukan model resmi.",
+    "description": "Tampilan terurai motor listrik yang memperlihatkan poros, rotor, stator, rumah bersirip, dan penutup belakang. Ilustrasi, bukan model resmi. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi motor listrik dengan tampilan komponen terurai, bukan foto model resmi",
+    "asset": "images/products/wolong-electric-motor.jpg",
+    "applications": []
+  },
+  {
+    "slug": "oli-industrial-vibrator",
+    "category": "vibration-technology",
+    "brand": "oli",
+    "preview": false,
+    "name": "Motor Vibrator dengan Penutup Pemberat Oranye (Ilustrasi)",
+    "short_description": "Motor vibrator berumah logam dengan penutup pemberat oranye, kotak terminal, dan kaki pemasangan. Ilustrasi, bukan model resmi.",
+    "description": "Motor vibrator berumah logam dengan penutup pemberat oranye, kotak terminal, dan kaki pemasangan. Ilustrasi, bukan model resmi. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi motor vibrator dengan penutup pemberat oranye, bukan foto model resmi",
+    "asset": "images/products/oli-industrial-vibrator.png",
+    "applications": []
+  },
+  {
+    "slug": "qdos-chemical-dosing-pump",
+    "category": "chemical-metering-pump",
+    "brand": "qdos",
+    "preview": false,
+    "name": "Pompa Dosing dengan Panel dan Kepala Diafragma (Ilustrasi)",
+    "short_description": "Pompa dosing kompak dengan panel depan, kepala diafragma bundar, serta sambungan selang atas dan bawah. Ilustrasi, bukan model resmi.",
+    "description": "Pompa dosing kompak dengan panel depan, kepala diafragma bundar, serta sambungan selang atas dan bawah. Ilustrasi, bukan model resmi. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi pompa dosing dengan panel dan kepala diafragma, bukan foto model resmi",
+    "asset": "images/products/qdos-chemical-dosing-pump.png",
+    "applications": []
+  },
+  {
+    "slug": "bredel-hose-pump",
+    "category": "hose-pump",
+    "brand": "bredel",
+    "preview": false,
+    "name": "Pompa Selang dengan Rumah Bundar dan Gearmotor (Ilustrasi)",
+    "short_description": "Pompa selang berumah bundar dengan rotor yang terlihat, sambungan masuk-keluar, dan gearmotor pada rangka. Ilustrasi, bukan model resmi.",
+    "description": "Pompa selang berumah bundar dengan rotor yang terlihat, sambungan masuk-keluar, dan gearmotor pada rangka. Ilustrasi, bukan model resmi. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi pompa selang dengan rumah bundar dan gearmotor, bukan foto model resmi",
+    "asset": "images/products/bredel-hose-pump.png",
+    "applications": []
+  },
+  {
+    "slug": "aflex-ptfe-hose",
+    "category": "industrial-hose",
+    "brand": "aflex",
+    "preview": false,
+    "name": "Selang PTFE Anyaman Baja dengan Flange (Ilustrasi)",
+    "short_description": "Selang berlapis anyaman baja berbentuk loop dengan lapisan dalam putih dan flange logam pada kedua ujungnya. Ilustrasi, bukan model resmi.",
+    "description": "Selang berlapis anyaman baja berbentuk loop dengan lapisan dalam putih dan flange logam pada kedua ujungnya. Ilustrasi, bukan model resmi. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi selang ptfe anyaman baja dengan flange, bukan foto model resmi",
+    "asset": "images/products/aflex-ptfe-hose.png",
+    "applications": []
+  },
+  {
+    "slug": "tecbell-air-compressor",
+    "category": "air-compressor",
+    "brand": "tecbell",
+    "preview": false,
+    "name": "Paket Kompresor Bertangki dengan Pengering Udara (Ilustrasi)",
+    "short_description": "Paket kompresor kabinet di atas tangki horizontal, dilengkapi unit pengering udara terpisah di sampingnya. Ilustrasi, bukan model resmi.",
+    "description": "Paket kompresor kabinet di atas tangki horizontal, dilengkapi unit pengering udara terpisah di sampingnya. Ilustrasi, bukan model resmi. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi paket kompresor bertangki dengan pengering udara, bukan foto model resmi",
+    "asset": "images/products/tecbell-air-compressor.png",
+    "applications": []
+  },
+  {
+    "slug": "blu-c-oil-spill-kit",
+    "category": "oil-spill-response-prevention",
+    "brand": "blu-c",
+    "preview": false,
+    "name": "Spill Kit Kontainer dengan Boom dan Absorben (Ilustrasi)",
+    "short_description": "Paket penanganan tumpahan berisi kontainer kuning, containment boom, absorbent boom, lembaran absorben, sarung tangan, dan kacamata. Ilustrasi, bukan model resmi.",
+    "description": "Paket penanganan tumpahan berisi kontainer kuning, containment boom, absorbent boom, lembaran absorben, sarung tangan, dan kacamata. Ilustrasi, bukan model resmi. Gambar menunjukkan jenis dan susunan peralatan secara ilustratif, bukan penawaran produk resmi. Model, spesifikasi, kompatibilitas aplikasi, dan hubungan dengan brand pada katalog belum diverifikasi. Konfirmasikan produk resmi kepada tim sebelum pemesanan.",
+    "image_alt": "Ilustrasi spill kit kontainer dengan boom dan absorben, bukan foto model resmi",
+    "asset": "images/products/blu-c-oil-spill-kit.png",
+    "applications": []
+  }
+]
+

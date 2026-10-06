@@ -38,19 +38,22 @@ class CategoryPreviewSeederTest extends TestCase
         $this->assertNotSame($original->image, $demo->image);
         Storage::disk('public')->assertExists([$original->image, $demo->image]);
         $this->get('/produk/electric-motors-generators')->assertOk()
-            ->assertSee('2 produk')->assertSee('Permanent Magnet Motor (Contoh)')
+            ->assertSee('2 produk')->assertSee('Motor Sinkron Magnet Permanen Berflensa (Contoh)')
             ->assertDontSee('Edited preview')->assertDontSee('Produk belum tersedia.');
         $visible = Product::where('slug', 'demo-industrial-generator')->firstOrFail();
         $this->get($visible->url)->assertOk()->assertSee('bukan penawaran produk resmi');
     }
 
-    public function test_preview_can_use_placeholder_when_no_product_photo_exists(): void
+    public function test_preview_has_dedicated_images_without_requiring_category_or_original_product_media(): void
     {
         Storage::fake('public');
         $this->seed(CatalogSeeder::class);
         $this->seed(CategoryPreviewSeeder::class);
         $this->assertSame(21, Product::published()->count());
-        $this->assertNull(Product::where('slug', 'demo-induction-motor')->firstOrFail()->image);
+        $this->assertCount(21, Product::published()->pluck('image')->unique());
+        foreach (Product::published()->get() as $product) {
+            Storage::disk('public')->assertExists($product->image);
+        }
     }
 
     public function test_preview_seeder_refuses_production(): void
@@ -88,7 +91,7 @@ class CategoryPreviewSeederTest extends TestCase
                 if ($category->image) {
                     $this->assertNotSame($category->image, $product->image);
                     Storage::disk('public')->assertExists($product->image);
-                    $this->assertSame(Storage::disk('public')->get($category->image), Storage::disk('public')->get($product->image));
+                    $this->assertNotSame(hash('sha256', Storage::disk('public')->get($category->image)), hash('sha256', Storage::disk('public')->get($product->image)));
                 }
                 $this->get($product->url)->assertOk()->assertSee('bukan penawaran produk resmi');
                 $this->get('/produk?'.http_build_query(['q' => $product->name, 'category' => $category->id, 'brand' => $product->brand_id]))
