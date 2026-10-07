@@ -1,7 +1,11 @@
 @extends('layouts.public')
 @section('content')
-<section class="hero">
-    <img class="hero-image" src="{{ asset('images/industrial.jpg') }}" alt="Fasilitas industri dengan peralatan dan instalasi produksi" width="1920" height="1280" fetchpriority="high">
+<section class="hero" data-hero-carousel aria-label="Sorotan industri" aria-roledescription="carousel">
+    <div class="hero-slides" id="hero-slides">
+        <img class="hero-image is-active" src="{{ asset('images/industrial.jpg') }}" alt="Fasilitas industri dengan peralatan dan instalasi produksi" width="1920" height="1280" fetchpriority="high" data-slide>
+        <img class="hero-image" data-src="{{ asset('images/hero-pumps.webp') }}" alt="Ilustrasi instalasi pompa dan motor listrik industri" width="1672" height="941" decoding="async" fetchpriority="low" data-slide aria-hidden="true">
+        <img class="hero-image" data-src="{{ asset('images/hero-compressors.webp') }}" alt="Ilustrasi ruang kompresor dengan tangki dan pengering udara" width="1672" height="941" decoding="async" fetchpriority="low" data-slide aria-hidden="true">
+    </div>
     <div class="container hero-content"><p class="eyebrow">GENERAL SUPPLIER & TECHNICAL SOLUTIONS</p><h1>PT. Syirkah<br>Mandiri Artomoro<span>.</span></h1><p class="hero-subtitle">Industrial Supply &<br>Integrated Technical Solutions.</p><p class="hero-description">Equipment, spare part, dan dukungan teknis yang menghubungkan kebutuhan Anda dengan solusi industri.</p><div class="actions"><a class="button" href="{{ route('products.index') }}">Jelajahi Produk <x-icon name="arrow-up-right"/></a><a class="button outline-light" href="{{ route('contact') }}">Request Inquiry</a></div></div>
     <div class="hero-caption">PEKANBARU, RIAU <span>INDUSTRIAL SOLUTIONS</span></div>
 </section>

@@ -1,8 +1,10 @@
 import { createIcons, ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save } from 'lucide';
+import { initHeroCarousel } from './hero-carousel';
 
 const icons = { ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save };
 const renderIcons = () => createIcons({ icons });
 renderIcons();
+document.querySelectorAll('[data-hero-carousel]').forEach(initHeroCarousel);
 
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('#primary-nav');

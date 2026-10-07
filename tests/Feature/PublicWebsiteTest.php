@@ -33,6 +33,23 @@ class PublicWebsiteTest extends TestCase
         }
     }
 
+    public function test_homepage_has_three_hero_images_with_a_static_fallback(): void
+    {
+        $response = $this->get('/')->assertOk()
+            ->assertSee('src="'.asset('images/industrial.jpg').'"', false)
+            ->assertSee('data-src="'.asset('images/hero-pumps.webp').'"', false)
+            ->assertSee('data-src="'.asset('images/hero-compressors.webp').'"', false)
+            ->assertDontSee('data-carousel-controls', false)
+            ->assertSee('Jelajahi Produk');
+
+        $this->assertSame(3, substr_count($response->getContent(), ' data-slide'));
+        $this->assertSame(0, substr_count($response->getContent(), ' data-carousel-dot='));
+        $this->assertSame(1, substr_count($response->getContent(), '<h1>'));
+        foreach (['industrial.jpg', 'hero-pumps.webp', 'hero-compressors.webp'] as $image) {
+            $this->assertFileExists(public_path('images/'.$image));
+        }
+    }
+
     public function test_only_published_products_with_published_parents_are_public(): void
     {
         $visible = Product::factory()->create(['name' => 'Visible Motor']);

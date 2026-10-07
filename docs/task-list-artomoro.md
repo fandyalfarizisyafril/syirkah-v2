@@ -336,7 +336,7 @@ Task ini perlu dikonfirmasi seawal mungkin karena memengaruhi konten, konfiguras
 
 ### 8.1 Performance
 
-- [x] **P0** Gunakan satu hero image utama, bukan carousel berat.
+- [x] **P0** Hero ringan: revisi 2026-10-08 menggunakan slideshow tiga gambar otomatis dengan fade dan dukungan reduced motion tanpa mengubah layout. Kontrol dan indikator dihapus sesuai revisi lanjutan. Gambar pertama tetap diprioritaskan; gambar tambahan dimuat setelah halaman selesai.
 - [x] **P0** Lazy-load gambar di bawah fold.
 - [x] **P0** Tetapkan width/height atau aspect ratio gambar untuk mencegah layout shift.
 - [x] **P0** Gunakan pagination dan eager loading pada daftar produk.

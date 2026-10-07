@@ -77,6 +77,14 @@ Logo perusahaan dapat diunggah melalui Pengaturan. Header publik menggunakan log
 
 Footer menggunakan logo khusus yang diberikan pada 2026-10-06 (`public/images/company-logo-footer.png`). PNG asli dipertahankan; ruang transparan dibatasi lewat CSS. Latar footer terang menjaga logo biru dan tagline hitam terbaca, dengan navigasi, kontak, alamat, kategori produk, dan bar copyright gelap. Tampilan dan tautan footer diperiksa pada lebar 320, 390, 768, 901, 1024, dan 1440 px.
 
+## Slideshow Hero Beranda
+
+Revisi 2026-10-08 mempertahankan layout, ukuran, teks, dan CTA hero. Tiga gambar berganti otomatis setiap enam detik dengan fade 900 ms. Sesuai revisi lanjutan, tombol putar/jeda, sebelumnya/berikutnya, dan indikator dihapus. Hover serta fokus pada CTA tidak menghentikan autoplay. Tab tersembunyi dan hero di luar viewport menghentikan timer sementara.
+
+Preferensi reduced motion menonaktifkan autoplay dan fade; hero tetap statis selama preferensi ini aktif. Tanpa JavaScript, gambar pertama dan CTA tetap tampil. Gambar berikutnya baru dimuat setelah window load dan harus selesai di-decode sebelum ditampilkan; gambar gagal dimuat dilewati. Tidak ada perubahan CMS atau data produk. Pengaturan slide saat ini berada di template Beranda, bukan Admin.
+
+Gambar tambahan berupa ilustrasi AI generik, bukan foto fasilitas perusahaan. Aset WebP dan prompt lengkap: [hero-slideshow.md](hero-slideshow.md). Pengujian browser khusus: `npx playwright test tests/Browser/hero-carousel.spec.js`, termasuk ukuran hero yang sama pada lebar 320, 390, 768, dan 1440 px.
+
 ## Inquiry dan Email
 
 Inquiry disimpan sebelum notifikasi email diproses. Kegagalan email dicatat tanpa menggagalkan penyimpanan inquiry. Status: new, contacted, qualified, closed, spam. Catatan internal hanya tersedia bagi administrator/sales.

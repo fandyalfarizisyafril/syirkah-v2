@@ -28,7 +28,7 @@ for (const viewport of viewports) {
         }
         expect(errors).toEqual([]);
         await page.goto('/');
-        await expect(page.locator('.hero-image')).toBeVisible();
+        await expect(page.locator('.hero-image.is-active')).toBeVisible();
         if (viewport.width < 901) {
             const toggle = page.getByRole('button', { name: 'Buka navigasi' });
             await toggle.click();

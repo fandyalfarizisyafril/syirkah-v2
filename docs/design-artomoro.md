@@ -215,7 +215,7 @@ Dalam beberapa detik, pengunjung harus memahami siapa perusahaan, apa yang dised
 
 #### Adaptasi dari referensi CSI
 
-- Menggunakan hero industrial yang kuat, tetapi tidak memakai carousel otomatis secara default.
+- Menggunakan hero industrial yang kuat. Revisi 2026-10-08: slideshow tiga gambar otomatis setiap enam detik dengan fade halus, tanpa indikator atau tombol kontrol sesuai revisi lanjutan. Posisi, ukuran hero, teks, dan CTA tetap.
 - Menggunakan navigasi sticky dan footer informatif.
 - Mengganti fokus “project showcase” menjadi “product and solution discovery.”
 - Mempertahankan kesan teknis dan terpercaya tanpa menyalin logo, warna, tipografi, copy, atau layout persis referensi.
@@ -703,7 +703,7 @@ Keyword final harus disusun berdasarkan riset dan prioritas bisnis, bukan hanya 
 
 ## 17. Performance
 
-- Hero menggunakan satu gambar utama, bukan carousel berat.
+- Hero menggunakan slideshow ringan tanpa library tambahan; gambar pertama diprioritaskan, gambar berikutnya dimuat setelah halaman selesai. Reduced motion menonaktifkan autoplay awal dan transisi.
 - Gambar responsif dan lazy-loaded di bawah fold.
 - Ukuran gambar disimpan untuk mencegah layout shift.
 - CSS dan JavaScript hanya dimuat sesuai kebutuhan.
