@@ -33,21 +33,32 @@ class PublicWebsiteTest extends TestCase
         }
     }
 
-    public function test_homepage_has_three_hero_images_with_a_static_fallback(): void
+    public function test_homepage_has_five_data_driven_focus_slides_without_hero_cta(): void
     {
+        $slides = config('focus-slides');
         $response = $this->get('/')->assertOk()
             ->assertSee('src="'.asset('images/industrial.jpg').'"', false)
             ->assertSee('data-src="'.asset('images/hero-pumps.webp').'"', false)
-            ->assertSee('data-src="'.asset('images/hero-compressors.webp').'"', false)
-            ->assertDontSee('data-carousel-controls', false)
-            ->assertSee('Jelajahi Produk');
+            ->assertSee('aria-label="Pilih bidang fokus" hidden', false)
+            ->assertDontSee('focus-strip', false)
+            ->assertDontSee('Jelajahi Produk');
 
-        $this->assertSame(3, substr_count($response->getContent(), ' data-slide'));
+        $this->assertCount(5, $slides);
+        $this->assertCount(5, array_unique(array_column($slides, 'image')));
+        $this->assertSame(5, substr_count($response->getContent(), ' data-slide='));
+        $this->assertSame(5, substr_count($response->getContent(), ' data-focus-slide='));
         $this->assertSame(0, substr_count($response->getContent(), ' data-carousel-dot='));
-        $this->assertSame(1, substr_count($response->getContent(), '<h1>'));
-        foreach (['industrial.jpg', 'hero-pumps.webp', 'hero-compressors.webp'] as $image) {
-            $this->assertFileExists(public_path('images/'.$image));
+        $this->assertSame(1, substr_count($response->getContent(), '<h1 '));
+        foreach ($slides as $slide) {
+            $this->assertFileExists(public_path($slide['image']));
+            $response->assertSee($slide['description'])->assertSee($slide['eyebrow']);
         }
+
+        $dom = new \DOMDocument;
+        @$dom->loadHTML($response->getContent());
+        $xpath = new \DOMXPath($dom);
+        $this->assertSame(0, $xpath->query('//section[@id="focus-hero"]//a')->length);
+        $this->assertSame(5, $xpath->query('//section[@id="focus-hero"]//button')->length);
     }
 
     public function test_only_published_products_with_published_parents_are_public(): void

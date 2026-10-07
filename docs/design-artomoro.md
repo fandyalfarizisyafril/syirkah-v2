@@ -181,18 +181,15 @@ Dalam beberapa detik, pengunjung harus memahami siapa perusahaan, apa yang dised
    - Navigasi.
    - Search icon.
    - Request Inquiry CTA.
-3. **Hero**
-   - Headline: “Industrial Supply & Integrated Technical Solutions.”
-   - Supporting copy tentang General Supplier & Technical Solutions.
-   - CTA utama: Explore Products.
-   - CTA sekunder: Request Inquiry.
-   - Satu gambar industrial berkualitas tinggi.
-4. **Core focus**
-   - Engineering.
-   - Mechanical.
-   - Electrical.
-   - Instrumentation.
-   - Oil Spill Response & Prevention.
+3. **Hero dan Bidang Fokus (revisi 2026-10-08)**
+   - Satu komponen carousel full-width dengan lima visual, eyebrow, headline, dan deskripsi.
+   - Konten di kiri, overlay navy terarah, tipografi Inter hanya pada hero.
+   - Tidak ada CTA, panah, dots, atau floating controls di dalam hero.
+4. **Navigasi Bidang Fokus di dalam Hero**
+   - Engineering, Mechanical, Electrical, Instrumentation, Oil Spill Response & Prevention.
+   - Tombol horizontal di dasar hero dengan garis aktif SMART Orange; bukan section putih terpisah.
+   - Autoplay 5000 ms dan klik manual yang mengulang timer; gambar, teks, dan navigasi sinkron.
+   - Navigasi mobile bisa digeser; keyboard dan reduced motion didukung.
 5. **Featured product categories**
    - Tujuh kategori utama dari PRD.
 6. **Company positioning**
@@ -215,7 +212,7 @@ Dalam beberapa detik, pengunjung harus memahami siapa perusahaan, apa yang dised
 
 #### Adaptasi dari referensi CSI
 
-- Menggunakan hero industrial yang kuat. Revisi 2026-10-08: slideshow tiga gambar otomatis setiap enam detik dengan fade halus, tanpa indikator atau tombol kontrol sesuai revisi lanjutan. Posisi, ukuran hero, teks, dan CTA tetap.
+- Menggunakan hero industrial dengan lima Bidang Fokus sebagai navigasi internal. Revisi terbaru 2026-10-08 mengambil konsep interaksi [PETRONAS](https://www.petronas.com/), bukan menyalin aset atau desain. Hero tanpa CTA; navbar dan section lainnya tetap.
 - Menggunakan navigasi sticky dan footer informatif.
 - Mengganti fokus “project showcase” menjadi “product and solution discovery.”
 - Mempertahankan kesan teknis dan terpercaya tanpa menyalin logo, warna, tipografi, copy, atau layout persis referensi.
@@ -703,7 +700,7 @@ Keyword final harus disusun berdasarkan riset dan prioritas bisnis, bukan hanya 
 
 ## 17. Performance
 
-- Hero menggunakan slideshow ringan tanpa library tambahan; gambar pertama diprioritaskan, gambar berikutnya dimuat setelah halaman selesai. Reduced motion menonaktifkan autoplay awal dan transisi.
+- Hero menggunakan carousel lima bidang tanpa library tambahan; gambar pertama diprioritaskan, hanya slide berikutnya dipreload setelah load. Reduced motion menonaktifkan autoplay dan transisi, dengan navigasi manual tetap tersedia. Detail: [hero-slideshow.md](hero-slideshow.md).
 - Gambar responsif dan lazy-loaded di bawah fold.
 - Ukuran gambar disimpan untuk mencegah layout shift.
 - CSS dan JavaScript hanya dimuat sesuai kebutuhan.

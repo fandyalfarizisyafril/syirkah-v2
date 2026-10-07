@@ -13,6 +13,7 @@ class PublicController extends Controller
     public function home()
     {
         return view('public.home', [
+            'focusSlides' => config('focus-slides'),
             'categories' => Category::published()->ordered()->get(), 'brands' => Brand::published()->ordered()->get(),
             'industries' => Industry::published()->ordered()->limit(4)->get(),
             'products' => Product::published()->with(['brand', 'category'])->where('featured', true)->ordered()->limit(4)->get(),

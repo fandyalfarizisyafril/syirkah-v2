@@ -196,9 +196,9 @@ Task ini perlu dikonfirmasi seawal mungkin karena memengaruhi konten, konfiguras
 
 ### 4.2 Homepage
 
-- [x] **P0** Bangun hero dengan identitas perusahaan sebagai H1 dan "Industrial Supply & Integrated Technical Solutions." sebagai supporting headline.
-- [x] **P0** Tambahkan CTA Explore Products dan Request Inquiry.
-- [x] **P0** Tampilkan core focus: Engineering, Mechanical, Electrical, Instrumentation, Oil Spill Response & Prevention.
+- [x] **P0** Revisi 2026-10-08: hero data-driven lima slide, H1 dan deskripsi mengikuti Bidang Fokus aktif, dengan identitas visual SMART.
+- [x] **P0** Sesuai revisi, hapus CTA di dalam hero; Request Inquiry pada navbar tetap.
+- [x] **P0** Integrasikan Engineering, Mechanical, Electrical, Instrumentation, Oil Spill Response & Prevention sebagai navigasi carousel di dalam hero; hapus bar putih lama.
 - [x] **P0** Tampilkan tujuh featured product categories.
 - [x] **P0** Tampilkan company positioning singkat.
 - [x] **P0** Tampilkan brand/principal.
@@ -336,7 +336,7 @@ Task ini perlu dikonfirmasi seawal mungkin karena memengaruhi konten, konfiguras
 
 ### 8.1 Performance
 
-- [x] **P0** Hero ringan: revisi 2026-10-08 menggunakan slideshow tiga gambar otomatis dengan fade dan dukungan reduced motion tanpa mengubah layout. Kontrol dan indikator dihapus sesuai revisi lanjutan. Gambar pertama tetap diprioritaskan; gambar tambahan dimuat setelah halaman selesai.
+- [x] **P0** Hero lima bidang fokus: autoplay 5000 ms, fade 900 ms, reset timer saat klik manual, keyboard, reduced motion, dan navigasi mobile horizontal. Prioritaskan gambar pertama; preload hanya slide berikutnya. Tanpa dependency carousel tambahan.
 - [x] **P0** Lazy-load gambar di bawah fold.
 - [x] **P0** Tetapkan width/height atau aspect ratio gambar untuk mencegah layout shift.
 - [x] **P0** Gunakan pagination dan eager loading pada daftar produk.

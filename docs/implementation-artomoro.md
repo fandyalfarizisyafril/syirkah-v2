@@ -79,11 +79,11 @@ Footer menggunakan logo khusus yang diberikan pada 2026-10-06 (`public/images/co
 
 ## Slideshow Hero Beranda
 
-Revisi 2026-10-08 mempertahankan layout, ukuran, teks, dan CTA hero. Tiga gambar berganti otomatis setiap enam detik dengan fade 900 ms. Sesuai revisi lanjutan, tombol putar/jeda, sebelumnya/berikutnya, dan indikator dihapus. Hover serta fokus pada CTA tidak menghentikan autoplay. Tab tersembunyi dan hero di luar viewport menghentikan timer sementara.
+Revisi terbaru 2026-10-08 menggabungkan Hero dan Bidang Fokus menjadi satu carousel data-driven berisi Engineering, Mechanical, Electrical, Instrumentation, serta Oil Spill Response & Prevention. Data tersimpan pada `config/focus-slides.php` dan dirender oleh komponen Blade `hero-carousel`. Setiap slide memiliki background, eyebrow, headline, dan deskripsi berbeda. Navigasi tombol berada di dalam dasar hero, dengan garis aktif SMART Orange. Bar putih Bidang Fokus serta CTA hero dihapus. Navbar termasuk Request Inquiry, section setelah hero, dan footer tetap.
 
-Preferensi reduced motion menonaktifkan autoplay dan fade; hero tetap statis selama preferensi ini aktif. Tanpa JavaScript, gambar pertama dan CTA tetap tampil. Gambar berikutnya baru dimuat setelah window load dan harus selesai di-decode sebelum ditampilkan; gambar gagal dimuat dilewati. Tidak ada perubahan CMS atau data produk. Pengaturan slide saat ini berada di template Beranda, bukan Admin.
+Autoplay 5000 ms berulang; klik manual mengganti seluruh elemen slide secara sinkron lalu mengulang timer. Crossfade 900 ms dan animasi teks 450-500 ms. Preferensi reduced motion menghentikan autoplay/animasi, tetapi tombol navigasi tetap berfungsi. Tanpa JavaScript, Engineering tampil statis. Gambar pertama diprioritaskan; hanya gambar berikutnya dipreload setelah load dan setiap gambar harus selesai decode sebelum commit. Gambar gagal dimuat dilewati. Timer, listener, dan observer memiliki cleanup. Inter lokal hanya diterapkan pada hero. Tidak ada perubahan CMS atau data produk.
 
-Gambar tambahan berupa ilustrasi AI generik, bukan foto fasilitas perusahaan. Aset WebP dan prompt lengkap: [hero-slideshow.md](hero-slideshow.md). Pengujian browser khusus: `npx playwright test tests/Browser/hero-carousel.spec.js`, termasuk ukuran hero yang sama pada lebar 320, 390, 768, dan 1440 px.
+Gambar tambahan berupa ilustrasi AI generik, bukan foto fasilitas perusahaan. Aset WebP, prompt, dan perilaku lengkap: [hero-slideshow.md](hero-slideshow.md). Pengujian browser khusus: `npx playwright test tests/Browser/hero-carousel.spec.js`, meliputi seluruh slide pada lebar 320, 390, 768, 1440, dan 1920 px. Navigasi mobile horizontal mengikuti slide aktif tanpa menggeser halaman.
 
 ## Inquiry dan Email
 
