@@ -262,6 +262,13 @@ td small { display:block; font-size:11px; color:var(--muted); overflow-wrap:anyw
 .admin-topbar { min-height:76px; border-bottom:1px solid var(--border); padding:15px 30px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
 .admin-topbar .wordmark { font-size:18px; }
 .admin-topbar .wordmark-symbol { font-size:36px; }
+.admin-topbar .admin-brand { font-family:SMART Inter,Arial,Helvetica,sans-serif; min-width:0; }
+@media(max-width:640px) {
+    .admin-topbar .admin-brand { width:min(228px,calc(100% - 136px)); }
+    .admin-brand .company-signature { width:100%; min-width:0; }
+    .admin-brand .signature-image { flex:0 1 96px; min-width:40px; }
+    .admin-brand .signature-copy { flex:0 1 126px; min-width:100px; }
+}
 .admin-shell { display:grid; grid-template-columns:235px minmax(0,1fr); min-height:calc(100svh - 76px); }
 .admin-sidebar { border-right:1px solid var(--border); padding:32px 18px; background:#f7f9fa; }
 .admin-sidebar>.eyebrow { padding-left:14px; color:var(--muted); }
