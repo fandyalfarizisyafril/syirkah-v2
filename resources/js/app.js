@@ -1,9 +1,25 @@
-import { createIcons, ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save } from 'lucide';
+import { createIcons, ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save, Eye, EyeOff } from 'lucide';
 import { initHeroCarousel } from './hero-carousel';
 
-const icons = { ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save };
+const icons = { ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save, Eye, EyeOff };
 const renderIcons = () => createIcons({ icons });
 renderIcons();
+
+const passwordToggle = document.querySelector('.cms-login-page [data-password-toggle]');
+if (passwordToggle) {
+    const password = document.getElementById(passwordToggle.getAttribute('aria-controls'));
+    passwordToggle.hidden = false;
+    passwordToggle.addEventListener('click', () => {
+        const visible = password.type === 'password';
+        password.type = visible ? 'text' : 'password';
+        const label = visible ? 'Sembunyikan password' : 'Tampilkan password';
+        passwordToggle.setAttribute('aria-label', label);
+        passwordToggle.setAttribute('aria-pressed', String(visible));
+        passwordToggle.title = label;
+        passwordToggle.querySelector('[data-password-show]').hidden = visible;
+        passwordToggle.querySelector('[data-password-hide]').hidden = !visible;
+    });
+}
 document.querySelectorAll('[data-hero-carousel]').forEach(initHeroCarousel);
 
 const toggle = document.querySelector('.menu-toggle');
