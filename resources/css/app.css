@@ -114,6 +114,17 @@ a.category-item:hover { background:var(--surface); }
 .category-item h3 { max-width:290px; font-size:20px; }
 .category-item p { font-size:13px; color:var(--muted); margin-bottom:30px; }
 .category-item>.icon { position:absolute; bottom:22px; right:25px; color:var(--primary); }
+.home-product-categories .has-reveal { overflow:hidden; isolation:isolate; }
+.home-product-categories .has-reveal:hover { background:transparent; }
+.home-product-categories .category-reveal { position:absolute; inset:0; z-index:-1; opacity:0; transform:translateY(16px); pointer-events:none; transition:opacity 500ms ease,transform 500ms ease; }
+.home-product-categories .category-reveal img { width:100%; height:100%; object-fit:cover; }
+.home-product-categories .category-reveal::after { content:''; position:absolute; inset:0; background:linear-gradient(140deg,rgba(7,28,45,.83),rgba(7,28,45,.66) 55%,rgba(7,28,45,.92)); }
+@media(hover:hover) and (pointer:fine) {
+    .home-product-categories .has-reveal :is(.category-number,h3,p,.icon) { transition:color 500ms ease; }
+    .home-product-categories .has-reveal:hover .category-reveal { opacity:1; transform:translateY(0); }
+    .home-product-categories .has-reveal:hover :is(h3,p,.icon) { color:#fff; }
+    .home-product-categories .has-reveal:hover .category-number { color:#ffd3ae; }
+}
 .category-intro { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); align-items:center; gap:48px; }
 .category-intro-copy { min-width:0; }
 .category-intro .lead { margin-bottom:0; }

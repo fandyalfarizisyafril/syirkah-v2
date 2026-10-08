@@ -1,8 +1,8 @@
 @extends('layouts.public')
 @section('content')
 <x-hero-carousel :slides="$focusSlides" />
-<section class="section container"><div class="section-heading"><div><p class="eyebrow">PRODUCTS & SOLUTIONS</p><h2>Peralatan tepat.<br>Operasional lebih baik.</h2></div><div><p>Jelajahi kebutuhan teknis Anda melalui tujuh kategori utama kami.</p><a class="text-link" href="{{ route('products.index') }}">Semua Produk <x-icon name="arrow-up-right"/></a></div></div>
-    <div class="category-grid">@foreach($categories as $category)@include('partials.category-card', ['number' => $loop->iteration])@endforeach</div>
+<section class="section container home-product-categories"><div class="section-heading"><div><p class="eyebrow">PRODUCTS & SOLUTIONS</p><h2>Peralatan tepat.<br>Operasional lebih baik.</h2></div><div><p>Jelajahi kebutuhan teknis Anda melalui tujuh kategori utama kami.</p><a class="text-link" href="{{ route('products.index') }}">Semua Produk <x-icon name="arrow-up-right"/></a></div></div>
+    <div class="category-grid">@foreach($categories as $category)@include('partials.category-card', ['number' => $loop->iteration, 'revealImage' => config('homepage-category-images.'.$category->slug)])@endforeach</div>
 </section>
 <section class="section company-band"><div class="container company-grid"><div><p class="eyebrow">YOUR INDUSTRIAL PARTNER</p><h2>Kebutuhan teknis Anda.<br>Fokus kami.</h2></div><div><p class="lead">{{ $settings['profile'] }}</p><a class="text-link" href="{{ route('about') }}">Tentang Artomoro <x-icon name="arrow-up-right"/></a></div></div></section>
 <section class="section container"><div class="section-heading"><div><p class="eyebrow">BRANDS & PRINCIPALS</p><h2>Teknologi untuk setiap kebutuhan.</h2></div><a class="text-link" href="{{ route('brands.index') }}">Lihat Brand <x-icon name="arrow-up-right"/></a></div><div class="brand-strip">@foreach($brands as $brand)<a href="{{ route('brands.show', $brand->slug) }}">@if($brand->image)<img src="{{ $brand->image_url }}" alt="{{ $brand->name }}" width="150" height="64" loading="lazy">@else<span>{{ $brand->name }}</span>@endif</a>@endforeach</div></section>
