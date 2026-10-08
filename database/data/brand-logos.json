@@ -1,0 +1,32 @@
+[
+    {
+        "slug": "wolong",
+        "file": "wolong.svg",
+        "page": "https://www.wolong-electric.com/",
+        "source": "https://www.wolong-electric.com/Public/Uploads/uploadfile/images/20240408/comlogo01.svg"
+    },
+    {
+        "slug": "oli",
+        "file": "oli.png",
+        "page": "https://www.olivibra.com/",
+        "source": "https://www.olivibra.com/wp-content/uploads/2021/02/OLI-logo-2021-transp.png"
+    },
+    {
+        "slug": "bredel",
+        "file": "bredel.svg",
+        "page": "https://www.wmfts.com/en/brands/",
+        "source": "https://www.wmfts.com/globalassets/brands/bredel.svg"
+    },
+    {
+        "slug": "aflex",
+        "file": "aflex.svg",
+        "page": "https://www.wmfts.com/en/brands/",
+        "source": "https://www.wmfts.com/globalassets/brands/aflexhose.svg"
+    },
+    {
+        "slug": "tecbell",
+        "file": "tecbell.png",
+        "page": "https://www.tecbell.cn/",
+        "source": "https://www.tecbell.cn/upload/20241210111927378099.png"
+    }
+]

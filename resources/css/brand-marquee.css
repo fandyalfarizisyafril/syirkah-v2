@@ -1,0 +1,24 @@
+.home-brand-marquee { container-type:inline-size; overflow:hidden; width:100%; background:#fff; }
+.home-brand-track { display:flex; width:max-content; animation:home-brand-scroll 30s linear infinite; }
+.home-brand-group { display:flex; flex:0 0 auto; align-items:center; justify-content:space-around; gap:56px; min-width:100cqw; margin:0; padding:18px 28px; list-style:none; }
+.home-brand-group li { flex:0 0 160px; width:160px; margin:0; }
+.home-brand-group a { display:flex; align-items:center; justify-content:center; height:64px; }
+.home-brand-group img { display:block; width:160px; height:64px; object-fit:contain; }
+.home-brand-group a:focus-visible { outline:2px solid var(--primary); outline-offset:6px; }
+.home-brand-marquee:hover .home-brand-track { animation-play-state:paused; }
+.home-brand-marquee.is-single .home-brand-track { animation:none; }
+/* Keyboard users see the original, scrollable list instead of chasing moving links. */
+.home-brand-marquee:has(a:focus-visible) { overflow-x:auto; }
+.home-brand-marquee:has(a:focus-visible) .home-brand-track { animation:none; }
+.home-brand-marquee:has(a:focus-visible) .home-brand-group[aria-hidden] { display:none; }
+@keyframes home-brand-scroll { to { transform:translateX(-50%); } }
+@media(max-width:640px) {
+    .home-brand-group { gap:32px; padding:18px 16px; }
+    .home-brand-group li { flex-basis:128px; width:128px; }
+    .home-brand-group a,.home-brand-group img { width:128px; height:48px; }
+}
+@media(prefers-reduced-motion:reduce) {
+    .home-brand-marquee { overflow-x:auto; }
+    .home-brand-track { animation:none; }
+    .home-brand-group[aria-hidden] { display:none; }
+}

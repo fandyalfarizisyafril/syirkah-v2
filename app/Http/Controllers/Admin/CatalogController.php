@@ -53,7 +53,7 @@ class CatalogController extends Controller
             'image_alt' => 'nullable|string|max:255', 'meta_title' => 'nullable|string|max:200', 'meta_description' => 'nullable|string|max:500',
         ];
         if ($module === 'brands') {
-            $rules += ['focus' => 'nullable|string|max:255', 'website_url' => 'nullable|url:http,https|max:255'];
+            $rules += ['focus' => 'nullable|string|max:255', 'website_url' => 'nullable|url:http,https|max:255', 'remove_image' => 'nullable|boolean'];
         }
         if ($module === 'industries') {
             $rules += ['challenges' => 'nullable|string|max:10000', 'solution_copy' => 'nullable|string|max:10000', 'product_ids' => 'nullable|array', 'product_ids.*' => 'integer|exists:products,id'];
@@ -73,6 +73,9 @@ class CatalogController extends Controller
         $data = $request->validate($rules);
         $industryIds = $data['industry_ids'] ?? [];
         $productIds = $data['product_ids'] ?? [];
+        if ($module === 'brands' && $request->boolean('remove_image')) {
+            $data['image'] = null;
+        }
         if ($module === 'products') {
             foreach (['benefits', 'applications'] as $field) {
                 $data[$field] = array_values(array_filter(array_map('trim', preg_split('/\R/', $data[$field.'_text'] ?? ''))));
