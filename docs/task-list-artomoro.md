@@ -199,6 +199,7 @@ Task ini perlu dikonfirmasi seawal mungkin karena memengaruhi konten, konfiguras
 - [x] **P0** Revisi 2026-10-08: hero data-driven lima slide, H1 dan deskripsi mengikuti Bidang Fokus aktif, dengan identitas visual SMART.
 - [x] **P0** Sesuai revisi, hapus CTA di dalam hero; Request Inquiry pada navbar tetap.
 - [x] **P0** Integrasikan Engineering, Mechanical, Electrical, Instrumentation, Oil Spill Response & Prevention sebagai navigasi carousel di dalam hero; hapus bar putih lama.
+- [x] **P0** Admin Hero Beranda: edit gambar, eyebrow, headline dua baris, deskripsi, dan label navigasi untuk lima bidang tetap. Izin Administrator/Editor, validasi upload, serta integrasi homepage tanpa mengubah desain atau autoplay 5 detik.
 - [x] **P0** Tampilkan tujuh featured product categories.
 - [x] **P0** Tampilkan company positioning singkat.
 - [x] **P0** Tampilkan brand/principal.

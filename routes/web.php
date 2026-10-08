@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CatalogController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +39,11 @@ Route::prefix('admin')->group(function () {
         Route::middleware('can:manage-settings')->group(function () {
             Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
             Route::put('/settings', [DashboardController::class, 'updateSettings'])->name('settings.update');
+        });
+        Route::prefix('hero')->middleware('can:manage-content')->name('hero.')->group(function () {
+            Route::get('/', [HeroController::class, 'index'])->name('index');
+            Route::get('/{focus}/edit', [HeroController::class, 'edit'])->name('edit');
+            Route::put('/{focus}', [HeroController::class, 'update'])->name('update');
         });
         Route::prefix('catalog/{module}')->where(['module' => 'categories|brands|products|industries'])->middleware('can:manage-content')->name('catalog.')->group(function () {
             Route::get('/', [CatalogController::class, 'index'])->name('index');

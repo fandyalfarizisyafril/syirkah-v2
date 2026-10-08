@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Industry;
+use App\Models\HeroSlide;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class PublicController extends Controller
     public function home()
     {
         return view('public.home', [
-            'focusSlides' => config('focus-slides'),
+            'focusSlides' => HeroSlide::slides(),
             'categories' => Category::published()->ordered()->get(), 'brands' => Brand::published()->ordered()->get(),
             'industries' => Industry::published()->ordered()->limit(4)->get(),
             'products' => Product::published()->with(['brand', 'category'])->where('featured', true)->ordered()->limit(4)->get(),

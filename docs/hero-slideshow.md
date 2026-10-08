@@ -4,7 +4,7 @@ Revisi 2026-10-08: menggantikan slideshow latar tiga gambar dengan satu hero dat
 
 ## Struktur
 
-- Single source of truth: `config/focus-slides.php`, berisi ID, nomor, label, eyebrow, baris headline, deskripsi, path, dimensi, serta posisi gambar desktop/mobile.
+- Lima identitas, urutan, konten awal, dan posisi gambar tetap di `config/focus-slides.php`. Suntingan Admin disimpan di tabel `hero_slides`; `HeroSlide::slides()` menggabungkan data ini sebagai satu sumber konten untuk homepage dan form Admin.
 - Komponen reusable: `resources/views/components/hero-carousel.blade.php`; dipanggil dari Beranda dengan data konfigurasi melalui PublicController.
 - Urutan: Engineering, Mechanical, Electrical, Instrumentation, Oil Spill Response & Prevention.
 - Satu H1 dengan lapisan teks per slide. Lapisan tidak aktif disembunyikan secara visual dan dari accessibility tree. Seluruh lapisan tetap mengisi track grid yang sama agar tinggi konten stabil.
@@ -76,6 +76,10 @@ Use case: photorealistic-natural. Wide 16:9 industrial website background photog
 - Pengujian: `php artisan test`, `npm run build`, `npx playwright test tests/Browser/hero-carousel.spec.js`.
 - Browser: seluruh slide pada lebar 1920, 1440, 768, 390, dan 320 px; autoplay, reset manual, keyboard, reduced motion, no-JS, respons lambat/gagal, preload, crossfade, dan timer saat tab tersembunyi.
 - Snapshot markup sebelum/sesudah membuktikan top bar, navbar, section setelah hero, dan footer tidak berubah.
-- Edit konten/aset hanya di `config/focus-slides.php`; jika config production dicache, refresh config cache saat deployment.
-- Pengaturan slide belum ada di CMS. Tidak ada perubahan struktur database atau produk.
+- Edit konten melalui **Admin > Hero Beranda > Edit**: label navigasi, eyebrow, headline baris 1/2, deskripsi, dan gambar. Headline baris kedua opsional. Setelah Simpan Hero, perubahan langsung dibaca saat homepage dimuat ulang, tanpa build atau clear cache.
+- Akses mengikuti `manage-content`: Administrator dan Editor. Lima bidang dan urutannya tetap; tidak ada tambah/hapus slide, status, atau pengaturan autoplay di CMS.
+- Upload JPG/PNG/WebP maksimal 4 MB, dimensi maksimal 8000 x 8000. File disimpan dengan nama acak pada disk public, direktori `hero/`. Membutuhkan storage link yang sudah digunakan katalog.
+- Simpan teks tanpa upload mempertahankan gambar terakhir. Opsi Kembalikan gambar awal hanya mereset referensi gambar. File lama dipertahankan, mengikuti pola media katalog. Upload baru dibersihkan jika penyimpanan database gagal.
+- Jika file unggahan hilang, background kembali ke aset awal tanpa kehilangan teks editan. GET halaman tidak membuat record database. Migration baru hanya menambah tabel `hero_slides`; katalog dan data produk tidak diubah.
+- Deployment: jalankan `php artisan migrate --force` sebelum melayani request dengan kode baru. Tidak memerlukan seed untuk menampilkan lima slide awal.
 - Interval: `resources/js/hero-carousel.js`. Styling scoped hero: `resources/css/app.css`. Jalankan build setelah perubahan JS/CSS.

@@ -79,11 +79,19 @@ Footer menggunakan logo khusus yang diberikan pada 2026-10-06 (`public/images/co
 
 ## Slideshow Hero Beranda
 
-Revisi terbaru 2026-10-08 menggabungkan Hero dan Bidang Fokus menjadi satu carousel data-driven berisi Engineering, Mechanical, Electrical, Instrumentation, serta Oil Spill Response & Prevention. Data tersimpan pada `config/focus-slides.php` dan dirender oleh komponen Blade `hero-carousel`. Setiap slide memiliki background, eyebrow, headline, dan deskripsi berbeda. Navigasi tombol berada di dalam dasar hero, dengan garis aktif SMART Orange. Bar putih Bidang Fokus serta CTA hero dihapus. Navbar termasuk Request Inquiry, section setelah hero, dan footer tetap.
+Revisi terbaru 2026-10-08 menggabungkan Hero dan Bidang Fokus menjadi satu carousel data-driven berisi Engineering, Mechanical, Electrical, Instrumentation, serta Oil Spill Response & Prevention. Data awal tersimpan pada `config/focus-slides.php`, suntingan CMS pada tabel `hero_slides`. `HeroSlide::slides()` menggabungkannya untuk komponen Blade `hero-carousel`. Setiap slide memiliki background, eyebrow, headline, dan deskripsi berbeda. Navigasi tombol berada di dalam dasar hero, dengan garis aktif SMART Orange. Bar putih Bidang Fokus serta CTA hero dihapus. Navbar termasuk Request Inquiry, section setelah hero, dan footer tetap.
 
-Autoplay 5000 ms berulang; klik manual mengganti seluruh elemen slide secara sinkron lalu mengulang timer. Crossfade 900 ms dan animasi teks 450-500 ms. Preferensi reduced motion menghentikan autoplay/animasi, tetapi tombol navigasi tetap berfungsi. Tanpa JavaScript, Engineering tampil statis. Gambar pertama diprioritaskan; hanya gambar berikutnya dipreload setelah load dan setiap gambar harus selesai decode sebelum commit. Gambar gagal dimuat dilewati. Timer, listener, dan observer memiliki cleanup. Inter lokal hanya diterapkan pada hero. Tidak ada perubahan CMS atau data produk.
+Autoplay 5000 ms berulang; klik manual mengganti seluruh elemen slide secara sinkron lalu mengulang timer. Crossfade 900 ms dan animasi teks 450-500 ms. Preferensi reduced motion menghentikan autoplay/animasi, tetapi tombol navigasi tetap berfungsi. Tanpa JavaScript, Engineering tampil statis. Gambar pertama diprioritaskan; hanya gambar berikutnya dipreload setelah load dan setiap gambar harus selesai decode sebelum commit. Gambar gagal dimuat dilewati. Timer, listener, dan observer memiliki cleanup. Inter lokal hanya diterapkan pada hero. Modul Admin Hero Beranda tersedia tanpa perubahan data produk.
 
 Gambar tambahan berupa ilustrasi AI generik, bukan foto fasilitas perusahaan. Aset WebP, prompt, dan perilaku lengkap: [hero-slideshow.md](hero-slideshow.md). Pengujian browser khusus: `npx playwright test tests/Browser/hero-carousel.spec.js`, meliputi seluruh slide pada lebar 320, 390, 768, 1440, dan 1920 px. Navigasi mobile horizontal mengikuti slide aktif tanpa menggeser halaman.
+
+### Admin Hero Beranda
+
+Buka `/admin/hero`, pilih Edit pada salah satu dari lima slide, lalu ubah Label Navigasi, Eyebrow, Headline Baris 1/2, Deskripsi, atau Gambar Baru. Klik Simpan Hero. Headline baris kedua opsional. Gambar menerima JPG/PNG/WebP maksimal 4 MB dan dimensi maksimal 8000 x 8000. Tanpa upload baru, gambar terakhir dipertahankan; Kembalikan gambar awal mereset ke aset konfigurasi.
+
+Izin mengikuti pengelolaan konten (Administrator/Editor). Jumlah dan urutan bidang tetap, tanpa fitur tambah/hapus slide. Data tersimpan di `hero_slides`, gambar pada disk public `hero/`; GET tidak membuat atau menimpa data. Jalankan `php artisan migrate` untuk menambahkan tabel ini. Tidak perlu seeder. Homepage membaca perubahan pada request berikutnya, tanpa rebuild frontend. Desain, animasi, autoplay 5000 ms, navbar, serta section lain tetap.
+
+Pengujian: `php artisan test --filter=HeroAdminTest` untuk persistence/unggahan/validasi/izin; `npx playwright test tests/Browser/hero-admin.spec.js tests/Browser/hero-carousel.spec.js` untuk tampilan Admin dan regresi carousel. Skenario browser Admin memakai kredensial dari `CMS_TEST_EMAIL`/`CMS_TEST_PASSWORD`, tidak menyimpan perubahan pada data perusahaan.
 
 ## Inquiry dan Email
 
