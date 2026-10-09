@@ -117,7 +117,8 @@ class PublicWebsiteTest extends TestCase
         $draft = Category::factory()->create(['status' => 'draft', 'image' => 'catalog/draft-category.png']);
         foreach (['/', '/produk'] as $path) {
             $this->get($path)->assertOk()->assertDontSee('src="'.$visible->image_url.'"', false)
-                ->assertDontSee($draft->image_url)->assertSee('class="category-number"', false);
+                ->assertDontSee($draft->image_url)
+                ->assertSee($path === '/' ? 'class="home-category-card"' : 'class="category-number"', false);
         }
         $this->get('/produk/'.$visible->slug)->assertOk()->assertSee('src="'.$visible->image_url.'"', false)
             ->assertSee('class="category-intro"', false)

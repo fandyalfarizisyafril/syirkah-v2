@@ -1,0 +1,134 @@
+.home-category-carousel { min-width:0; }
+.home-category-track {
+    display:grid;
+    grid-auto-flow:column;
+    grid-auto-columns:calc((100% - 48px) / 3);
+    gap:24px;
+    margin:0;
+    padding:0;
+    list-style:none;
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+}
+.home-category-track::-webkit-scrollbar { display:none; }
+.home-category-carousel.is-ready .home-category-track { cursor:grab; }
+.home-category-carousel.is-ready .home-category-link { cursor:inherit; }
+.home-category-track.is-dragging { scroll-snap-type:none; cursor:grabbing!important; user-select:none; }
+.home-category-track.is-settling { scroll-snap-type:none; }
+.home-category-track.is-dragging * { cursor:grabbing!important; user-select:none; }
+.home-category-card {
+    position:relative;
+    isolation:isolate;
+    width:100%;
+    min-width:0;
+    margin:0;
+    aspect-ratio:4 / 5;
+    border-radius:8px;
+    overflow:hidden;
+    scroll-snap-align:start;
+    background:var(--primary);
+}
+.home-category-link { display:block; height:100%; }
+.home-category-link:has(.home-category-image) { background:#fff; }
+/* Frame each equipment silhouette at its native ratio, reserving the lower area for the title. */
+.home-category-image {
+    position:absolute;
+    left:50%;
+    top:var(--equipment-top,40%);
+    width:var(--equipment-width,100%);
+    max-width:none;
+    height:auto;
+    transform:translate(-50%,-50%);
+    user-select:none;
+    -webkit-user-drag:none;
+}
+.home-category-card[data-category="electric-motors-generators"] { --equipment-width:108%; --equipment-top:39%; }
+.home-category-card[data-category="vibration-technology"] { --equipment-width:100%; --equipment-top:39%; }
+.home-category-card[data-category="chemical-metering-pump"] { --equipment-width:110%; --equipment-top:38%; }
+.home-category-card[data-category="hose-pump"] { --equipment-width:100%; --equipment-top:40%; }
+.home-category-card[data-category="industrial-hose"] { --equipment-width:104%; --equipment-top:38%; }
+.home-category-card[data-category="air-compressor"] { --equipment-width:102%; --equipment-top:39%; }
+.home-category-card[data-category="oil-spill-response-prevention"] { --equipment-width:100%; --equipment-top:40%; }
+.home-category-link::after {
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg,transparent 35%,rgba(10,38,61,.3) 65%,rgba(10,38,61,.94));
+    pointer-events:none;
+}
+.home-category-title {
+    position:absolute;
+    z-index:1;
+    inset:auto 28px 30px;
+    color:#fff;
+    font-size:24px;
+    font-weight:700;
+    line-height:1.25;
+    overflow-wrap:anywhere;
+    transition:opacity 350ms ease,transform 350ms ease;
+}
+.home-category-panel {
+    position:absolute;
+    z-index:2;
+    inset:auto 0 0;
+    max-height:70%;
+    overflow-y:auto;
+    padding:28px;
+    background:var(--primary);
+    color:#fff;
+    opacity:0;
+    transform:translateY(100%);
+    transition:transform 400ms cubic-bezier(.22,.61,.36,1),opacity 400ms ease;
+}
+.home-category-panel h3 { margin:0 0 14px; color:#fff; font-size:24px; line-height:1.25; }
+.home-category-panel p { margin:0; color:#fff; font-size:14px; line-height:1.65; overflow-wrap:anywhere; }
+.home-category-info {
+    position:absolute;
+    z-index:3;
+    top:16px;
+    right:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:44px;
+    height:44px;
+    border:1px solid #ffffff80;
+    border-radius:50%;
+    background:var(--primary-dark);
+    color:#fff;
+}
+.home-category-info[hidden],.home-category-controls[hidden] { display:none; }
+.home-category-card.is-expanded .home-category-panel,
+.home-category-card:has(.home-category-link:focus-visible) .home-category-panel { opacity:1; transform:translateY(0); }
+.home-category-card.is-expanded .home-category-title,
+.home-category-card:has(.home-category-link:focus-visible) .home-category-title { opacity:0; transform:translateY(-8px); }
+.home-category-link:focus-visible { outline:3px solid var(--accent); outline-offset:-4px; border-radius:8px; }
+.home-category-info:focus-visible { outline-color:#fff; outline-offset:3px; }
+.home-category-controls { display:flex; justify-content:flex-end; gap:10px; margin-top:22px; }
+.home-category-controls .icon-button { border:1px solid var(--border); border-radius:50%; color:var(--primary); transition:background 200ms ease,color 200ms ease; }
+.home-category-controls .icon-button:hover:not(:disabled) { background:var(--primary); color:#fff; }
+.home-category-controls .icon-button:disabled { opacity:.35; cursor:default; }
+@media(hover:hover) and (pointer:fine) {
+    .home-category-card:hover .home-category-panel { opacity:1; transform:translateY(0); }
+    .home-category-card:hover .home-category-title { opacity:0; transform:translateY(-8px); }
+    .home-category-info:not(:focus-visible) { opacity:0; pointer-events:none; }
+}
+@media(max-width:900px) {
+    .home-category-track { grid-auto-columns:calc((100% - 24px) / 2); }
+    .home-category-title,.home-category-panel h3 { font-size:22px; }
+    .home-category-title { inset-inline:24px; bottom:26px; }
+    .home-category-panel { padding:24px; }
+}
+@media(max-width:640px) {
+    .home-category-track { grid-auto-columns:100%; gap:16px; }
+    .home-category-card { aspect-ratio:4 / 5; min-height:360px; }
+    .home-category-title { inset-inline:22px; bottom:26px; }
+    .home-category-panel { padding:24px 22px; }
+    .home-category-controls { margin-top:18px; }
+}
+@media(hover:none) {
+    .home-category-carousel:not(.is-ready) .home-category-panel { opacity:1; transform:none; }
+    .home-category-carousel:not(.is-ready) .home-category-title { opacity:0; }
+}

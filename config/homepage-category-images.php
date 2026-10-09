@@ -1,8 +1,8 @@
 <?php
 
-// Hover-only visuals for the homepage; category detail media stays independent.
+// Homepage carousel visuals; category detail media stays independent.
 return [
-    'electric-motors-generators' => 'images/category-reveals/electric-motors-generators.webp',
+    'electric-motors-generators' => 'images/products/demo-induction-motor.png',
     'vibration-technology' => 'images/category-reveals/vibration-technology.webp',
     'chemical-metering-pump' => 'images/category-reveals/chemical-metering-pump.webp',
     'hose-pump' => 'images/category-reveals/hose-pump.webp',
