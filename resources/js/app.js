@@ -2,6 +2,7 @@ import { createIcons, ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin,
 import { initHeroCarousel } from './hero-carousel';
 import { initBrandMarquee } from './brand-marquee';
 import { initCategoryCarousel } from './category-carousel';
+import { initIndustrialPartner } from './industrial-partner';
 
 const icons = { ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save, Eye, EyeOff, Info };
 const renderIcons = () => createIcons({ icons });
@@ -25,6 +26,7 @@ if (passwordToggle) {
 document.querySelectorAll('[data-hero-carousel]').forEach(initHeroCarousel);
 document.querySelectorAll('.home-brand-marquee').forEach(initBrandMarquee);
 document.querySelectorAll('[data-category-carousel]').forEach(initCategoryCarousel);
+document.querySelectorAll('[data-industrial-partner]').forEach(initIndustrialPartner);
 
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('#primary-nav');
