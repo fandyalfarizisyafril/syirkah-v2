@@ -25,7 +25,7 @@ class IndustrialPartnerTest extends TestCase
         $this->assertSame(route('about'), $xpath->query('//section[@data-industrial-partner]//a')->item(0)->getAttribute('href'));
         $this->assertSame(0, $xpath->query('//section[@data-industrial-partner]//img')->length);
         $this->assertSame('true', $xpath->query('//section[@data-industrial-partner]//svg')->item(0)->getAttribute('aria-hidden'));
-        $this->get('/tentang-kami')->assertOk()->assertDontSee('data-industrial-partner')->assertSee('company-grid');
+        $this->get('/tentang-kami')->assertOk()->assertDontSee('data-industrial-partner')->assertSee('about-profile');
     }
 
     public function test_cms_profile_is_rendered_in_full_and_escaped(): void
