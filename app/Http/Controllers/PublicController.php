@@ -50,8 +50,10 @@ class PublicController extends Controller
         $isBrand = $request->routeIs('brands.*');
         $model = $isBrand ? Brand::class : Industry::class;
         $entry = $slug ? $model::published()->where('slug', $slug)->firstOrFail() : null;
+        $productQuery = $entry?->products()->published()->with(['category', 'brand'])->ordered();
+        $products = $entry ? ($isBrand ? $productQuery->limit(6)->get() : $productQuery->paginate(12)) : null;
 
-        return view('public.directory', ['isBrand' => $isBrand, 'entry' => $entry, 'entries' => $entry ? collect() : $model::published()->ordered()->get(), 'products' => $entry ? $entry->products()->published()->with(['category', 'brand'])->ordered()->paginate(12) : null, 'relatedCategories' => $entry ? Category::published()->whereIn('id', $entry->products()->published()->pluck('category_id'))->ordered()->get() : collect()]);
+        return view('public.directory', ['isBrand' => $isBrand, 'entry' => $entry, 'entries' => $entry ? collect() : $model::published()->ordered()->get(), 'products' => $products, 'relatedCategories' => $entry ? Category::published()->whereIn('id', $entry->products()->published()->pluck('category_id'))->ordered()->get() : collect()]);
     }
 
     public function contact(Request $request)

@@ -5,10 +5,16 @@
     @push('head')
         @vite('resources/css/brand-portfolio.css')
     @endpush
+@elseif($isBrand && $entry)
+    @push('head')
+        @vite('resources/css/brand-detail.css')
+    @endpush
 @endif
 @section('content')
 @if($isBrand && !$entry)
     @include('public.partials.brand-portfolio')
+@elseif($isBrand && $entry)
+    @include('public.partials.brand-detail')
 @else
 <div class="container page-intro"><nav class="breadcrumb" aria-label="Breadcrumb"><a href="{{ route('home') }}">Beranda</a><span>/</span><a href="{{ route($isBrand ? 'brands.index' : 'industries.index') }}">{{ $isBrand ? 'Brand' : 'Industri' }}</a>@if($entry)<span>/</span><span>{{ $entry->name }}</span>@endif</nav><p class="eyebrow">{{ $isBrand ? 'BRANDS & PRINCIPALS' : 'INDUSTRIES & APPLICATIONS' }}</p><h1>{{ $entry?->name ?: ($isBrand ? 'Brands & Principals' : 'Industri & Aplikasi') }}</h1><p class="lead">{{ $entry?->description ?: ($isBrand ? 'Pilihan teknologi untuk kebutuhan equipment dan proses industri.' : 'Diskusikan tantangan operasional Anda bersama tim kami.') }}</p></div>
 <section class="container catalog-section">

@@ -57,6 +57,6 @@ class BrandPortfolioTest extends TestCase
         foreach (['/', '/tentang-kami', '/produk', '/industri', '/kontak', '/admin/login', route('brands.show', $brand->slug)] as $path) {
             $this->get($path)->assertOk()->assertDontSee('class="brand-portfolio"', false);
         }
-        $this->get(route('brands.show', $brand->slug))->assertSee($brand->name)->assertSee('Produk Terkait');
+        $this->get(route('brands.show', $brand->slug))->assertSee($brand->name)->assertSee('Jelajahi produk');
     }
 }

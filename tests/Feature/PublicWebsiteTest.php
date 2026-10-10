@@ -86,7 +86,7 @@ class PublicWebsiteTest extends TestCase
         $this->get('/brand/'.$product->brand->slug)->assertOk()->assertSee($product->name);
         $this->get('/industri/'.$industry->slug)->assertOk()->assertSee($product->name);
         $this->get('/produk/'.$product->category->slug)->assertSee($industry->name)->assertSee('Brand Terkait');
-        $this->get('/brand/'.$product->brand->slug)->assertSee($product->category->name)->assertSee('Kategori Terkait');
+        $this->get('/brand/'.$product->brand->slug)->assertSee($product->category->name)->assertSee('Teknologi dan solusi');
     }
 
     public function test_product_filters_and_keyword_search(): void

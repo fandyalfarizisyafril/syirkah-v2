@@ -56,8 +56,8 @@ test('every brand link opens its existing detail page and page assets stay scope
         await page.locator(`.brand-portfolio-card[href="${item.href}"]`).click();
         await expect(page).toHaveURL(item.href);
         await expect(page.locator('h1')).toHaveText(item.name);
-        await expect(page.locator('.catalog-section>.lead')).toHaveText(item.focus);
-        if (item.src) await expect(page.locator('.directory-image')).toHaveAttribute('src', item.src);
+        await expect(page.locator('.brand-detail-summary')).toHaveText(item.focus);
+        if (item.src) await expect(page.locator('.brand-detail-logo img')).toHaveAttribute('src', item.src);
         await expect(page.locator('.brand-portfolio')).toHaveCount(0);
         await expect(page.locator('link[rel="stylesheet"][href*="/brand-portfolio-"]')).toHaveCount(0);
     }
