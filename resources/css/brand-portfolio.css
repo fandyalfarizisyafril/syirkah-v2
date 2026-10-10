@@ -1,0 +1,43 @@
+.brand-portfolio { --brand-portfolio-blue:#084ca1; font-family:SMART Inter,Arial,Helvetica,sans-serif; color:var(--primary-dark); background:#fff; }
+.brand-portfolio .brand-portfolio-intro { padding-block:30px 40px; }
+.brand-portfolio .breadcrumb { margin-bottom:30px; }
+.brand-portfolio .eyebrow { display:flex; align-items:center; gap:12px; margin-bottom:18px; font-size:11px; font-weight:600; }
+.brand-portfolio .eyebrow::before { content:''; width:26px; height:2px; background:var(--accent); flex:none; }
+.brand-portfolio h1 { max-width:800px; margin-bottom:22px; font-size:56px; line-height:1.12; font-weight:650; }
+.brand-portfolio .brand-portfolio-description { max-width:700px; margin:0; color:var(--muted); font-size:17px; line-height:1.7; }
+.brand-portfolio .brand-portfolio-list { padding-bottom:64px; }
+.brand-portfolio .brand-portfolio-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:24px; }
+.brand-portfolio .brand-portfolio-card { position:relative; display:flex; flex-direction:column; min-width:0; padding:24px; border:1px solid var(--border); border-radius:8px; background:#fff; transition:border-color 240ms ease; }
+.brand-portfolio .brand-portfolio-logo { display:flex; align-items:center; justify-content:center; height:120px; flex:none; margin-bottom:24px; }
+.brand-portfolio .brand-portfolio-logo img { width:100%; max-width:240px; height:100%; max-height:100px; object-fit:contain; object-position:center; }
+.brand-portfolio .brand-portfolio-copy { flex:1; padding-right:24px; }
+.brand-portfolio .brand-portfolio-copy h2 { margin-bottom:8px; font-size:20px; line-height:1.3; font-weight:600; }
+.brand-portfolio .brand-portfolio-copy p { margin:0; font-size:14px; line-height:1.65; color:var(--muted); overflow-wrap:anywhere; }
+.brand-portfolio .brand-portfolio-card>.icon { position:absolute; right:22px; bottom:24px; width:18px; height:18px; color:var(--brand-portfolio-blue); transition:transform 240ms ease; }
+.brand-portfolio .brand-portfolio-card:hover,.brand-portfolio .brand-portfolio-card:focus-visible { border-color:var(--brand-portfolio-blue); }
+.brand-portfolio .brand-portfolio-card:hover>.icon,.brand-portfolio .brand-portfolio-card:focus-visible>.icon { transform:translate(2px,-2px); }
+.brand-portfolio a:focus-visible { outline:2px solid var(--brand-portfolio-blue); outline-offset:4px; }
+.brand-portfolio .empty-state h2 { font-size:26px; }
+@media(max-width:1199px) {
+    .brand-portfolio .brand-portfolio-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .brand-portfolio h1 { font-size:50px; max-width:740px; }
+}
+@media(max-width:900px) {
+    .brand-portfolio .brand-portfolio-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .brand-portfolio h1 { font-size:42px; max-width:640px; }
+}
+@media(max-width:640px) {
+    .brand-portfolio .brand-portfolio-intro { padding-block:24px 32px; }
+    .brand-portfolio .breadcrumb { margin-bottom:26px; }
+    .brand-portfolio h1 { font-size:34px; line-height:1.15; margin-bottom:18px; }
+    .brand-portfolio .brand-portfolio-description { font-size:16px; }
+    .brand-portfolio .brand-portfolio-grid { grid-template-columns:1fr; gap:20px; }
+    .brand-portfolio .brand-portfolio-card { padding:22px; }
+    .brand-portfolio .brand-portfolio-logo { height:110px; margin-bottom:20px; }
+    .brand-portfolio .brand-portfolio-logo img { max-height:90px; }
+    .brand-portfolio .brand-portfolio-list { padding-bottom:44px; }
+}
+@media(prefers-reduced-motion:reduce) {
+    .brand-portfolio .brand-portfolio-card,.brand-portfolio .brand-portfolio-card>.icon { transition:none; }
+    .brand-portfolio .brand-portfolio-card:hover>.icon,.brand-portfolio .brand-portfolio-card:focus-visible>.icon { transform:none; }
+}
