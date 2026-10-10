@@ -1,4 +1,7 @@
 import { test, expect } from '@playwright/test';
+import { readFileSync } from 'node:fs';
+
+const drafts = JSON.parse(readFileSync(new URL('../../database/data/brand-profile-drafts.json', import.meta.url), 'utf8'));
 
 for (const [width, columns] of [[1440, 3], [1280, 3], [768, 2], [390, 1], [375, 1], [320, 1]]) {
     test(`brand detail geometry, logos and products at ${width}px`, async ({ page }, testInfo) => {
@@ -48,8 +51,10 @@ test('all brands keep their own logo, profile, categories and product relationsh
         const summary = await page.locator('.brand-hero-description').innerText();
         const profile = await page.locator('.brand-detail-profile-copy p').first().innerText();
         expect(summary.length).toBeGreaterThan(0);
-        // The current CMS has one sentence per brand; preserve it until enriched.
-        expect(summary).toBe(profile);
+        const draft = drafts.find(item => new URL(brand.href).pathname.endsWith(`/${item.slug}`));
+        expect(summary).toBe(draft.hero);
+        expect(profile).toBe(draft.profile);
+        expect(summary).not.toBe(profile);
         expect(summary).not.toMatch(/\.\.\.|\u2026/);
         expect(summary).toMatch(/[.!?]$/);
         await expect(page.locator('.brand-hero-description')).toHaveCSS('white-space', 'normal');
@@ -57,10 +62,11 @@ test('all brands keep their own logo, profile, categories and product relationsh
         await expect(page.locator('.brand-hero-description')).toHaveCSS('-webkit-line-clamp', 'none');
         await expect(page.locator('.brand-detail-logo img')).toHaveAttribute('src', brand.image);
         expect((await page.locator('.brand-detail-profile-copy p').innerText()).length).toBeGreaterThan(0);
-        await expect(page.locator('.brand-technology-item h3')).toHaveText([brand.focus]);
+        await expect(page.locator('.brand-technology-item h3')).toHaveText(draft.technology_details.map(item => item.name));
+        await expect(page.locator('.brand-technology-item p')).toHaveText(draft.technology_details.map(item => item.description));
         expect((await page.locator('.product-card .eyebrow').allTextContents()).every(n => n.trim() === brand.name)).toBe(true);
         expect(await page.locator('.product-card').count()).toBeLessThanOrEqual(6);
-        const category = page.locator('.brand-technology-item').first();
+        const category = page.locator('.brand-detail-summary a');
         const categoryUrl = await category.getAttribute('href');
         await category.click();
         await expect(page).toHaveURL(categoryUrl);
@@ -86,13 +92,13 @@ test('all brands keep their own logo, profile, categories and product relationsh
 
 test('keyboard links and reduced motion work while shared CTA stays intact', async ({ page }) => {
     await page.goto('/brand/wolong');
-    const category = page.locator('.brand-technology-item');
+    const category = page.locator('.brand-detail-summary a');
     await category.focus();
     await expect(category).toHaveCSS('outline-style', 'solid');
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await category.hover();
-    await expect(category).toHaveCSS('transition-duration', '0s');
-    await expect(category.locator(':scope > .icon')).toHaveCSS('transform', 'none');
+    await expect(page.locator('.brand-technology-item').first()).toHaveCSS('transition-duration', '0s');
+    await expect(category.locator('.icon')).toHaveCSS('transform', 'none');
     await category.focus();
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/\/produk\/electric-motors-generators$/);

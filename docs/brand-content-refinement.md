@@ -1,5 +1,7 @@
 # Review Konten Detail Brand
 
+> Catatan historis sebelum persetujuan pengisian draft. Pengguna kini telah menyetujui field dan pengisian sementara; status terbaru, sumber, batasan, backup, dan cara edit CMS tersedia di [Draft Konten Detail Brand](brand-draft-content.md). Keterbatasan tampilan satu kalimat di bawah tidak lagi menggambarkan data yang telah diisi.
+
 ## Sumber dan Batasan
 
 - Field CMS `brands.description` adalah satu-satunya profil naratif; `focus` menyimpan fokus teknologi, bukan deskripsi pendek terpisah.

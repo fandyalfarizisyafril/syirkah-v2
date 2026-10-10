@@ -54,6 +54,13 @@ class CatalogController extends Controller
         ];
         if ($module === 'brands') {
             $rules += ['focus' => 'nullable|string|max:255', 'website_url' => 'nullable|url:http,https|max:255', 'remove_image' => 'nullable|boolean'];
+            $rules += [
+                'technology_details_present' => 'nullable|boolean',
+                'technology_details' => 'nullable|array|max:12',
+                'technology_details.*' => 'array:name,description',
+                'technology_details.*.name' => 'nullable|required_with:technology_details.*.description|string|max:150',
+                'technology_details.*.description' => 'nullable|string|max:1000',
+            ];
         }
         if ($module === 'industries') {
             $rules += ['challenges' => 'nullable|string|max:10000', 'solution_copy' => 'nullable|string|max:10000', 'product_ids' => 'nullable|array', 'product_ids.*' => 'integer|exists:products,id'];
@@ -73,6 +80,13 @@ class CatalogController extends Controller
         $data = $request->validate($rules);
         $industryIds = $data['industry_ids'] ?? [];
         $productIds = $data['product_ids'] ?? [];
+        if ($module === 'brands' && ($request->has('technology_details') || $request->boolean('technology_details_present'))) {
+            $data['technology_details'] = collect($data['technology_details'] ?? [])
+                ->filter(fn ($row) => filled($row['name'] ?? null))
+                ->map(fn ($row) => ['name' => trim($row['name']), 'description' => trim($row['description'] ?? '')])
+                ->values()->all();
+        }
+        unset($data['technology_details_present']);
         if ($module === 'brands' && $request->boolean('remove_image')) {
             $data['image'] = null;
         }

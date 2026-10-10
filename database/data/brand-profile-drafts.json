@@ -1,0 +1,85 @@
+[
+    {
+        "slug": "wolong",
+        "expected_description": "Electric motors, generators, PM motors, dan drive control untuk kebutuhan penggerak industri.",
+        "hero": "Teknologi motor listrik, generator, dan sistem penggerak untuk kebutuhan peralatan industri.",
+        "profile": "Wolong berfokus pada motor listrik dan sistem penggerak untuk pengoperasian peralatan industri. Motor mengubah energi listrik menjadi gerak mekanis yang dapat digunakan pada mesin, pompa, maupun kipas. Portofolio produsen juga mencakup generator serta perangkat penggerak dan kontrol, dengan peran yang berbeda dalam suatu instalasi. Penentuan konfigurasi perlu mempertimbangkan karakteristik beban, kebutuhan daya, dan kondisi pengoperasian. Informasi model dan kebutuhan integrasi tetap perlu diperiksa sebelum memilih peralatan yang sesuai.",
+        "technology_details": [
+            {"name": "Electric Motors", "description": "Mengubah energi listrik menjadi gerak mekanis untuk menggerakkan peralatan. Jenis motor dipilih sesuai karakteristik beban dan kebutuhan instalasi."},
+            {"name": "Generators", "description": "Mengubah tenaga mekanis menjadi energi listrik. Pemilihan generator perlu mempertimbangkan sumber penggerak dan kebutuhan sistem kelistrikan."},
+            {"name": "Drives & Control", "description": "Perangkat untuk mengatur pengoperasian sistem penggerak, termasuk pengendalian motor sesuai kebutuhan proses dan konfigurasi peralatan."}
+        ],
+        "sources": ["https://www.wolong-electric.com/"],
+        "review_note": "Kelompok portofolio produsen, bukan pernyataan stok atau ketersediaan seluruh model melalui SMART."
+    },
+    {
+        "slug": "oli",
+        "expected_description": "Internal dan external vibrator, screen vibrator, serta converter untuk kebutuhan proses material.",
+        "hero": "Teknologi vibrasi untuk membantu proses aliran, pemindahan, dan penanganan material industri.",
+        "profile": "OLI mengembangkan peralatan vibrasi untuk penanganan material dan pemadatan beton. Dalam proses industri, getaran dapat membantu pergerakan material pada peralatan, mendukung pengosongan hopper atau silo, serta digunakan pada sistem pengayakan. Aplikasi pemadatan memiliki kebutuhan yang berbeda dari aliran material sehingga jenis vibrator dan perangkat pendukungnya perlu dipilih secara tepat. Karakteristik material, metode pemasangan, dan kondisi proses menjadi bagian penting dalam meninjau pilihan teknologi sebelum menentukan konfigurasi untuk suatu peralatan.",
+        "technology_details": [
+            {"name": "External Vibrators", "description": "Unit vibrasi yang dipasang pada struktur atau peralatan untuk meneruskan getaran. Konfigurasi pemasangan disesuaikan dengan aplikasi yang dilayani."},
+            {"name": "Internal Vibrators", "description": "Peralatan vibrasi yang bekerja dari dalam material pada aplikasi pemadatan beton. Pemilihannya mengikuti kebutuhan pekerjaan dan metode penggunaan."},
+            {"name": "Screen Vibrators", "description": "Unit vibrasi untuk peralatan pengayakan yang membantu proses pemisahan material. Kesesuaian unit perlu diperiksa terhadap rancangan mesin pengayak."},
+            {"name": "Converters", "description": "Perangkat pendukung untuk menyediakan suplai listrik yang sesuai bagi sistem vibrator tertentu, terutama pada aplikasi pemadatan beton."}
+        ],
+        "sources": ["https://www.olivibra.com/", "https://concrete.olivibra.com/concrete-vibrators/", "https://www.olivibra.com/products/mve-sv-screen-vibrators/"],
+        "review_note": "Fungsi tiap kelompok dibedakan; tidak menyatakan semua model tersedia di SMART."
+    },
+    {
+        "slug": "qdos",
+        "expected_description": "Chemical dosing pump untuk kebutuhan penakaran bahan kimia dalam proses industri.",
+        "hero": "Teknologi pompa metering untuk membantu pengaturan aliran dan dosis cairan pada proses industri.",
+        "profile": "Qdos merupakan lini pompa peristaltik Watson-Marlow untuk penakaran bahan kimia. Dalam proses dosing, pompa membantu menyalurkan cairan dalam jumlah yang mengikuti kebutuhan proses, bukan sekadar memindahkannya dari satu titik ke titik lain. Pengaturan aliran menjadi bagian penting ketika penambahan bahan kimia perlu dikendalikan. Pemilihan pompa dan bagian yang bersentuhan dengan cairan perlu mempertimbangkan kompatibilitas bahan, rentang pengoperasian, serta konfigurasi instalasi. Informasi setiap model tetap menjadi acuan sebelum menentukan pilihan.",
+        "technology_details": [
+            {"name": "Chemical Metering & Dosing", "description": "Penakaran bahan kimia menggunakan pompa peristaltik dengan pengaturan aliran sesuai kebutuhan proses. Pemilihan konfigurasi memperhatikan karakteristik cairan dan metode pengendalian dosis."}
+        ],
+        "sources": ["https://www.wmfts.com/en-us/mining-products/watson-marlow-pumps/cased-pumps/qdos-metering-pump/"],
+        "review_note": "Produk CMS berlabel (Contoh) tidak digunakan untuk menentukan teknologi Qdos; data produk tidak diubah."
+    },
+    {
+        "slug": "bredel",
+        "expected_description": "Hose pump untuk pemindahan fluida pada proses industri.",
+        "hero": "Teknologi hose pump untuk penanganan dan pemindahan fluida dalam proses industri.",
+        "profile": "Bredel berfokus pada pompa selang yang memindahkan fluida dengan mekanisme peristaltik. Penekanan dan pelepasan selang secara berurutan mendorong cairan melalui jalur di dalam selang, sehingga fluida tidak bersentuhan langsung dengan komponen penggerak pompa. Pendekatan ini relevan untuk kebutuhan transfer, metering, dan dosing sesuai rancangan modelnya. Pemilihan elemen selang serta konfigurasi pompa perlu mengikuti karakteristik fluida dan kondisi proses. Kecocokan material dan batas pengoperasian tetap harus diperiksa pada dokumentasi produk.",
+        "technology_details": [
+            {"name": "Peristaltic Hose Pumps", "description": "Pemompaan melalui kompresi selang secara berurutan untuk mendorong fluida. Elemen selang menjadi jalur cairan dan dipilih berdasarkan kebutuhan transfer, metering, atau dosing pada proses terkait."}
+        ],
+        "sources": ["https://www.wmfts.com/en/brands/bredel-hose-pumps/"],
+        "review_note": "Tidak memasukkan angka tekanan, kapasitas, atau klaim kompatibilitas fluida tertentu."
+    },
+    {
+        "slug": "aflex",
+        "expected_description": "PTFE hose untuk kebutuhan transfer fluida industri.",
+        "hero": "Solusi selang berlapis PTFE untuk kebutuhan penyaluran fluida pada sistem proses industri.",
+        "profile": "Aflex mengembangkan selang berlapis PTFE untuk kebutuhan transfer fluida pada aplikasi industri. Selang fleksibel dapat menghubungkan peralatan dengan jalur proses ketika instalasi membutuhkan sambungan yang dapat mengikuti tata letak sistem. Portofolio produsen mencakup konstruksi bagian dalam yang berbeda serta pilihan rangkaian selang dan sambungan. Pemilihan konfigurasi perlu mempertimbangkan jenis fluida, kondisi operasi, dan metode pemasangan. Dokumentasi produk tetap diperlukan untuk memeriksa kompatibilitas material dan menentukan rakitan yang sesuai dengan kebutuhan penggunaannya.",
+        "technology_details": [
+            {"name": "PTFE Hose Assemblies", "description": "Rangkaian selang berlapis PTFE beserta sambungan untuk menghubungkan jalur fluida. Konstruksi selang dan jenis sambungan dipilih sebagai satu konfigurasi sesuai kebutuhan aplikasi."}
+        ],
+        "sources": ["https://www.wmfts.com/en/water-wastewater/aflex-hoses/"],
+        "review_note": "Industrial hose dan flexible connections tidak dipisahkan menjadi lini produk buatan."
+    },
+    {
+        "slug": "tecbell",
+        "expected_description": "Air compressor dan refrigerated dryer untuk kebutuhan sistem udara bertekanan.",
+        "hero": "Teknologi kompresor udara untuk mendukung kebutuhan udara bertekanan pada fasilitas industri.",
+        "profile": "Tecbell memiliki portofolio kompresor udara dan peralatan pengering udara. Dalam suatu instalasi, kompresor menyediakan udara bertekanan untuk peralatan dan proses, sedangkan pengering membantu menangani kandungan uap air sebelum udara digunakan. Kedua fungsi tersebut perlu ditinjau bersama kebutuhan sistem, bukan dipilih hanya berdasarkan ukuran peralatan. Pola penggunaan, kebutuhan aliran, tekanan kerja, dan kualitas udara menjadi pertimbangan saat memilih konfigurasi. Spesifikasi setiap model perlu dicocokkan dengan kondisi instalasi yang akan dilayani.",
+        "technology_details": [
+            {"name": "Air Compressors", "description": "Peralatan untuk menghasilkan udara bertekanan sebagai suplai bagi peralatan atau proses. Konfigurasi kompresor mengikuti kebutuhan operasi dan pola pemakaian."},
+            {"name": "Air Dryers", "description": "Peralatan pengolahan udara setelah kompresi untuk membantu mengurangi kandungan uap air. Jenis pengering dipilih berdasarkan kondisi udara dan kebutuhan sistem."}
+        ],
+        "sources": ["https://www.tecbell.cn/", "https://www.tecbell.cn/product_list_7_1.html"],
+        "review_note": "Tidak mengklaim seluruh jaringan distribusi atau perangkat pneumatik sebagai produk Tecbell."
+    },
+    {
+        "slug": "blu-c",
+        "expected_description": "Oil boom, absorbent, skimmer, dispersant, dan spill kit untuk penanganan tumpahan minyak.",
+        "hero": "Dalam katalog SMART, BLU-C berada pada cakupan penanganan dan pencegahan penyebaran tumpahan minyak.",
+        "profile": "BLU-C ditempatkan dalam kategori Oil Spill Response & Prevention pada katalog SMART. Secara umum, bidang ini berkaitan dengan kesiapan respons, pembatasan penyebaran, dan penanganan material yang tumpah. Pendekatan yang sesuai bergantung pada lokasi kejadian, karakteristik fluida, kondisi lingkungan, serta prosedur keselamatan yang berlaku. Peninjauan kebutuhan peralatan menjadi bagian dari perencanaan respons, bukan pengganti prosedur penanganan di lapangan. Rincian jenis dan spesifikasi produk perlu dikonfirmasi sebelum menentukan solusi untuk suatu kebutuhan operasional.",
+        "technology_details": [
+            {"name": "Pengendalian Tumpahan Minyak", "description": "Cakupan umum yang meliputi kesiapan respons dan pembatasan penyebaran tumpahan sesuai kondisi lapangan. Pemilihan peralatan pendukung perlu mengikuti karakteristik tumpahan serta prosedur penanganan yang berlaku."}
+        ],
+        "sources": [],
+        "review_note": "Berdasarkan draft pengguna dan kategori CMS/PRD. Identitas produsen belum terverifikasi; tidak menyatakan BLU-C memproduksi seluruh peralatan respons tumpahan."
+    }
+]

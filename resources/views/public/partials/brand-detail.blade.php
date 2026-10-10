@@ -9,6 +9,7 @@
         $profileParagraphs = array_slice($profileParagraphs, 1);
     }
     $primaryCategory = $relatedCategories->firstWhere('name', $heroSummary);
+    $technologyDetails = collect($entry->technology_details ?? []);
     $technologyDescriptions = $relatedCategories->mapWithKeys(function ($category) use ($profile, $heroDescription, $heroSummary) {
         $description = trim($category->description ?? '');
         return [$category->id => filled($description) && !in_array($description, [$profile, $heroDescription, trim($heroSummary ?? '')], true) ? $description : null];
@@ -51,12 +52,21 @@
         </section>
     @endif
 
-    @if($relatedCategories->isNotEmpty())
-        <section @class(['brand-detail-technology', 'is-compact' => $technologyDescriptions->filter()->isEmpty()]) aria-labelledby="brand-technology-title">
+    @if($technologyDetails->isNotEmpty() || $relatedCategories->isNotEmpty())
+        <section @class(['brand-detail-technology', 'is-compact' => $technologyDetails->isNotEmpty() || $technologyDescriptions->filter()->isEmpty()]) aria-labelledby="brand-technology-title">
             <div class="container">
                 <p class="brand-detail-eyebrow">02 / FOKUS TEKNOLOGI</p>
                 <h2 id="brand-technology-title">Teknologi dan solusi {{ $entry->name }}</h2>
-                <div @class(['brand-technology-grid', 'is-single' => $relatedCategories->count() === 1])>
+                <div @class(['brand-technology-grid', 'is-single' => ($technologyDetails->isNotEmpty() ? $technologyDetails->count() : $relatedCategories->count()) === 1])>
+                    @if($technologyDetails->isNotEmpty())
+                        @foreach($technologyDetails as $technology)
+                            <div @class(['brand-technology-item', 'has-description' => filled($technology['description'] ?? null)])>
+                                <span class="brand-technology-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                                <h3>{{ $technology['name'] }}</h3>
+                                @if(filled($technology['description'] ?? null))<p>{{ $technology['description'] }}</p>@endif
+                            </div>
+                        @endforeach
+                    @else
                     @foreach($relatedCategories as $category)
                         @php($showCategoryDescription = filled($technologyDescriptions[$category->id]))
                         <a @class(['brand-technology-item', 'has-description' => $showCategoryDescription]) href="{{ route('products.category', $category->slug) }}">
@@ -66,6 +76,7 @@
                             <x-icon name="arrow-up-right"/>
                         </a>
                     @endforeach
+                    @endif
                 </div>
             </div>
         </section>
