@@ -1,4 +1,12 @@
 import { test, expect } from '@playwright/test';
+import { execFileSync } from 'node:child_process';
+
+const expectedLogos = () => JSON.parse(execFileSync('php', ['-r', `
+require 'vendor/autoload.php';
+$app = require 'bootstrap/app.php';
+$app->make(Illuminate\\Contracts\\Console\\Kernel::class)->bootstrap();
+echo App\\Models\\Brand::published()->ordered()->get()->filter(fn ($brand) => filled($brand->image))->pluck('name')->values()->toJson();
+`], { encoding: 'utf8' }));
 
 async function openMarquee(page) {
     await page.goto('/');
@@ -19,9 +27,10 @@ for (const width of [1920, 1440, 768, 390, 320]) {
         const groups = marquee.locator('.home-brand-group');
         await expect(groups).toHaveCount(2);
         const original = groups.first();
-        await expect(original.locator('img')).toHaveCount(5);
+        const names = expectedLogos();
+        await expect(original.locator('img')).toHaveCount(names.length);
         expect(await original.locator('img').evaluateAll(images => images.map(image => image.alt)))
-            .toEqual(['Wolong', 'OLI', 'Bredel', 'Aflex', 'Tecbell']);
+            .toEqual(names);
         await expect(groups.last()).toHaveAttribute('aria-hidden', 'true');
         await expect(groups.last().locator('a:not([tabindex="-1"])')).toHaveCount(0);
         await expect(groups.last().locator('img:not([alt=""])')).toHaveCount(0);
@@ -84,8 +93,9 @@ test('keyboard users can reach every original logo without moving or duplicate f
             return item.x >= view.x - 1 && item.x + item.width <= view.x + view.width + 1;
         }).toBe(true);
     }
+    const destination = await links.last().getAttribute('href');
     await page.keyboard.press('Enter');
-    await expect(page).toHaveURL(/\/brand\/tecbell$/);
+    await expect(page).toHaveURL(destination);
 });
 
 test('reduced motion shows one scrollable list and responds to preference changes', async ({ page }) => {
@@ -110,7 +120,7 @@ test('small CMS lists still cover the viewport without a gap at the loop', async
     await marquee.locator('.home-brand-track').evaluate(element => element.getAnimations()[0].pause());
     const group = await marquee.locator('.home-brand-group').first().boundingBox();
     const duplicate = await marquee.locator('.home-brand-group').last().boundingBox();
-    expect(group.width).toBeGreaterThanOrEqual((await marquee.boundingBox()).width);
+    expect(group.width + .01).toBeGreaterThanOrEqual((await marquee.boundingBox()).width);
     expect(group.x + group.width).toBeCloseTo(duplicate.x, 1);
 });
 

@@ -38,10 +38,11 @@
 .about-page .about-legal { padding-block:0 64px; scroll-margin-top:110px; }
 .about-page .about-legal p { color:#3b5367; overflow-wrap:anywhere; }
 @media(prefers-reduced-motion:no-preference) {
-    .about-page [data-about-reveal].is-revealed .about-reveal-item { animation:about-enter 600ms cubic-bezier(.22,.61,.36,1) both; animation-delay:var(--about-delay,0ms); }
+    .about-page [data-about-reveal].is-revealed .about-reveal-item { animation:about-enter 650ms cubic-bezier(.22,1,.36,1) both; animation-delay:var(--about-delay,0ms); }
+    .about-page [data-about-reveal].is-revealed .about-focus-item { animation-duration:600ms; }
     .about-page .about-profile-copy { --about-delay:100ms; }
 }
-@keyframes about-enter { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+@keyframes about-enter { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
 @media(max-width:1100px) {
     .about-page h1 { font-size:44px; }
     .about-page .about-profile { gap:40px; padding-block:60px; }

@@ -93,7 +93,7 @@ test('reuses one-time entrance animation with reduced-motion support', async ({ 
     await expect(focus).not.toHaveClass(/is-revealed/);
     await focus.scrollIntoViewIfNeeded();
     await expect(focus).toHaveClass(/is-revealed/);
-    await expect(focus.locator('li').last()).toHaveCSS('animation-delay', '0.24s');
+    await expect(focus.locator('li').last()).toHaveCSS('animation-delay', '0.36s');
     await page.waitForTimeout(950);
     const starts = await focus.evaluate(e => e.getAnimations({ subtree: true }).map(a => a.startTime));
     await page.evaluate(() => scrollTo(0, 0));

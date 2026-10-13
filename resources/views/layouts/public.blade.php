@@ -10,6 +10,7 @@
     <meta property="og:type" content="website"><meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="@yield('og_image', asset('images/industrial.jpg'))">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite('resources/js/scroll-reveal.js')
     @stack('head')
     <script type="application/ld+json">{!! json_encode(['@context' => 'https://schema.org', '@type' => 'Organization', 'name' => $settings['company_name'], 'url' => url('/'), 'email' => $settings['email'], 'telephone' => $settings['phone'], 'address' => $settings['address']], JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES) !!}</script>
 </head>
@@ -41,7 +42,7 @@
         </nav>
     </div>
 </header>
-<main id="main">@yield('content')</main>
+<main id="main" data-public-reveal-root>@yield('content')</main>
 <footer class="site-footer">
     <div class="container smart-footer-main">
         <div class="smart-footer-brand">

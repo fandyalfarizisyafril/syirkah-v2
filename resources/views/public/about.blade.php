@@ -30,7 +30,7 @@
             </div>
             <ul class="about-focus-grid">
                 @foreach(['Engineering' => 'drafting-compass', 'Mechanical' => 'cog', 'Electrical' => 'zap', 'Instrumentation' => 'gauge', 'Oil Spill Response & Prevention' => 'shield-check'] as $focus => $icon)
-                    <li class="about-focus-item about-reveal-item" style="--about-delay:{{ $loop->index * 60 }}ms">
+                    <li class="about-focus-item about-reveal-item" style="--about-delay:{{ min($loop->index * 90, 360) }}ms">
                         <span class="about-focus-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                         <i data-about-icon="{{ $icon }}" class="about-focus-icon" aria-hidden="true"></i>
                         <h3>{{ $focus }}</h3>

@@ -21,7 +21,7 @@
 .home-partner-signature path { stroke:var(--partner-blue); stroke-opacity:.2; stroke-width:1; }
 .home-partner-signature rect { fill:var(--accent); opacity:.75; }
 @media(prefers-reduced-motion:no-preference) {
-    .home-partner.is-revealed [data-partner-reveal] { animation:partner-fade-up 650ms cubic-bezier(.22,.61,.36,1) both; }
+    .home-partner.is-revealed [data-partner-reveal] { animation:partner-fade-up 650ms cubic-bezier(.22,1,.36,1) both; }
     .home-partner.is-revealed h2[data-partner-reveal] { animation-delay:80ms; }
     .home-partner.is-revealed .home-partner-copy { animation-delay:160ms; }
     .home-partner.is-revealed .home-partner-signature path { stroke-dasharray:1; animation:partner-line-draw 750ms ease 120ms both; }
