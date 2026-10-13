@@ -10,11 +10,11 @@ Tanggal pemeriksaan aset: 2026-10-09.
 - Hover menghentikan animasi sementara. Saat fokus keyboard, daftar asli menjadi statis dan logo terfokus digeser ke area terlihat. Duplikasi diabaikan screen reader dan tidak masuk urutan Tab.
 - Reduced motion menggunakan satu baris statis yang dapat digeser. Animasi dasar tidak membutuhkan JavaScript; helper kecil hanya mengatur fokus dan reset posisi scroll.
 - Admin > Brand > Media mendukung penggantian file JPG/PNG/WebP, serta opsi Hapus logo. Mengubah status menjadi draft atau menghapus brand juga menghapusnya dari marquee. Batasan penghapusan brand yang masih terkait produk tetap berlaku.
-- Logo yang belum tersedia tidak diganti dengan teks, placeholder, atau logo rekaan. Qdos dan BLU-C tetap ada dalam katalog dan menunggu aset dari perusahaan.
+- Qdos dan BLU-C menggunakan SVG lokal yang direkonstruksi secara deterministik dari wordmark pada materi branding/kemasan referensi. Keduanya perlu diganti jika perusahaan menyediakan master logo resmi.
 
-## Aset Resmi
+## Aset dan Referensi
 
-File disalin tanpa perubahan bentuk/warna dari sumber principal. `database/data/brand-logos.json` mencatat halaman asal dan URL file lengkap. Aset tidak di-hotlink pada runtime. Logo tetap milik masing-masing pemilik merek; sumber resmi tidak berarti pemberian lisensi atau bukti hubungan principal. Perusahaan perlu mengonfirmasi izin penggunaan sebelum publikasi resmi.
+`database/data/brand-logos.json` mencatat halaman asal dan URL referensi. Aset tidak di-hotlink pada runtime. Lima logo pertama disalin dari sumber principal. SVG Qdos dan BLU-C direkonstruksi dari wordmark yang terlihat pada materi branding dan kemasan karena master logo mandiri belum ditemukan. Logo tetap milik masing-masing pemilik merek; perusahaan perlu mengonfirmasi bentuk, izin penggunaan, dan identitas principal sebelum publikasi resmi.
 
 | Brand | Aset | Sumber |
 | --- | --- | --- |
@@ -23,14 +23,14 @@ File disalin tanpa perubahan bentuk/warna dari sumber principal. `database/data/
 | Bredel | `public/images/brands/bredel.svg` | [WMFTS Brands](https://www.wmfts.com/en/brands/) |
 | Aflex | `public/images/brands/aflex.svg` | [WMFTS Brands](https://www.wmfts.com/en/brands/) |
 | Tecbell | `public/images/brands/tecbell.png` | [Tecbell](https://www.tecbell.cn/) |
-| Qdos | Belum tersedia | Identitas produk sudah ditemukan pada WMFTS, tetapi file logo mandiri belum diperoleh. Tidak digantikan logo Watson-Marlow. |
-| BLU-C | Belum tersedia | Sumber principal dan logo resmi belum dapat diverifikasi. |
+| Qdos | `public/images/brands/qdos.svg` | [WMFTS Qdos](https://www.wmfts.com/en-us/mining-products/watson-marlow-pumps/cased-pumps/qdos-metering-pump/) dan materi branding Qdos |
+| BLU-C | `public/images/brands/blu-c.svg` | Wordmark pada kemasan produk BLU-C; identitas principal masih perlu diverifikasi |
 
 ## Penerapan
 
-`php artisan db:seed --class=BrandLogoSeeder` menyalin lima aset ke disk public (`catalog/brand-logos/`) dan mengisi media record brand existing yang masih kosong. Tidak membuat brand, mengubah status, atau menimpa upload Admin. Perintah sudah dijalankan pada database lokal.
+`BrandLogoSeeder` menyalin tujuh aset ke disk public (`catalog/brand-logos/`) dan mengisi media record brand existing yang masih kosong. Seeder dipanggil otomatis oleh `DatabaseSeeder` setelah katalog dasar dibuat. Seeder tidak membuat brand, mengubah status, atau menimpa upload Admin.
 
-Seeder ini sengaja tidak dimasukkan ke alur seed umum. Jalankan hanya saat pemasangan aset awal; jika dijalankan kembali setelah Admin menghapus logo, field kosong dapat diisi lagi. Pengelolaan sehari-hari tetap melalui CMS.
+Seeder ini ditujukan untuk pemasangan data awal melalui `php artisan migrate:fresh --seed`. Jika `DatabaseSeeder` dijalankan kembali setelah Admin menghapus logo, field kosong dapat diisi lagi; pengelolaan sehari-hari tetap melalui CMS.
 
 SVG bawaan berasal dari sumber tepercaya dan ditampilkan melalui `<img>`, bukan inline. Validasi upload CMS tetap JPG/PNG/WebP; tidak membuka upload SVG umum.
 

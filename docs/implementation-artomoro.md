@@ -9,8 +9,7 @@ Kebutuhan: PHP 8.2+, Composer, Node.js, MySQL/MariaDB. Dependency PHP menggunaka
 ```powershell
 composer install
 npm install
-php artisan migrate
-php artisan db:seed --class=CatalogSeeder
+php artisan migrate:fresh --seed
 php artisan storage:link
 npm run build
 php artisan serve --host=127.0.0.1 --port=8000
@@ -19,10 +18,11 @@ php artisan serve --host=127.0.0.1 --port=8000
 - Website: http://127.0.0.1:8000
 - CMS: http://127.0.0.1:8000/admin
 - Sitemap: http://127.0.0.1:8000/sitemap.xml
-- Akun lokal awal: `admin@artomoro.test`. Password diberikan saat pembuatan akun dan tidak disimpan di dokumentasi.
+- Akun admin lokal awal: `admin@smartomoro.com` dengan password `password`.
+- Akun seed hanya dibuat pada environment `local`/`testing`; segera ganti password melalui `/admin/account`.
 - Password dapat diganti di `/admin/account`.
 
-Seeder menggunakan `firstOrCreate`: menjalankannya lagi tidak menimpa konten yang sudah diedit. Jangan menggunakan `migrate:fresh` pada database berisi data yang ingin dipertahankan.
+`DatabaseSeeder` menjalankan akun admin lokal, katalog dasar, draft profil brand, logo brand, media kategori, produk pratinjau, dan ilustrasi produk dalam urutan dependensi yang benar. Jangan menggunakan `migrate:fresh` pada database berisi data yang ingin dipertahankan karena seluruh tabel akan dibuat ulang.
 
 ## Hak Akses
 
@@ -61,15 +61,15 @@ Seluruh tujuh kategori menggunakan template detail yang sama: pengantar di kiri,
 
 Enam ilustrasi kategori lainnya dibuat dengan tool image generation bawaan pada 2026-10-06, tanpa logo atau klaim model resmi. Aset sumber berada di `public/images/categories/`. Daftar aset dan prompt lengkap tersedia di `docs/category-image-prompts.md`. Ilustrasi ini bukan foto produk resmi dan perlu persetujuan perusahaan sebelum launch.
 
-Jalankan `php artisan db:seed --class=CategoryMediaSeeder` untuk mengisi media yang kosong pada enam kategori yang sudah ada. Seeder menyalin aset ke public storage `catalog/categories/`, tidak membuat kategori baru, tidak menimpa gambar/alt yang sudah diunggah, dan tidak mengubah status kategori maupun data produk. Seeder dijalankan secara eksplisit, bukan otomatis melalui DatabaseSeeder. Media dapat diganti dari Admin > Kategori > Media seperti unggahan biasa. Kartu daftar kategori tetap tanpa gambar.
+`CategoryMediaSeeder` mengisi media yang kosong pada enam kategori yang sudah ada. Seeder menyalin aset ke public storage `catalog/categories/`, tidak membuat kategori baru, tidak menimpa gambar/alt yang sudah diunggah, dan tidak mengubah status kategori maupun data produk. Seeder dipanggil otomatis oleh `DatabaseSeeder`, sehingga ikut berjalan melalui `php artisan migrate:fresh --seed`. Media dapat diganti dari Admin > Kategori > Media seperti unggahan biasa. Kartu daftar kategori tetap tanpa gambar.
 
 ### Pratinjau Data Produk
 
-`php artisan db:seed --class=CategoryPreviewSeeder` menambahkan tiga produk published bertanda `(Contoh)` untuk masing-masing dari tujuh kategori (total 21) di lingkungan local/testing saja. Seeder ini tidak dipanggil oleh DatabaseSeeder dan tidak mengubah produk draft yang sudah ada. Slug berawalan `demo-` dipakai untuk mencegah duplikasi; menjalankannya kembali tidak menimpa perubahan CMS, termasuk tiga contoh motor yang sudah ada. Semua kategori dan brand terkait harus sudah published; seeder tidak memublikasikan kategori atau brand secara otomatis.
+`CategoryPreviewSeeder` menambahkan tiga produk published bertanda `(Contoh)` untuk masing-masing dari tujuh kategori (total 21) di lingkungan local/testing saja. Seeder dipanggil otomatis oleh `DatabaseSeeder` setelah katalog dasar dibuat dan tidak mengubah produk draft yang sudah ada. Slug berawalan `demo-` dipakai untuk mencegah duplikasi; menjalankannya kembali tidak menimpa perubahan CMS, termasuk tiga contoh motor yang sudah ada. Semua kategori dan brand terkait harus sudah published; seeder tidak memublikasikan kategori atau brand secara otomatis.
 
 Sejak koreksi 2026-10-07, masing-masing dari 21 produk contoh memiliki gambar khusus yang berbeda di `public/images/products/`, disalin ke `catalog/product-illustrations/`. Seeder tidak lagi menyalin satu gambar kategori untuk beberapa produk dan tidak membutuhkan unggahan kategori. Nama, deskripsi, dan alt text mengikuti jenis serta bentuk peralatan pada setiap gambar. Nomor seri DEMO dikosongkan karena bukan model resmi. Data contoh masih muncul pada semua daftar publik karena berstatus published. Sebelum launch, ganti dengan katalog resmi atau ubah menjadi draft.
 
-Seluruh 28 record lama, termasuk tujuh draft, dikoreksi melalui `php artisan db:seed --class=ProductIllustrationSeeder` (local/testing saja). Tujuh draft diberi nama ilustratif dan gambar terpisah dari produk lain tanpa dipublikasikan. Status, URL, kategori, brand, serta media kategori tidak diubah. Cadangan data sebelumnya tersimpan pada disk local `backups/product-illustrations/`. Penanda selesai mencegah koreksi ulang menimpa suntingan CMS. Pemetaan lengkap, prompt, dan batasan ilustrasi: [product-image-corrections.md](product-image-corrections.md). Gambar ini bukan foto model resmi atau bukti spesifikasi dan hubungan brand.
+Seluruh 28 record awal, termasuk tujuh draft, dikoreksi oleh `ProductIllustrationSeeder` (local/testing saja) yang dipanggil otomatis oleh `DatabaseSeeder`. Tujuh draft diberi nama ilustratif dan gambar terpisah dari produk lain tanpa dipublikasikan. Status, URL, kategori, brand, serta media kategori tidak diubah. Cadangan data sebelumnya tersimpan pada disk local `backups/product-illustrations/`. Penanda selesai mencegah koreksi ulang menimpa suntingan CMS. Pemetaan lengkap, prompt, dan batasan ilustrasi: [product-image-corrections.md](product-image-corrections.md). Gambar ini bukan foto model resmi atau bukti spesifikasi dan hubungan brand.
 
 Contoh yang ditambahkan: external/screen/internal vibrator; chemical/water treatment/process dosing pump; peristaltic/slurry/sludge hose pump; process/braided/flanged hose; screw/tank mounted compressor dan air dryer; containment boom, absorbent pads, dan spill kit. Nama dan aplikasi hanya untuk peninjauan tampilan, bukan katalog resmi brand terkait.
 

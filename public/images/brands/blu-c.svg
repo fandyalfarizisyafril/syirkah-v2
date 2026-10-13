@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title">
+  <title id="title">BLU-C</title>
+  <path fill="#00539b" d="M120 8 218 39v67c0 61-38 105-98 126-60-21-98-65-98-126V39L120 8Z"/>
+  <path fill="none" stroke="#ffffff" stroke-opacity=".22" stroke-width="4" d="M120 20 206 47v59c0 53-31 92-86 112-55-20-86-59-86-112V47l86-27Z"/>
+  <text x="120" y="132" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="43" font-weight="700" letter-spacing="1" text-anchor="middle">BLU-C</text>
+</svg>

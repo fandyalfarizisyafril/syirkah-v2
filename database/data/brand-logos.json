@@ -12,6 +12,12 @@
         "source": "https://www.olivibra.com/wp-content/uploads/2021/02/OLI-logo-2021-transp.png"
     },
     {
+        "slug": "qdos",
+        "file": "qdos.svg",
+        "page": "https://www.wmfts.com/en-us/mining-products/watson-marlow-pumps/cased-pumps/qdos-metering-pump/",
+        "source": "https://images.squarespace-cdn.com/content/v1/6533cee511fe2226fec22fc9/e810128d-e33d-4dbc-9b81-151397927cca/qdos_brochure_design.jpg"
+    },
+    {
         "slug": "bredel",
         "file": "bredel.svg",
         "page": "https://www.wmfts.com/en/brands/",
@@ -28,5 +34,11 @@
         "file": "tecbell.png",
         "page": "https://www.tecbell.cn/",
         "source": "https://www.tecbell.cn/upload/20241210111927378099.png"
+    },
+    {
+        "slug": "blu-c",
+        "file": "blu-c.svg",
+        "page": "https://shopee.co.id/Oil-Absorbent-Pad-200-lembar-Blu-C-isi-paling-banyak-i.639013267.43361372670",
+        "source": "https://down-id.img.susercontent.com/file/id-11134207-7ra0g-mcyr7ytlhcev44"
     }
 ]

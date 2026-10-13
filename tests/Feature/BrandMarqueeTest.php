@@ -102,8 +102,8 @@ class BrandMarqueeTest extends TestCase
         $this->assertSame($before, Brand::ordered()->get()->toArray());
         $this->assertSame(7, Brand::count());
         $this->assertSame('catalog/admin-upload.png', Brand::where('slug', 'oli')->first()->image);
-        $this->assertNull(Brand::where('slug', 'qdos')->first()->image);
-        $this->assertNull(Brand::where('slug', 'blu-c')->first()->image);
+        $this->assertSame('catalog/brand-logos/qdos.svg', Brand::where('slug', 'qdos')->first()->image);
+        $this->assertSame('catalog/brand-logos/blu-c.svg', Brand::where('slug', 'blu-c')->first()->image);
         $logos = json_decode(file_get_contents(database_path('data/brand-logos.json')), true, 512, JSON_THROW_ON_ERROR);
         foreach ($logos as $logo) {
             $this->assertFileExists(public_path('images/brands/'.$logo['file']));
