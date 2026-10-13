@@ -216,6 +216,34 @@ class PublicationTest extends TestCase
         $this->put('/admin/publications/'.$entry->id, array_replace($data, ['status' => 'draft']))->assertSessionHasNoErrors();
     }
 
+    public function test_public_sections_follow_admin_category_not_document_title(): void
+    {
+        $legal = $this->document(['title' => 'Dokumen Disetujui', 'category' => 'legalitas', 'status' => 'published', 'published_at' => now()]);
+        $company = $this->document(['title' => 'SK Kemenkumham Pengesahan', 'category' => 'perusahaan', 'status' => 'published', 'published_at' => now()]);
+        $draft = $this->document(['title' => 'Dokumen Belum Disetujui', 'category' => 'legalitas']);
+        $this->get('/publikasi')->assertOk()
+            ->assertViewHas('legalities', fn ($entries) => $entries->values()->modelKeys() === [$legal->id])
+            ->assertViewHas('publications', fn ($entries) => $entries->values()->modelKeys() === [$company->id])
+            ->assertSee($legal->title)->assertSee($company->title)->assertDontSee($draft->title);
+        $this->assertSame('perusahaan', $company->fresh()->category);
+    }
+
+    public function test_cards_use_existing_thumbnails_fallback_and_download_permission(): void
+    {
+        $entry = $this->document(['status' => 'published', 'published_at' => now()]);
+        $card = $this->view('public.publications.card', ['document' => $entry]);
+        $card->assertSee('publication-placeholder')->assertSee('PDF')->assertDontSee('data-publication-thumbnail')
+            ->assertDontSee('publication-download')->assertSee(route('publications.preview', $entry), false);
+        $thumbnail = app(PublicationStorage::class)->store(UploadedFile::fake()->createWithContent('thumb.png', base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl6cS8AAAAASUVORK5CYII=')));
+        $entry->update(['thumbnail_path' => $thumbnail, 'thumbnail_mime_type' => 'image/png', 'allow_download' => true]);
+        $this->view('public.publications.card', ['document' => $entry])->assertSee('data-publication-thumbnail')
+            ->assertSee(route('publications.thumbnail', $entry), false)->assertSee('publication-download')
+            ->assertSee('Unduh <', false)->assertSee('aria-label="Unduh '.$entry->title.'"', false);
+        $this->get('/publikasi/'.$entry->id.'/unduh')->assertDownload('demo.pdf');
+        Storage::disk('publications')->delete($thumbnail);
+        $this->view('public.publications.card', ['document' => $entry])->assertDontSee('data-publication-thumbnail')->assertSee('publication-placeholder');
+    }
+
     public function test_invalid_mime_signature_extensions_size_and_metadata_are_rejected(): void
     {
         $this->actingAs($this->admin());

@@ -1,6 +1,14 @@
 import { test, expect } from '@playwright/test';
 import { execFileSync } from 'node:child_process';
 
+const publicationCounts = () => JSON.parse(execFileSync('php', ['-r', `
+require 'vendor/autoload.php';
+$app = require 'bootstrap/app.php';
+$app->make(Illuminate\\Contracts\\Console\\Kernel::class)->bootstrap();
+$visible = App\\Models\\Publication::published()->get()->filter(fn ($entry) => app(App\\Services\\PublicationStorage::class)->exists($entry->file_path));
+echo json_encode(['public' => $visible->count(), 'admin' => min(15, App\\Models\\Publication::count())]);
+`], { encoding: 'utf8' }));
+
 for (const [width, columns] of [[1440, 3], [1280, 3], [768, 2], [390, 1], [375, 1]]) {
     test(`publication library and preview at ${width}px`, async ({ page }, testInfo) => {
         const errors = [];
@@ -9,14 +17,36 @@ for (const [width, columns] of [[1440, 3], [1280, 3], [768, 2], [390, 1], [375, 
         expect((await page.goto('/publikasi')).status()).toBe(200);
         await expect(page.locator('h1')).toHaveText('Transparansi dan informasi perusahaan.');
         await expect(page.locator('.publications-empty')).toContainText('Dokumen legalitas belum tersedia');
-        await expect(page.locator('.publication-card')).toHaveCount(1);
-        await expect(page.locator('.publication-card h3')).toHaveText('Panduan Penggunaan Website SMART (Demo)');
-        await expect(page.locator('.publication-placeholder')).toBeVisible();
-        await expect(page.locator('.publication-placeholder')).toHaveJSProperty('tagName', 'svg');
+        await expect(page.locator('.publication-card')).toHaveCount(publicationCounts().public);
+        const demo = page.locator('.publication-card').filter({ hasText: 'Panduan Penggunaan Website SMART (Demo)' });
+        await expect(demo.locator('h3')).toHaveText('Panduan Penggunaan Website SMART (Demo)');
+        await expect(demo.locator('.publication-placeholder')).toBeVisible();
+        await expect(demo.locator('.publication-placeholder')).toHaveJSProperty('tagName', 'svg');
+        await expect(demo.locator('.publication-download')).toHaveText('Unduh');
+        for (const card of await page.locator('.publication-card').all()) {
+            const previewBox = await card.locator('.publication-preview').boundingBox();
+            expect(Math.abs(previewBox.height / previewBox.width - 11 / 20)).toBeLessThan(0.01);
+            for (const link of await card.locator('.publication-actions a').all()) {
+                const box = await link.boundingBox();
+                expect(box.height).toBeGreaterThanOrEqual(44);
+                expect(box.x + box.width).toBeLessThanOrEqual(width);
+            }
+        }
+        const boxes = await page.locator('.publication-card').evaluateAll(cards => cards.map(card => {
+            const box = card.getBoundingClientRect();
+            const actions = card.querySelector('.publication-actions').getBoundingClientRect();
+            return { top: box.top, height: box.height, actions: actions.top };
+        }));
+        for (const box of boxes) {
+            for (const sibling of boxes.filter(other => Math.abs(other.top - box.top) < 1)) {
+                expect(Math.abs(sibling.height - box.height)).toBeLessThan(1);
+                expect(Math.abs(sibling.actions - box.actions)).toBeLessThan(1);
+            }
+        }
         expect(await page.locator('.publications-grid').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length)).toBe(columns);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
         await page.screenshot({ path: testInfo.outputPath(`publications-${width}.png`), fullPage: true });
-        const preview = page.getByRole('link', { name: /^Lihat dokumen / });
+        const preview = demo.getByRole('link', { name: /^Lihat dokumen / });
         await preview.focus();
         await expect(preview).toHaveCSS('outline-style', 'solid');
         await preview.press('Enter');
@@ -48,7 +78,7 @@ test('navigation, download, drafts, old route and shared components', async ({ p
     expect(await page.locator('.site-footer').innerHTML()).toBe(footer);
     await expect(page.locator('.publications-page')).not.toContainText('Contoh Materi Publikasi');
     const [download] = await Promise.all([
-        page.waitForEvent('download'), page.getByRole('link', { name: /^Unduh / }).click(),
+        page.waitForEvent('download'), page.getByRole('link', { name: 'Unduh Panduan Penggunaan Website SMART (Demo)', exact: true }).click(),
     ]);
     expect(download.suggestedFilename()).toBe('website-guide-demo.pdf');
     const redirect = await page.request.get('/industri', { maxRedirects: 0 });
@@ -93,7 +123,7 @@ for (const width of [1440, 768, 390, 375]) {
         await page.screenshot({ path: testInfo.outputPath(`publication-form-${width}.png`), fullPage: true });
         await page.route('**/admin/publications', route => route.fulfill({ contentType: 'text/html', body: adminView('index', baseURL) }));
         await page.goto('/admin/publications');
-        await expect(page.locator('tbody tr')).toHaveCount(3);
+        await expect(page.locator('tbody tr')).toHaveCount(publicationCounts().admin);
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
         await page.screenshot({ path: testInfo.outputPath(`publication-admin-${width}.png`), fullPage: true });
     });
@@ -104,10 +134,27 @@ test('publications remain accessible without JavaScript', async ({ browser, base
     try {
         const page = await context.newPage();
         await page.goto('/publikasi');
-        await page.getByRole('link', { name: /^Lihat dokumen / }).click();
+        await page.getByRole('link', { name: /^Lihat dokumen / }).first().click();
         await expect(page.locator('h1')).toBeVisible();
         await expect(page.getByRole('link', { name: 'Buka di tab baru' })).toBeVisible();
     } finally { await context.close(); }
+});
+
+test('existing thumbnails stay contained and failed loads reveal the fallback', async ({ page }) => {
+    await page.goto('/publikasi');
+    const image = page.locator('[data-publication-thumbnail]').first();
+    await expect(image).toBeAttached();
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate(el => el.complete && el.naturalWidth > 0)).toBe(true);
+    await expect(image).toHaveCSS('object-fit', 'contain');
+    const src = await image.getAttribute('src');
+    await page.route(src, route => route.abort());
+    await page.reload();
+    const failedImage = page.locator('[data-publication-thumbnail]').first();
+    await failedImage.locator('..').scrollIntoViewIfNeeded();
+    await expect(failedImage).toBeHidden();
+    await expect(failedImage.locator('..').locator('.publication-placeholder')).toBeVisible();
+    await expect(failedImage.locator('..').locator('.publication-file-type')).toHaveText('PDF');
 });
 
 test('approved public pages and deferred image assets remain available', async ({ page }) => {

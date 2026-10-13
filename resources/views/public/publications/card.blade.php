@@ -19,7 +19,7 @@
         @if($publishedAt)<p class="publication-date">Dipublikasikan <time datetime="{{ $publishedAt->toDateString() }}">{{ $publishedAt->translatedFormat('d M Y') }}</time></p>@endif
         <div class="publication-actions">
             <a class="text-link" href="{{ route('publications.preview', $document) }}" aria-label="Lihat dokumen {{ $document->title }}">Lihat Dokumen <x-icon name="arrow-up-right"/></a>
-            @if($document->allow_download)<a class="icon-button" href="{{ route('publications.download', $document) }}" aria-label="Unduh {{ $document->title }}" title="Unduh"><x-icon name="download"/></a>@endif
+            @if($document->allow_download)<a class="text-link publication-download" href="{{ route('publications.download', $document) }}" aria-label="Unduh {{ $document->title }}">Unduh <x-icon name="download"/></a>@endif
         </div>
     </div>
 </article>
