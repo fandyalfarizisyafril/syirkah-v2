@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CatalogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HeroController;
+use App\Http\Controllers\Admin\PublicationController as AdminPublicationController;
+use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +17,14 @@ Route::get('/produk/{category}', [PublicController::class, 'products'])->name('p
 Route::get('/produk/{category}/{product}', [PublicController::class, 'product'])->name('products.show');
 Route::get('/brand', [PublicController::class, 'directory'])->name('brands.index');
 Route::get('/brand/{slug}', [PublicController::class, 'directory'])->name('brands.show');
-Route::get('/industri', [PublicController::class, 'directory'])->name('industries.index');
+Route::redirect('/industri', '/publikasi', 301)->name('industries.index');
+Route::prefix('publikasi')->name('publications.')->group(function () {
+    Route::get('/', [PublicationController::class, 'index'])->name('index');
+    Route::get('/{publication}/preview', [PublicationController::class, 'preview'])->whereNumber('publication')->name('preview');
+    Route::get('/{publication}/file', [PublicationController::class, 'file'])->whereNumber('publication')->name('file');
+    Route::get('/{publication}/thumbnail', [PublicationController::class, 'file'])->whereNumber('publication')->name('thumbnail');
+    Route::get('/{publication}/unduh', [PublicationController::class, 'file'])->whereNumber('publication')->name('download');
+});
 Route::get('/industri/{slug}', [PublicController::class, 'directory'])->name('industries.show');
 Route::get('/kontak', [PublicController::class, 'contact'])->name('contact');
 Route::post('/inquiry', [InquiryController::class, 'store'])->middleware('throttle:inquiry')->name('inquiry.store');
@@ -44,6 +53,18 @@ Route::prefix('admin')->group(function () {
             Route::get('/', [HeroController::class, 'index'])->name('index');
             Route::get('/{focus}/edit', [HeroController::class, 'edit'])->name('edit');
             Route::put('/{focus}', [HeroController::class, 'update'])->name('update');
+        });
+        Route::prefix('publications')->middleware('can:manage-content')->name('publications.')->group(function () {
+            Route::get('/', [AdminPublicationController::class, 'index'])->name('index');
+            Route::get('/create', [AdminPublicationController::class, 'create'])->name('create');
+            Route::post('/', [AdminPublicationController::class, 'store'])->name('store');
+            Route::get('/{publication}/edit', [AdminPublicationController::class, 'edit'])->whereNumber('publication')->name('edit');
+            Route::put('/{publication}', [AdminPublicationController::class, 'update'])->whereNumber('publication')->name('update');
+            Route::delete('/{publication}', [AdminPublicationController::class, 'destroy'])->whereNumber('publication')->name('destroy');
+            Route::get('/{publication}/preview', [PublicationController::class, 'preview'])->whereNumber('publication')->name('preview');
+            Route::get('/{publication}/file', [PublicationController::class, 'file'])->whereNumber('publication')->name('file');
+            Route::get('/{publication}/thumbnail', [PublicationController::class, 'file'])->whereNumber('publication')->name('thumbnail');
+            Route::get('/{publication}/unduh', [PublicationController::class, 'file'])->whereNumber('publication')->name('download');
         });
         Route::prefix('catalog/{module}')->where(['module' => 'categories|brands|products|industries'])->middleware('can:manage-content')->name('catalog.')->group(function () {
             Route::get('/', [CatalogController::class, 'index'])->name('index');

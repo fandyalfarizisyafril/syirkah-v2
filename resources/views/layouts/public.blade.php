@@ -33,7 +33,7 @@
         </a>
         <button class="icon-button menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="primary-nav" title="Navigasi"><x-icon name="menu"/></button>
         <nav id="primary-nav" class="primary-nav" aria-label="Navigasi utama">
-            @foreach(['home' => 'Beranda', 'about' => 'Tentang Kami', 'products.index' => 'Produk', 'brands.index' => 'Brand', 'industries.index' => 'Industri'] as $route => $label)
+            @foreach(['home' => 'Beranda', 'about' => 'Tentang Kami', 'products.index' => 'Produk', 'brands.index' => 'Brand', 'publications.index' => 'Publikasi'] as $route => $label)
                 <a href="{{ route($route) }}" @class(['active' => request()->routeIs(str_replace('.index', '.*', $route))]) @if(request()->routeIs(str_replace('.index', '.*', $route))) aria-current="page" @endif>{{ $label }}</a>
             @endforeach
             <a href="{{ route('search') }}" class="icon-button" aria-label="Cari" title="Cari"><x-icon name="search"/></a>
@@ -59,7 +59,7 @@
                     <a href="{{ route('about') }}">Tentang Kami</a>
                     <a href="{{ route('products.index') }}">Produk & Solusi</a>
                     <a href="{{ route('brands.index') }}">Brands & Principals</a>
-                    <a href="{{ route('industries.index') }}">Industri</a>
+                    <a href="{{ route('publications.index') }}">Publikasi</a>
                     <a href="{{ route('contact') }}">Kontak</a>
                 </nav>
             </div>

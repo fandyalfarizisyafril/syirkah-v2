@@ -28,7 +28,7 @@ class PublicWebsiteTest extends TestCase
         $this->assertDatabaseCount('brands', 7);
         $this->assertDatabaseCount('products', 7);
         $this->assertSame(0, Product::published()->count());
-        foreach (['/', '/tentang-kami', '/produk', '/brand', '/industri', '/kontak', '/privasi', '/search', '/sitemap.xml', '/admin/login'] as $path) {
+        foreach (['/', '/tentang-kami', '/produk', '/brand', '/publikasi', '/kontak', '/privasi', '/search', '/sitemap.xml', '/admin/login'] as $path) {
             $this->get($path)->assertOk();
         }
     }

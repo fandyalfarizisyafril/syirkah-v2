@@ -27,7 +27,7 @@ class PublicFooterTest extends TestCase
         $this->seed(CatalogSeeder::class);
         Category::factory()->create(['name' => 'Private Category', 'status' => 'draft']);
         $settings = Setting::values();
-        foreach (['/', '/tentang-kami', '/produk', '/brand', '/industri', '/kontak', '/privasi'] as $path) {
+        foreach (['/', '/tentang-kami', '/produk', '/brand', '/publikasi', '/kontak', '/privasi'] as $path) {
             $xpath = $this->footer($path);
             $this->assertSame(1, $xpath->query('//footer')->length);
             $footerText = $xpath->query('//footer')->item(0)->textContent;
@@ -38,7 +38,7 @@ class PublicFooterTest extends TestCase
             $this->assertStringNotContainsString('Private Category', $footerText);
             $links = [];
             foreach ($xpath->query('//footer//a') as $link) $links[] = $link->getAttribute('href');
-            foreach (['home', 'about', 'products.index', 'brands.index', 'industries.index', 'contact', 'privacy'] as $route) {
+            foreach (['home', 'about', 'products.index', 'brands.index', 'publications.index', 'contact', 'privacy'] as $route) {
                 $this->assertContains(route($route), $links);
             }
             $categoryLinks = $xpath->query('//footer//nav[@aria-label="Kategori produk"]/a');

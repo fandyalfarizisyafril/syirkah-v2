@@ -1,0 +1,78 @@
+.publications-page,.publications-admin { --publication-blue:#084ca1; font-family:SMART Inter,Arial,Helvetica,sans-serif; }
+.publications-page { color:var(--primary-dark); background:#fff; }
+.publications-page .publications-intro { padding-block:30px 48px; }
+.publications-page .breadcrumb { margin-bottom:30px; }
+.publications-page .publications-eyebrow { display:flex; align-items:center; gap:12px; }
+.publications-page .publications-eyebrow::before { content:''; width:26px; height:2px; background:var(--accent); }
+.publications-page h1 { max-width:820px; font-size:56px; line-height:1.12; font-weight:650; margin-bottom:22px; }
+.publications-page .publications-lead { max-width:700px; font-size:17px; line-height:1.7; color:var(--muted); margin:0; }
+.publications-page .publications-section { padding-block:52px; border-top:1px solid var(--border); }
+.publications-page .publications-band { background:var(--surface); }
+.publications-page .publications-heading { margin-bottom:28px; }
+.publications-page .publications-heading h2 { font-size:30px; margin-bottom:12px; }
+.publications-page .publications-heading>p:last-child,.publications-page .publications-verification p:not(.eyebrow) { color:var(--muted); line-height:1.7; font-size:15px; max-width:660px; }
+.publications-page .publications-empty { display:flex; align-items:center; gap:22px; padding:28px 0; border-block:1px solid var(--border); }
+.publications-page .publications-empty>.icon { width:34px; height:34px; flex:none; color:var(--publication-blue); stroke-width:1.5; }
+.publications-page .publications-empty h3 { font-size:17px; margin-bottom:8px; }
+.publications-page .publications-empty p { margin:0; font-size:14px; color:var(--muted); max-width:680px; }
+.publications-page .publications-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+.publications-page .publication-card { min-width:0; display:flex; flex-direction:column; border:1px solid var(--border); border-radius:8px; background:#fff; overflow:hidden; transition:border-color 220ms ease; }
+.publications-page .publication-card:hover,.publications-page .publication-card:focus-within { border-color:var(--publication-blue); }
+.publications-page .publication-preview { position:relative; display:grid; place-items:center; aspect-ratio:8/5; background:var(--surface); border-bottom:1px solid var(--border); }
+.publications-page .publication-placeholder { width:58px; height:58px; color:#8dafc5; stroke-width:1.25; }
+.publications-page .publication-preview img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; padding:16px; background:var(--surface); }
+.publications-page .publication-file-type { position:absolute; bottom:16px; left:20px; font-size:11px; font-weight:700; color:var(--primary); }
+.publications-page .publication-card-body { display:flex; flex-direction:column; flex:1; padding:24px; min-width:0; }
+.publications-page .publication-category { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:12px; font-size:11px; font-weight:600; color:var(--publication-blue); }
+.publications-page .publication-demo { color:var(--muted); border-left:1px solid var(--border); padding-left:10px; }
+.publications-page .publication-card h3 { font-size:20px; line-height:1.35; margin-bottom:14px; }
+.publications-page .publication-description { color:var(--muted); font-size:14px; line-height:1.65; overflow-wrap:anywhere; }
+.publications-page .publication-date { margin-top:auto; padding-top:12px; font-size:12px; color:var(--muted); }
+.publications-page .publication-actions { display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--border); padding-top:14px; min-height:58px; }
+.publications-page .text-link { color:var(--publication-blue); }
+.publications-page .text-link>.icon { transition:transform 220ms ease; }
+.publications-page .text-link:hover>.icon { transform:translate(2px,-2px); }
+.publications-page a:focus-visible,.publications-admin a:focus-visible,.publications-admin button:focus-visible { outline:2px solid var(--publication-blue); outline-offset:4px; }
+.publications-page .publications-verification { display:grid; grid-template-columns:1fr 1fr; gap:64px; }
+.publications-page .publications-verification h2 { max-width:430px; font-size:30px; }
+.publications-page.publication-viewer { padding-block:32px 56px; }
+.publications-page .publication-viewer-heading { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-top:28px; }
+.publications-page .publication-viewer-heading>div { min-width:0; }
+.publications-page .publication-viewer-heading h1 { font-size:32px; line-height:1.25; }
+.publications-page .publication-viewer-heading .button { flex:none; }
+.publications-page .publication-demo-notice { color:var(--primary); background:var(--surface); border-left:3px solid var(--accent); padding:14px 18px; font-weight:600; font-size:14px; }
+.publications-page .publication-pdf { display:block; width:100%; height:72svh; min-height:360px; border:1px solid var(--border); background:var(--surface); }
+.publications-page .publication-pdf>p { padding:24px; }
+.publications-page .publication-viewer-fallback { font-size:14px; color:var(--muted); margin-top:18px; }
+.publications-page .publication-full-image { display:block; width:100%; max-height:80svh; object-fit:contain; background:var(--surface); }
+.publications-admin .filter-bar .field { min-width:0; }
+.publications-admin .table-wrap { max-width:100%; }
+.publications-admin .table-name { overflow-wrap:anywhere; }
+.publications-admin .publication-filename { overflow-wrap:anywhere; font-size:13px; color:var(--muted); }
+.publications-admin .publication-approval { border-left:3px solid var(--accent); background:var(--surface); padding:16px; margin-top:20px; }
+.publications-admin .publication-approval p { margin:0 0 10px; font-size:13px; color:var(--muted); }
+.publications-admin .publication-help { color:var(--muted); font-size:13px; margin-top:10px; }
+.publications-admin input[type=file] { max-width:100%; }
+@media(max-width:1199px) { .publications-page h1 { font-size:50px; } }
+@media(max-width:900px) {
+    .publications-page h1 { font-size:42px; }
+    .publications-page .publications-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .publications-page .publications-verification { gap:32px; }
+}
+@media(max-width:640px) {
+    .publications-page .publications-intro { padding-block:24px 36px; }
+    .publications-page h1 { font-size:34px; line-height:1.15; }
+    .publications-page .publications-lead { font-size:16px; }
+    .publications-page .publications-section { padding-block:36px; }
+    .publications-page .publications-grid,.publications-page .publications-verification { grid-template-columns:1fr; gap:20px; }
+    .publications-page .publications-heading h2,.publications-page .publications-verification h2 { font-size:27px; }
+    .publications-page .publications-empty { align-items:flex-start; gap:16px; }
+    .publications-page .publication-card-body { padding:22px; }
+    .publications-page .publication-viewer-heading { flex-direction:column; align-items:flex-start; margin-bottom:20px; gap:8px; }
+    .publications-page .publication-viewer-heading h1 { font-size:26px; }
+    .publications-admin .form-actions { flex-wrap:wrap; }
+}
+@media(prefers-reduced-motion:reduce) {
+    .publications-page .publication-card,.publications-page .text-link>.icon { transition:none; }
+    .publications-page .text-link:hover>.icon { transform:none; }
+}

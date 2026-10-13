@@ -30,6 +30,14 @@ return [
 
     'disks' => [
 
+        'publications' => [
+            'driver' => 'local',
+            'root' => storage_path('app/publications'),
+            'visibility' => 'private',
+            'serve' => false,
+            'throw' => true,
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
