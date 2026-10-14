@@ -120,7 +120,7 @@ class AdminCmsTest extends TestCase
         $this->post('/admin/catalog/brands', $data + ['website_url' => 'javascript:alert(1)'])->assertSessionHasErrors('website_url');
     }
 
-    public function test_category_image_upload_and_replacement_are_visible_only_on_category_detail(): void
+    public function test_category_image_upload_and_replacement_remain_stored_with_editorial_public_detail(): void
     {
         Storage::fake('public');
         $admin = $this->user();
@@ -134,6 +134,7 @@ class AdminCmsTest extends TestCase
                 ->assertSessionHasNoErrors()->assertRedirect('/admin/catalog/categories');
             $category->refresh();
             Storage::disk('public')->assertExists($category->image);
+            $this->assertSame('Motor listrik industri', $category->image_alt);
             $this->assertNotSame($previousPath, $category->image);
             $this->app['auth']->forgetGuards();
 
@@ -141,8 +142,8 @@ class AdminCmsTest extends TestCase
                 $this->get($path)->assertOk()->assertDontSee('src="'.$category->image_url.'"', false);
             }
             $response = $this->get('/produk/'.$category->slug)->assertOk()
-                ->assertSee('src="'.$category->image_url.'"', false)
-                ->assertSee('alt="Motor listrik industri"', false);
+                ->assertDontSee('src="'.$category->image_url.'"', false)
+                ->assertSee('category-directory-page');
             if ($previousPath) {
                 $response->assertDontSee('src="'.asset('storage/'.$previousPath).'"', false);
             }

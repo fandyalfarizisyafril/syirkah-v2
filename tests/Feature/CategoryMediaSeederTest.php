@@ -14,7 +14,7 @@ class CategoryMediaSeederTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_all_category_details_use_media_without_changing_products_or_listing_cards(): void
+    public function test_category_media_is_preserved_without_changing_products_or_editorial_directory(): void
     {
         $this->withoutVite();
         Storage::fake('public');
@@ -40,9 +40,9 @@ class CategoryMediaSeederTest extends TestCase
                 $this->assertSame(hash_file('sha256', public_path('images/categories/'.$category->slug.'.png')), hash('sha256', Storage::disk('public')->get($category->image)));
             }
             $this->get('/produk/'.$category->slug)->assertOk()
-                ->assertSee('class="category-intro"', false)
-                ->assertSee('src="'.$category->image_url.'"', false)
-                ->assertSee($category->image_alt)
+                ->assertSee('category-directory-page', false)
+                ->assertDontSee('src="'.$category->image_url.'"', false)
+                ->assertSee($category->name)
                 ->assertSee('value="'.$category->id.'" selected', false)
                 ->assertSee('0 produk');
             foreach (['/', '/produk'] as $url) {

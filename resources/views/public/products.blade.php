@@ -6,7 +6,15 @@
         @vite('resources/css/catalog.css')
     @endpush
 @endif
+@if($current)
+    @push('head')
+        @vite('resources/js/product-details.js')
+    @endpush
+@endif
 @section('content')
+@if($current)
+    @include('public.category-detail')
+@else
 @if(!$current)<div class="catalog-page">@endif
 <div class="page-intro container">
     <nav class="breadcrumb" aria-label="Breadcrumb"><a href="{{ route('home') }}">Beranda</a><span>/</span>@if($current)<a href="{{ route('products.index') }}">Produk</a><span>/</span><span>{{ $current->name }}</span>@else<span>Produk & Solusi</span>@endif</nav>
@@ -53,5 +61,6 @@
     @if(!$current)<div class="section"><h2>Kategori Produk</h2><div class="category-grid">@foreach($categories as $category)@include('partials.category-card', ['number' => $loop->iteration])@endforeach</div></div>@endif
 </section>
 @if(!$current)</div>@endif
+@endif
 @include('partials.inquiry-cta')
 @endsection

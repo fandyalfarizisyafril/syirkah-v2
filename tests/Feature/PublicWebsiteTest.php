@@ -120,9 +120,9 @@ class PublicWebsiteTest extends TestCase
                 ->assertDontSee($draft->image_url)
                 ->assertSee($path === '/' ? 'class="home-category-card"' : 'class="category-number"', false);
         }
-        $this->get('/produk/'.$visible->slug)->assertOk()->assertSee('src="'.$visible->image_url.'"', false)
-            ->assertSee('class="category-intro"', false)
-            ->assertSee('alt="Electric Motors"', false)->assertDontSee($draft->image_url);
+        $this->get('/produk/'.$visible->slug)->assertOk()->assertDontSee('src="'.$visible->image_url.'"', false)
+            ->assertSee('category-directory-page', false)
+            ->assertSee('Electric Motors')->assertDontSee($draft->image_url);
         $this->get('/produk/'.$draft->slug)->assertNotFound();
     }
 
@@ -137,12 +137,12 @@ class PublicWebsiteTest extends TestCase
         $response = $this->get('/produk/'.$category->slug)->assertOk()
             ->assertSee('value="'.$category->id.'" selected', false)
             ->assertViewHas('products', fn ($products) => $products->total() === 2 && $products->contains('id', $product->id) && $products->contains('id', $withoutImage->id))
-            ->assertSee('src="'.$category->image_url.'"', false)
+            ->assertDontSee('src="'.$category->image_url.'"', false)
             ->assertSee('src="'.$product->image_url.'"', false)
             ->assertSee('src="'.asset('images/catalog-placeholder.svg').'"', false)
             ->assertDontSee($draft->name)->assertDontSee($other->name)->assertDontSee($other->image_url)
-            ->assertSeeInOrder(['class="category-detail-image"', 'class="filter-bar"', 'class="product-grid"'], false);
-        $this->assertSame(1, substr_count($response->getContent(), 'src="'.$category->image_url.'"'));
+            ->assertSeeInOrder(['category-directory-page', 'class="filter-bar"', 'class="product-grid"'], false);
+        $this->assertSame(0, substr_count($response->getContent(), 'src="'.$category->image_url.'"'));
     }
 
     public function test_category_media_does_not_count_as_a_product_when_all_products_are_drafts(): void
@@ -152,7 +152,7 @@ class PublicWebsiteTest extends TestCase
 
         $this->get('/produk/'.$category->slug)->assertOk()
             ->assertViewHas('products', fn ($products) => $products->total() === 0)
-            ->assertSee('src="'.$category->image_url.'"', false)
+            ->assertDontSee('src="'.$category->image_url.'"', false)
             ->assertSee('0 produk')->assertSee('Produk belum tersedia.')
             ->assertDontSee('class="product-card"', false);
     }
