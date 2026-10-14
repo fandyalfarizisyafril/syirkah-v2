@@ -13,6 +13,26 @@ const load = async page => {
     })));
 };
 
+for (const width of [1440, 390]) {
+    test(`CMS category images load for every published card at ${width}px`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 900 });
+        await load(page);
+        const cards = page.locator('.home-category-card');
+        const count = await cards.count();
+        expect(count).toBeGreaterThan(0);
+        await expect(cards.locator('.home-category-image')).toHaveCount(count);
+        expect(await cards.locator('img').evaluateAll(images => images.every(image => image.complete && image.naturalWidth > 0))).toBe(true);
+        expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+        const last = cards.last().locator('.home-category-link');
+        const href = await last.getAttribute('href');
+        await last.focus();
+        await expect(last).toBeInViewport();
+        await expect(last.locator('.home-category-panel')).toHaveCSS('opacity', '1');
+        await page.keyboard.press('Enter');
+        await expect(page).toHaveURL(href);
+    });
+}
+
 for (const [width, visible] of [[1440, 3], [1024, 3], [768, 2], [390, 1], [320, 1]]) {
     test(width + 'px: responsive portrait cards, unique images and no page overflow', async ({ page }, testInfo) => {
         await page.setViewportSize({ width, height: 1000 });

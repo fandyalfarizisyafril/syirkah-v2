@@ -45,9 +45,8 @@ class CategoryMediaSeederTest extends TestCase
                 ->assertSee($category->name)
                 ->assertSee('value="'.$category->id.'" selected', false)
                 ->assertSee('0 produk');
-            foreach (['/', '/produk'] as $url) {
-                $this->get($url)->assertOk()->assertDontSee('src="'.$category->image_url.'"', false);
-            }
+            $this->get('/')->assertOk()->assertSee('src="'.$category->image_url.'"', false);
+            $this->get('/produk')->assertOk()->assertDontSee('src="'.$category->image_url.'"', false);
         }
     }
 

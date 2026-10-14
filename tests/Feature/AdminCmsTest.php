@@ -138,9 +138,9 @@ class AdminCmsTest extends TestCase
             $this->assertNotSame($previousPath, $category->image);
             $this->app['auth']->forgetGuards();
 
-            foreach (['/', '/produk'] as $path) {
-                $this->get($path)->assertOk()->assertDontSee('src="'.$category->image_url.'"', false);
-            }
+            $this->get('/')->assertOk()->assertSee('src="'.$category->image_url.'"', false)
+                ->assertSee('alt="Motor listrik industri"', false);
+            $this->get('/produk')->assertOk()->assertDontSee('src="'.$category->image_url.'"', false);
             $response = $this->get('/produk/'.$category->slug)->assertOk()
                 ->assertDontSee('src="'.$category->image_url.'"', false)
                 ->assertSee('category-directory-page');

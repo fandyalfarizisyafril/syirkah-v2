@@ -1,6 +1,6 @@
 <?php
 
-// Homepage carousel visuals; category detail media stays independent.
+// Legacy homepage fallbacks; category images uploaded through CMS take priority.
 return [
     'electric-motors-generators' => 'images/products/demo-induction-motor.png',
     'vibration-technology' => 'images/category-reveals/vibration-technology.webp',

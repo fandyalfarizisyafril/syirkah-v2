@@ -34,13 +34,36 @@ class HomepageCategoryRevealTest extends TestCase
         $response->assertSeeInOrder(Category::published()->ordered()->pluck('name')->all());
     }
 
-    public function test_unmapped_and_unpublished_categories_do_not_receive_unrelated_images(): void
+    public function test_new_categories_use_cms_images_and_unpublished_categories_stay_hidden(): void
     {
         $this->withoutVite();
         $visible = Category::factory()->create(['slug' => 'custom-category', 'image' => 'catalog/custom.png']);
-        Category::factory()->create(['slug' => 'air-compressor', 'status' => 'draft']);
+        $draft = Category::factory()->create(['slug' => 'air-compressor', 'status' => 'draft', 'image' => 'catalog/private.png']);
         $this->get('/')->assertOk()->assertSee($visible->name)
-            ->assertDontSee('class="home-category-image"', false)
-            ->assertDontSee('src="'.$visible->image_url.'"', false);
+            ->assertSee('class="home-category-image"', false)
+            ->assertSee('src="'.$visible->image_url.'"', false)
+            ->assertDontSee('data-category="'.$draft->slug.'"', false)->assertDontSee($draft->image_url);
+    }
+
+    public function test_cms_replacement_overrides_legacy_image_and_survives_slug_changes(): void
+    {
+        $this->withoutVite();
+        $category = Category::factory()->create(['slug' => 'air-compressor', 'image' => 'catalog/upload.png', 'image_alt' => 'Foto kompresor perusahaan']);
+        $this->get('/')->assertOk()->assertSee('src="'.$category->image_url.'"', false)
+            ->assertSee('alt="Foto kompresor perusahaan"', false)
+            ->assertDontSee('src="'.asset(config('homepage-category-images.air-compressor')).'"', false);
+        $category->update(['image' => 'catalog/replacement.png', 'slug' => 'custom-compressor']);
+        $this->get('/')->assertOk()->assertSee('src="'.$category->image_url.'"', false)
+            ->assertSee('href="'.route('products.category', $category->slug).'"', false)
+            ->assertDontSee('src="'.asset('storage/catalog/upload.png').'"', false);
+    }
+
+    public function test_category_without_upload_or_legacy_image_uses_existing_placeholder(): void
+    {
+        $this->withoutVite();
+        $category = Category::factory()->create(['slug' => 'new-category', 'image' => null]);
+        $this->get('/')->assertOk()->assertSee($category->name)
+            ->assertSee('src="'.asset('images/catalog-placeholder.svg').'"', false)
+            ->assertSee('alt="Gambar kategori belum tersedia"', false);
     }
 }
