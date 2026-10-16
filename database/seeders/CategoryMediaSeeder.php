@@ -25,7 +25,10 @@ class CategoryMediaSeeder extends Seeder
         DB::transaction(function () use ($illustrations, $disk) {
             foreach ($illustrations as $slug => $alt) {
                 $category = Category::where('slug', $slug)->lockForUpdate()->first();
-                if (! $category || $category->image) {
+                $path = 'catalog/categories/'.$slug.'-illustration.png';
+
+                // Preserve administrator uploads, but restore a missing seeded file.
+                if (! $category || (filled($category->image) && $category->image !== $path)) {
                     continue;
                 }
 
@@ -34,13 +37,13 @@ class CategoryMediaSeeder extends Seeder
                     throw new RuntimeException('Ilustrasi kategori tidak ditemukan: '.$source);
                 }
 
-                $path = 'catalog/categories/'.$slug.'-illustration.png';
                 if (! $disk->exists($path) && ! $disk->put($path, file_get_contents($source))) {
                     throw new RuntimeException('Gagal menyimpan ilustrasi kategori: '.$slug);
                 }
 
-                // Only fill missing media; never replace an image uploaded through the CMS.
-                $category->update(['image' => $path, 'image_alt' => $alt]);
+                if (blank($category->image)) {
+                    $category->update(['image' => $path, 'image_alt' => $alt]);
+                }
             }
         });
     }

@@ -98,8 +98,10 @@ class BrandMarqueeTest extends TestCase
         Brand::where('slug', 'oli')->update(['image' => 'catalog/admin-upload.png']);
         $this->seed(BrandLogoSeeder::class);
         $before = Brand::ordered()->get()->toArray();
+        Storage::disk('public')->delete('catalog/brand-logos/qdos.svg');
         $this->seed(BrandLogoSeeder::class);
         $this->assertSame($before, Brand::ordered()->get()->toArray());
+        Storage::disk('public')->assertExists('catalog/brand-logos/qdos.svg');
         $this->assertSame(7, Brand::count());
         $this->assertSame('catalog/admin-upload.png', Brand::where('slug', 'oli')->first()->image);
         $this->assertSame('catalog/brand-logos/qdos.svg', Brand::where('slug', 'qdos')->first()->image);

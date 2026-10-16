@@ -28,7 +28,18 @@ final class ProductIllustrationCatalog
 
     public static function attributes(array $entry): array
     {
-        $path = 'catalog/product-illustrations/'.basename($entry['asset']);
+        $path = self::ensureAsset($entry);
+
+        return [
+            'name' => $entry['name'], 'short_description' => $entry['short_description'],
+            'description' => $entry['description'], 'applications' => $entry['applications'],
+            'model_or_series' => null, 'image' => $path, 'image_alt' => $entry['image_alt'],
+        ];
+    }
+
+    public static function ensureAsset(array $entry): string
+    {
+        $path = self::assetPath($entry);
         $disk = Storage::disk('public');
         $contents = file_get_contents(public_path($entry['asset']));
         if ($disk->exists($path)) {
@@ -39,10 +50,11 @@ final class ProductIllustrationCatalog
             throw new RuntimeException('Gagal menyimpan gambar: '.$path);
         }
 
-        return [
-            'name' => $entry['name'], 'short_description' => $entry['short_description'],
-            'description' => $entry['description'], 'applications' => $entry['applications'],
-            'model_or_series' => null, 'image' => $path, 'image_alt' => $entry['image_alt'],
-        ];
+        return $path;
+    }
+
+    public static function assetPath(array $entry): string
+    {
+        return 'catalog/product-illustrations/'.basename($entry['asset']);
     }
 }
