@@ -13,10 +13,6 @@ class BrandProfileDraftSeeder extends Seeder
 {
     public function run(): void
     {
-        if (! app()->environment(['local', 'testing'])) {
-            throw new RuntimeException('Draft brand hanya boleh diisi pada lingkungan local/testing.');
-        }
-
         $drafts = json_decode(file_get_contents(database_path('data/brand-profile-drafts.json')), true, 512, JSON_THROW_ON_ERROR);
 
         DB::transaction(function () use ($drafts) {

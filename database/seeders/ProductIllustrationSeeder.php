@@ -7,17 +7,12 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use LogicException;
 use RuntimeException;
 
 class ProductIllustrationSeeder extends Seeder
 {
     public function run(): void
     {
-        if (! app()->environment(['local', 'testing'])) {
-            throw new LogicException('Koreksi ilustrasi hanya untuk local atau testing.');
-        }
-
         $entries = ProductIllustrationCatalog::entries();
         $disk = Storage::disk('local');
         $directory = 'backups/product-illustrations';

@@ -10,7 +10,6 @@ use Database\Seeders\ProductIllustrationCatalog;
 use Database\Seeders\ProductIllustrationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
-use LogicException;
 use Tests\TestCase;
 
 class ProductIllustrationTest extends TestCase
@@ -68,10 +67,14 @@ class ProductIllustrationTest extends TestCase
         $this->assertSame('catalog/new-upload.png', $edited->fresh()->image);
     }
 
-    public function test_correction_refuses_production(): void
+    public function test_correction_can_run_in_production(): void
     {
+        Storage::fake('public');
+        Storage::fake('local');
+        $this->seed([CatalogSeeder::class, CategoryPreviewSeeder::class]);
         $this->app->instance('env', 'production');
-        $this->expectException(LogicException::class);
-        $this->seed(ProductIllustrationSeeder::class);
+        app(ProductIllustrationSeeder::class)->run();
+
+        $this->assertDatabaseCount('products', 28);
     }
 }

@@ -9,7 +9,6 @@ use Database\Seeders\CategoryMediaSeeder;
 use Database\Seeders\CategoryPreviewSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
-use LogicException;
 use Tests\TestCase;
 
 class CategoryPreviewSeederTest extends TestCase
@@ -56,11 +55,14 @@ class CategoryPreviewSeederTest extends TestCase
         }
     }
 
-    public function test_preview_seeder_refuses_production(): void
+    public function test_preview_seeder_can_run_in_production(): void
     {
+        Storage::fake('public');
+        $this->seed(CatalogSeeder::class);
         $this->app->instance('env', 'production');
-        $this->expectException(LogicException::class);
-        $this->seed(CategoryPreviewSeeder::class);
+        app(CategoryPreviewSeeder::class)->run();
+
+        $this->assertDatabaseCount('products', 28);
     }
 
     public function test_each_category_has_three_preview_products_with_independent_media_and_working_filters(): void

@@ -103,12 +103,13 @@ class BrandProfileDraftTest extends TestCase
         $this->assertSame($brand->toArray(), $brand->fresh()->toArray());
     }
 
-    public function test_draft_seeder_refuses_production(): void
+    public function test_draft_seeder_can_run_in_production(): void
     {
+        $this->seed(CatalogSeeder::class);
         $this->app->detectEnvironment(fn () => 'production');
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('local/testing');
         app(BrandProfileDraftSeeder::class)->run();
+
+        $this->assertNotNull(Brand::where('slug', 'wolong')->firstOrFail()->technology_details);
     }
 
     public function test_editor_can_manage_technology_items_without_touching_identity_or_relations(): void

@@ -12,9 +12,6 @@ class PublicationDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        if (! app()->environment(['local', 'staging', 'testing'])) {
-            throw new \RuntimeException('Demo publikasi hanya boleh dibuat di local, staging, atau testing.');
-        }
         $items = [
             ['key' => 'website-guide', 'title' => 'Panduan Penggunaan Website SMART (Demo)', 'category' => 'perusahaan', 'status' => 'published', 'lines' => [
                 'Materi pengujian fitur publikasi. Bukan dokumen resmi perusahaan.',

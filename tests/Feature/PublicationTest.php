@@ -322,7 +322,7 @@ class PublicationTest extends TestCase
         Storage::disk('publications')->assertMissing($demo->file_path);
     }
 
-    public function test_demo_is_never_public_in_production_and_legal_demo_never_publishes(): void
+    public function test_demo_stays_private_in_production_while_seeder_can_run_and_legal_demo_never_publishes(): void
     {
         $this->seed(PublicationDemoSeeder::class);
         $demo = Publication::where('demo_key', 'website-guide')->firstOrFail();
@@ -332,8 +332,9 @@ class PublicationTest extends TestCase
         $this->app['env'] = 'production';
         $this->get('/publikasi')->assertDontSee($demo->title);
         $this->get('/publikasi/'.$demo->id.'/file')->assertNotFound();
-        $this->expectException(\RuntimeException::class);
         (new PublicationDemoSeeder)->run();
+        $this->assertDatabaseCount('publications', 3);
+        $this->get('/publikasi')->assertDontSee($demo->title);
     }
 
     public function test_publication_writes_have_csrf_protection(): void
