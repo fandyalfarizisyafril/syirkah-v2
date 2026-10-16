@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', $settings['meta_title'])</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/company-logo.png') }}">
     <meta name="description" content="@yield('description', $settings['meta_description'])">
     <link rel="canonical" href="{{ url()->current() }}">
     <meta property="og:title" content="@yield('title', $settings['meta_title'])">

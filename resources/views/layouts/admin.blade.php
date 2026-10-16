@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>@yield('title', 'CMS') | Artomoro</title>@vite(['resources/css/app.css','resources/js/app.js'])</head>
+<!DOCTYPE html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>@yield('title', 'CMS') | Artomoro</title><link rel="icon" type="image/png" href="{{ asset('images/company-logo.png') }}">@vite(['resources/css/app.css','resources/js/app.js'])</head>
 <body class="admin-body"><a class="skip-link" href="#main">Langsung ke konten</a><header class="admin-topbar">
     <a href="{{ route('admin.dashboard') }}" class="wordmark admin-brand" aria-label="PT. Syirkah Mandiri Artomoro, Dashboard CMS">
         <span class="company-signature">

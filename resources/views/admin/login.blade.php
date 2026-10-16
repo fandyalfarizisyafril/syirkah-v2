@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="robots" content="noindex,nofollow">
     <title>Masuk CMS | Artomoro</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/company-logo.png') }}">
     <link rel="preload" as="font" href="{{ asset('fonts/InterVariable.woff2') }}" type="font/woff2" crossorigin>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
