@@ -1,0 +1,126 @@
+{
+  "_industrial-partner-DyL699jU.js": {
+    "file": "assets/industrial-partner-DyL699jU.js",
+    "name": "industrial-partner"
+  },
+  "_lucide-DstTJpr5.js": {
+    "file": "assets/lucide-DstTJpr5.js",
+    "name": "lucide"
+  },
+  "_trash-3sjl502V.js": {
+    "file": "assets/trash-3sjl502V.js",
+    "name": "trash"
+  },
+  "resources/css/about.css": {
+    "file": "assets/about-DNp3ULI5.css",
+    "src": "resources/css/about.css",
+    "isEntry": true,
+    "name": "about",
+    "names": [
+      "about.css"
+    ]
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-BlOUnY9b.css",
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
+  },
+  "resources/css/brand-detail.css": {
+    "file": "assets/brand-detail-BEnGIts3.css",
+    "src": "resources/css/brand-detail.css",
+    "isEntry": true,
+    "name": "brand-detail",
+    "names": [
+      "brand-detail.css"
+    ]
+  },
+  "resources/css/brand-portfolio.css": {
+    "file": "assets/brand-portfolio-CezcEtX4.css",
+    "src": "resources/css/brand-portfolio.css",
+    "isEntry": true,
+    "name": "brand-portfolio",
+    "names": [
+      "brand-portfolio.css"
+    ]
+  },
+  "resources/css/catalog.css": {
+    "file": "assets/catalog-MF9sAOT9.css",
+    "src": "resources/css/catalog.css",
+    "isEntry": true,
+    "name": "catalog",
+    "names": [
+      "catalog.css"
+    ]
+  },
+  "resources/css/publications.css": {
+    "file": "assets/publications-BvQowAHY.css",
+    "src": "resources/css/publications.css",
+    "isEntry": true,
+    "name": "publications",
+    "names": [
+      "publications.css"
+    ]
+  },
+  "resources/js/about.js": {
+    "file": "assets/about-BDnIeo7l.js",
+    "name": "about",
+    "src": "resources/js/about.js",
+    "isEntry": true,
+    "imports": [
+      "_lucide-DstTJpr5.js",
+      "_industrial-partner-DyL699jU.js"
+    ]
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-D8G4kJr_.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_lucide-DstTJpr5.js",
+      "_industrial-partner-DyL699jU.js",
+      "_trash-3sjl502V.js"
+    ]
+  },
+  "resources/js/brand-editor.js": {
+    "file": "assets/brand-editor-1rV2E8cZ.js",
+    "name": "brand-editor",
+    "src": "resources/js/brand-editor.js",
+    "isEntry": true,
+    "imports": [
+      "_lucide-DstTJpr5.js",
+      "_trash-3sjl502V.js"
+    ]
+  },
+  "resources/js/product-details.js": {
+    "file": "assets/product-details-6Zfo9UZo.js",
+    "name": "product-details",
+    "src": "resources/js/product-details.js",
+    "isEntry": true,
+    "css": [
+      "assets/product-details-4jfMn1xj.css"
+    ]
+  },
+  "resources/js/publications.js": {
+    "file": "assets/publications-DCsJd0U3.js",
+    "name": "publications",
+    "src": "resources/js/publications.js",
+    "isEntry": true,
+    "imports": [
+      "_lucide-DstTJpr5.js"
+    ]
+  },
+  "resources/js/scroll-reveal.js": {
+    "file": "assets/scroll-reveal-I27m9xN0.js",
+    "name": "scroll-reveal",
+    "src": "resources/js/scroll-reveal.js",
+    "isEntry": true,
+    "css": [
+      "assets/scroll-reveal-DuQBSbQC.css"
+    ]
+  }
+}

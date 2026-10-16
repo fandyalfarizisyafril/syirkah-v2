@@ -1,0 +1,1 @@
+const t=document.querySelector(".product-showcase-page .gallery");t?.addEventListener("click",a=>{const e=a.target.closest("[data-gallery-src]");e&&t.querySelectorAll("[data-gallery-src]").forEach(r=>{r.setAttribute("aria-pressed",String(r===e))})});
