@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { execFileSync } from 'node:child_process';
 
 const viewports = [
     { name: 'desktop', width: 1440, height: 1000 },
@@ -6,6 +7,108 @@ const viewports = [
     { name: 'mobile', width: 390, height: 844 },
     { name: 'small-mobile', width: 360, height: 740 },
 ];
+
+test.describe('admin independent scrolling', () => {
+    let previews;
+    test.beforeAll(async ({ baseURL }) => {
+        // Render real CMS views in memory, without login changes or database writes.
+        previews = JSON.parse(execFileSync('php', ['-r', `
+require 'vendor/autoload.php';
+$app = require 'bootstrap/app.php';
+$app->make(Illuminate\\Contracts\\Console\\Kernel::class)->bootstrap();
+Illuminate\\Support\\Facades\\URL::forceRootUrl(getenv('ADMIN_SCROLL_TEST_URL'));
+view()->share('errors', new Illuminate\\Support\\ViewErrorBag);
+Illuminate\\Support\\Facades\\Auth::setUser((new App\\Models\\User)->forceFill(['name' => 'Layout Preview', 'role' => 'administrator']));
+$dashboard = app(App\\Http\\Controllers\\Admin\\DashboardController::class);
+$catalog = app(App\\Http\\Controllers\\Admin\\CatalogController::class);
+$views = ['dashboard' => $dashboard->index()->render(), 'settings' => $dashboard->settings()->render()];
+foreach (['categories','brands','products','industries'] as $module) {
+    $views[$module] = $catalog->form($module)->render();
+}
+$views['product-list'] = $catalog->index(Illuminate\\Http\\Request::create('/admin/catalog/products'), 'products')->render();
+$views['hero'] = app(App\\Http\\Controllers\\Admin\\HeroController::class)->edit('engineering')->render();
+$views['publications'] = app(App\\Http\\Controllers\\Admin\\PublicationController::class)->create()->render();
+$inquiry = (new App\\Models\\Inquiry)->forceFill(['id'=>0,'name'=>'Layout Preview','company'=>'Preview','email'=>'preview@example.test','phone'=>'00000000','reference_number'=>'LAYOUT-PREVIEW','status'=>'new','consent_at'=>now(),'message'=>'Preview only']);
+$views['inquiry'] = $dashboard->inquiry($inquiry)->render();
+echo json_encode($views);
+        `], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024, env: { ...process.env, ADMIN_SCROLL_TEST_URL: baseURL } }));
+    });
+
+    for (const [width, height] of [[1440, 900], [1280, 720], [768, 800], [390, 844], [375, 667]]) {
+        test(`header and navigation stay visible at ${width}px`, async ({ page }) => {
+            test.setTimeout(120000);
+            await page.setViewportSize({ width, height });
+            let html;
+            await page.route('**/__admin_scroll_preview', route => route.fulfill({ contentType: 'text/html', body: html }));
+            const errors = [];
+            page.on('pageerror', error => errors.push(error.message));
+            for (const [name, body] of Object.entries(previews)) {
+                html = body;
+                await page.goto('/__admin_scroll_preview');
+                await expect(page.locator('.admin-main')).toHaveCSS('overflow-y', 'auto');
+                const geometry = () => page.evaluate(() => {
+                    const box = selector => {
+                        const { x, y, width, height } = document.querySelector(selector).getBoundingClientRect();
+                        return { x, y, width, height };
+                    };
+                    return { header: box('.admin-topbar'), sidebar: box('.admin-sidebar'), main: box('.admin-main') };
+                });
+                const before = await geometry();
+                await page.locator('.admin-main').evaluate(el => { el.scrollTop = el.scrollHeight; });
+                expect(await geometry(), name).toEqual(before);
+                expect(before.header.y, name).toBe(0);
+                expect(before.sidebar.y, name).toBeCloseTo(before.header.height, 0);
+                expect(before.main.y + before.main.height, name).toBeCloseTo(height, 0);
+                expect(await page.evaluate(() => ({
+                    windowY: scrollY,
+                    pageOverflow: document.documentElement.scrollHeight > innerHeight + 1,
+                    horizontalOverflow: document.documentElement.scrollWidth > innerWidth + 1,
+                    mainOverflow: document.querySelector('.admin-main').scrollWidth > document.querySelector('.admin-main').clientWidth + 1,
+                })), name).toEqual({ windowY: 0, pageOverflow: false, horizontalOverflow: false, mainOverflow: false });
+                if (['products', 'settings', 'publications'].includes(name)) {
+                    expect(await page.locator('.admin-main').evaluate(el => el.scrollTop), name).toBeGreaterThan(0);
+                    await expect(page.locator('.admin-main').getByRole('button', { name: /^Simpan/ }).last()).toBeInViewport();
+                }
+                const lastMenu = page.locator('.admin-sidebar nav a').last();
+                await lastMenu.focus();
+                await expect(lastMenu).toBeInViewport();
+                expect(await geometry(), name).toEqual(before);
+            }
+            expect(errors).toEqual([]);
+        });
+    }
+
+    test('long navigation scrolls independently and form controls remain usable', async ({ page }) => {
+        await page.setViewportSize({ width: 1280, height: 420 });
+        await page.route('**/__admin_scroll_preview', route => route.fulfill({ contentType: 'text/html', body: previews.products }));
+        await page.goto('/__admin_scroll_preview');
+        const sidebar = page.locator('.admin-sidebar');
+        const main = page.locator('.admin-main');
+        await main.evaluate(el => { el.scrollTop = 300; });
+        await sidebar.evaluate(el => { el.scrollTop = el.scrollHeight; });
+        expect(await sidebar.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
+        expect(await main.evaluate(el => el.scrollTop)).toBe(300);
+        await expect(page.locator('.admin-topbar')).toBeInViewport();
+        await page.getByLabel('Status', { exact: false }).selectOption('draft');
+        await expect(page.locator('#status')).toHaveValue('draft');
+        await page.getByRole('button', { name: 'Tambah Spesifikasi' }).click();
+        await expect(page.locator('.spec-row')).toHaveCount(2);
+        await page.getByRole('button', { name: 'Hapus spesifikasi' }).last().click();
+        await expect(page.locator('.spec-row')).toHaveCount(1);
+        await page.locator('.admin-main button[type="submit"]').click();
+        await expect(page.locator('#name')).toBeFocused();
+        await expect(page.locator('#name')).toBeInViewport();
+        expect(await page.evaluate(() => scrollY)).toBe(0);
+    });
+
+    test('public pages and login retain document scrolling', async ({ page }) => {
+        for (const path of ['/', '/produk', '/publikasi', '/admin/login']) {
+            await page.goto(path);
+            await expect(page.locator('body')).not.toHaveClass(/admin-body/);
+            await expect(page.locator('body')).not.toHaveCSS('overflow-y', 'hidden');
+        }
+    });
+});
 
 for (const viewport of viewports) {
     test(`public website: ${viewport.name}`, async ({ page }, testInfo) => {
