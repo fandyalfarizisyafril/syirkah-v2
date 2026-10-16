@@ -19,7 +19,6 @@ class CategoryPreviewSeeder extends Seeder
                 if (! $entry['preview']) {
                     continue;
                 }
-                ProductIllustrationCatalog::ensureAsset($entry);
                 $sortOrder = 100 + ($order++ % 3);
                 if (Product::where('slug', $entry['slug'])->exists()) {
                     continue;

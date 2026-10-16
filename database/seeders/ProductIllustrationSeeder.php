@@ -14,10 +14,6 @@ class ProductIllustrationSeeder extends Seeder
     public function run(): void
     {
         $entries = ProductIllustrationCatalog::entries();
-        foreach ($entries as $entry) {
-            ProductIllustrationCatalog::ensureAsset($entry);
-        }
-
         $disk = Storage::disk('local');
         $directory = 'backups/product-illustrations';
         $ledgerPath = $directory.'/completed.json';

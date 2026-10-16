@@ -62,12 +62,9 @@ class ProductIllustrationTest extends TestCase
 
         $edited = Product::where('slug', 'demo-induction-motor')->firstOrFail();
         $edited->update(['name' => 'Nama resmi dari CMS', 'image' => 'catalog/new-upload.png']);
-        $missingAsset = Product::where('slug', 'qdos-chemical-dosing-pump')->value('image');
-        Storage::disk('public')->delete($missingAsset);
         $this->seed(ProductIllustrationSeeder::class);
         $this->assertSame('Nama resmi dari CMS', $edited->fresh()->name);
         $this->assertSame('catalog/new-upload.png', $edited->fresh()->image);
-        Storage::disk('public')->assertExists($missingAsset);
     }
 
     public function test_correction_can_run_in_production(): void

@@ -18,14 +18,13 @@ class BrandLogoSeeder extends Seeder
         DB::transaction(function () use ($logos, $disk) {
             foreach ($logos as $logo) {
                 $brand = Brand::where('slug', $logo['slug'])->lockForUpdate()->first();
-                $path = 'catalog/brand-logos/'.$logo['file'];
-
-                // Preserve administrator uploads, but restore a missing seeded file.
-                if (! $brand || (filled($brand->image) && $brand->image !== $path)) {
+                // Use existing CMS records and never replace administrator uploads.
+                if (! $brand || filled($brand->image)) {
                     continue;
                 }
 
                 $source = public_path('images/brands/'.$logo['file']);
+                $path = 'catalog/brand-logos/'.$logo['file'];
                 if (! is_file($source)) {
                     throw new RuntimeException('Logo brand tidak ditemukan: '.$source);
                 }
@@ -33,9 +32,7 @@ class BrandLogoSeeder extends Seeder
                     throw new RuntimeException('Gagal menyimpan logo brand: '.$logo['slug']);
                 }
 
-                if (blank($brand->image)) {
-                    $brand->update(['image' => $path, 'image_alt' => $brand->image_alt ?: $brand->name]);
-                }
+                $brand->update(['image' => $path, 'image_alt' => $brand->image_alt ?: $brand->name]);
             }
         });
     }

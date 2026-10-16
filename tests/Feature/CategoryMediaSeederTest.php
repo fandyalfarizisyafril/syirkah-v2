@@ -26,11 +26,9 @@ class CategoryMediaSeederTest extends TestCase
 
         $this->seed(CategoryMediaSeeder::class);
         $firstRun = Category::orderBy('id')->get()->toArray();
-        Storage::disk('public')->delete('catalog/categories/hose-pump-illustration.png');
         $this->seed(CategoryMediaSeeder::class);
 
         $this->assertSame($firstRun, Category::orderBy('id')->get()->toArray());
-        Storage::disk('public')->assertExists('catalog/categories/hose-pump-illustration.png');
         $this->assertSame($before, $motor->fresh()->getAttributes());
         $this->assertSame($products, Product::orderBy('id')->get()->toArray());
         $this->assertCount(6, Storage::disk('public')->allFiles('catalog/categories'));
