@@ -6,12 +6,119 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Industry;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class BrandDetailTest extends TestCase
 {
     use RefreshDatabase;
+
+    private function videoPayload(Brand $brand, array $extra = []): array
+    {
+        return array_merge(['name' => $brand->name, 'slug' => $brand->slug, 'status' => $brand->status, 'sort_order' => 0], $extra);
+    }
+
+    private function mp4(): UploadedFile
+    {
+        return UploadedFile::fake()->createWithContent('brand.mp4', pack('N', 32).'ftypisom'.pack('N', 512).'isomiso2avc1mp41')->mimeType('video/mp4');
+    }
+
+    public function test_brand_video_upload_replace_remove_and_public_rendering(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create(['role' => 'administrator']));
+        $brand = Brand::factory()->create();
+        $originalDescription = $brand->description;
+        $route = route('admin.catalog.update', ['brands', $brand->id]);
+        $this->put($route, $this->videoPayload($brand, [
+            'video_source' => 'mp4', 'video_file' => $this->mp4(), 'video_poster' => UploadedFile::fake()->image('poster.jpg'),
+            'video_width' => 464, 'video_height' => 832, 'video_title' => 'Video resmi',
+        ]))->assertRedirect()->assertSessionHasNoErrors();
+        $video = $brand->fresh()->video;
+        Storage::disk('public')->assertExists([$video['path'], $video['poster']]);
+        $this->assertSame($originalDescription, $brand->fresh()->description);
+        $this->get(route('brands.video', $brand->slug), ['Range' => 'bytes=0-15'])->assertStatus(206)->assertHeader('Content-Type', 'video/mp4')->assertHeader('Content-Length', '16');
+        $this->get(route('brands.show', $brand->slug))->assertOk()->assertSee('03 / BRAND VIDEO')
+            ->assertSee('04 / PRODUK TERKAIT')->assertSee('preload="none"', false)
+            ->assertSee('--video-ratio:464 / 832', false)->assertSee('Video resmi');
+        $this->put($route, $this->videoPayload($brand, ['video_source' => 'mp4', 'video_title' => 'Judul baru']))->assertSessionHasNoErrors();
+        $this->assertSame($video['path'], $brand->fresh()->video['path']);
+        $this->put($route, $this->videoPayload($brand, ['video_source' => 'mp4', 'video_file' => $this->mp4()]))->assertSessionHasNoErrors();
+        Storage::disk('public')->assertMissing([$video['path'], $video['poster']]);
+        $replacement = $brand->fresh()->video['path'];
+        $this->put($route, $this->videoPayload($brand, ['video_source' => 'none']))->assertSessionHasNoErrors();
+        $this->assertNull($brand->fresh()->video);
+        Storage::disk('public')->assertMissing($replacement);
+        $this->get(route('brands.show', $brand->slug))->assertDontSee('BRAND VIDEO')->assertSee('03 / PRODUK TERKAIT');
+    }
+
+    public function test_brand_youtube_is_normalized_and_never_renders_arbitrary_embeds(): void
+    {
+        Storage::fake('public');
+        $this->actingAs(User::factory()->create(['role' => 'administrator']));
+        $brand = Brand::factory()->create();
+        $route = route('admin.catalog.update', ['brands', $brand->id]);
+        $this->put($route, $this->videoPayload($brand, ['video_source' => 'youtube', 'video_youtube_url' => 'https://youtu.be/M7lc1UVf-VE?si=test', 'video_title' => '<script>bad</script>']))->assertSessionHasNoErrors();
+        $this->assertSame('M7lc1UVf-VE', $brand->fresh()->video['youtube_id']);
+        $this->get(route('brands.show', $brand->slug))->assertSee('https://www.youtube-nocookie.com/embed/M7lc1UVf-VE', false)
+            ->assertSee('loading="lazy"', false)->assertDontSee('<script>bad</script>', false)->assertDontSee('autoplay=1');
+        foreach (['https://youtube.com.evil.test/watch?v=M7lc1UVf-VE', 'javascript:alert(1)', 'https://www.youtube.com/watch?v[]=M7lc1UVf-VE', 'https://user@youtube.com/watch?v=M7lc1UVf-VE'] as $url) {
+            $this->put($route, $this->videoPayload($brand, ['video_source' => 'youtube', 'video_youtube_url' => $url]))->assertSessionHasErrors('video_youtube_url');
+        }
+        $this->put($route, $this->videoPayload($brand))->assertSessionHasNoErrors();
+        $this->assertSame('M7lc1UVf-VE', $brand->fresh()->video['youtube_id']);
+    }
+
+    public function test_brand_video_validation_and_authorization(): void
+    {
+        Storage::fake('public');
+        $brand = Brand::factory()->create();
+        $route = route('admin.catalog.update', ['brands', $brand->id]);
+        $this->put($route, [])->assertRedirect(route('login'));
+        $this->actingAs(User::factory()->create(['role' => 'sales']));
+        $this->put($route, [])->assertForbidden();
+        $this->actingAs(User::factory()->create(['role' => 'administrator']));
+        $this->put($route, $this->videoPayload($brand, ['video_source' => 'mp4']))->assertSessionHasErrors('video_file');
+        $this->put($route, $this->videoPayload($brand, ['video_source' => 'mp4', 'video_file' => UploadedFile::fake()->createWithContent('bad.mp4', '<?php echo 1;')]))->assertSessionHasErrors('video_file');
+        $this->put($route, $this->videoPayload($brand, ['video_source' => 'mp4', 'video_file' => $this->mp4()->size(51201)]))->assertSessionHasErrors('video_file');
+        $this->put($route, $this->videoPayload($brand, ['video_source' => 'youtube', 'video_youtube_url' => 'https://youtu.be/M7lc1UVf-VE', 'video_poster' => UploadedFile::fake()->createWithContent('poster.svg', '<svg/>')]))->assertSessionHasErrors('video_poster');
+        $this->assertNull($brand->fresh()->video);
+        $this->assertSame([], Storage::disk('public')->allFiles());
+    }
+
+    public function test_video_endpoint_checks_status_and_brand_creation_supports_video(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create(['role' => 'administrator']);
+        $this->actingAs($user);
+        $this->post(route('admin.catalog.store', 'brands'), [
+            'name' => 'Video Brand', 'slug' => 'video-brand', 'status' => 'draft', 'sort_order' => 0,
+            'video_source' => 'mp4', 'video_file' => $this->mp4(),
+        ])->assertSessionHasNoErrors();
+        $brand = Brand::where('slug', 'video-brand')->firstOrFail();
+        $path = $brand->video['path'];
+        $url = route('brands.video', $brand->slug);
+        $this->get($url)->assertOk();
+        auth()->logout();
+        $this->get($url)->assertNotFound();
+        $brand->update(['status' => 'published']);
+        $this->get($url)->assertOk();
+        $this->actingAs($user);
+        $this->put(route('admin.catalog.update', ['brands', $brand->id]), $this->videoPayload($brand, [
+            'video_source' => 'youtube', 'video_youtube_url' => 'https://youtube.com/shorts/M7lc1UVf-VE',
+        ]))->assertSessionHasNoErrors();
+        Storage::disk('public')->assertMissing($path);
+        $this->get($url)->assertNotFound();
+        $this->put(route('admin.catalog.update', ['brands', $brand->id]), $this->videoPayload($brand, [
+            'video_source' => 'mp4', 'video_file' => $this->mp4(),
+        ]))->assertSessionHasNoErrors();
+        $path = $brand->fresh()->video['path'];
+        $this->delete(route('admin.catalog.destroy', ['brands', $brand->id]))->assertRedirect();
+        Storage::disk('public')->assertMissing($path);
+    }
 
     protected function setUp(): void
     {

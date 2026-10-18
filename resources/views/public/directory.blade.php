@@ -8,6 +8,7 @@
 @elseif($isBrand && $entry)
     @push('head')
         @vite('resources/css/brand-detail.css')
+        @if($entry->video)@vite('resources/js/brand-video.js')@endif
     @endpush
 @endif
 @section('content')

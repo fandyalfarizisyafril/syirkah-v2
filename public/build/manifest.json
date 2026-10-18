@@ -87,13 +87,23 @@
     ]
   },
   "resources/js/brand-editor.js": {
-    "file": "assets/brand-editor-1rV2E8cZ.js",
+    "file": "assets/brand-editor-cmwMghJ6.js",
     "name": "brand-editor",
     "src": "resources/js/brand-editor.js",
     "isEntry": true,
     "imports": [
       "_lucide-DstTJpr5.js",
+      "resources/js/brand-video.js",
       "_trash-3sjl502V.js"
+    ]
+  },
+  "resources/js/brand-video.js": {
+    "file": "assets/brand-video-BC_QUsVi.js",
+    "name": "brand-video",
+    "src": "resources/js/brand-video.js",
+    "isEntry": true,
+    "css": [
+      "assets/brand-video-BxDTNFC-.css"
     ]
   },
   "resources/js/product-details.js": {

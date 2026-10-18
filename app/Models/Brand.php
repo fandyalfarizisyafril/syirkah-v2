@@ -8,7 +8,7 @@ class Brand extends CatalogEntry
 {
     protected function casts(): array
     {
-        return ['technology_details' => 'array'];
+        return ['technology_details' => 'array', 'video' => 'array'];
     }
 
     public function products(): HasMany

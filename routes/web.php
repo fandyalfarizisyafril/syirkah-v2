@@ -16,6 +16,7 @@ Route::get('/produk', [PublicController::class, 'products'])->name('products.ind
 Route::get('/produk/{category}', [PublicController::class, 'products'])->name('products.category');
 Route::get('/produk/{category}/{product}', [PublicController::class, 'product'])->name('products.show');
 Route::get('/brand', [PublicController::class, 'directory'])->name('brands.index');
+Route::get('/brand/{slug}/video', \App\Http\Controllers\BrandVideoController::class)->name('brands.video');
 Route::get('/brand/{slug}', [PublicController::class, 'directory'])->name('brands.show');
 Route::redirect('/industri', '/publikasi', 301)->name('industries.index');
 Route::prefix('publikasi')->name('publications.')->group(function () {

@@ -82,9 +82,22 @@
         </section>
     @endif
 
+    @if($entry->video)
+        <section class="container brand-detail-video" aria-labelledby="brand-video-title">
+            <div class="brand-products-heading">
+                <div>
+                    <p class="brand-detail-eyebrow">03 / BRAND VIDEO</p>
+                    <h2 id="brand-video-title">{{ $entry->video['title'] ?: 'Mengenal '.$entry->name.' Lebih Dekat' }}</h2>
+                    @if(!empty($entry->video['description']))<p class="brand-video-description">{{ $entry->video['description'] }}</p>@endif
+                </div>
+            </div>
+            @include('partials.brand-video-player', ['video' => $entry->video, 'videoTitle' => $entry->video['title'] ?: 'Video '.$entry->name])
+        </section>
+    @endif
+
     <section class="container brand-detail-products" aria-labelledby="brand-products-title">
         <div class="brand-products-heading">
-            <div><p class="brand-detail-eyebrow">03 / PRODUK TERKAIT</p><h2 id="brand-products-title">Jelajahi produk {{ $entry->name }}</h2></div>
+            <div><p class="brand-detail-eyebrow">{{ $entry->video ? '04' : '03' }} / PRODUK TERKAIT</p><h2 id="brand-products-title">Jelajahi produk {{ $entry->name }}</h2></div>
             @if($products->isNotEmpty())<a class="text-link brand-all-products" href="{{ route('products.index', ['brand' => $entry->id]) }}">Semua produk {{ $entry->name }} <x-icon name="arrow-up-right"/></a>@endif
         </div>
         <div class="product-grid">

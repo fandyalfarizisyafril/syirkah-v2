@@ -78,6 +78,8 @@ class CatalogController extends Controller
             ];
         }
         $data = $request->validate($rules);
+        $videoService = app(\App\Services\BrandVideo::class);
+        $videoData = $module === 'brands' && $request->has('video_source') ? $videoService->validate($request, $entry) : null;
         $industryIds = $data['industry_ids'] ?? [];
         $productIds = $data['product_ids'] ?? [];
         if ($module === 'brands' && ($request->has('technology_details') || $request->boolean('technology_details_present'))) {
@@ -115,15 +117,28 @@ class CatalogController extends Controller
             }
         }
         unset($data['industry_ids'], $data['product_ids'], $data['benefits_text'], $data['applications_text'], $data['remove_gallery'], $data['remove_image'], $data['remove_datasheet']);
-        DB::transaction(function () use ($entry, $data, $module, $industryIds, $productIds) {
-            $entry->fill($data)->save();
-            if ($module === 'products') {
-                $entry->industries()->sync($industryIds);
+        $oldVideo = $module === 'brands' ? $entry->video : null;
+        $createdVideos = [];
+        try {
+            if ($videoData !== null) {
+                $data['video'] = $videoService->prepare($videoData, $entry, $createdVideos);
             }
-            if ($module === 'industries') {
-                $entry->products()->sync($productIds);
-            }
-        });
+            DB::transaction(function () use ($entry, $data, $module, $industryIds, $productIds) {
+                $entry->fill($data)->save();
+                if ($module === 'products') {
+                    $entry->industries()->sync($industryIds);
+                }
+                if ($module === 'industries') {
+                    $entry->products()->sync($productIds);
+                }
+            });
+        } catch (\Throwable $exception) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($createdVideos);
+            throw $exception;
+        }
+        if ($videoData !== null) {
+            $videoService->deleteUnused($oldVideo, $entry->video);
+        }
 
         return redirect()->route('admin.catalog.index', $module)->with('success', $config['label'].' berhasil disimpan.');
     }
@@ -136,6 +151,9 @@ class CatalogController extends Controller
             return back()->withErrors(['delete' => 'Pindahkan produk terkait sebelum menghapus data ini.']);
         }
         $entry->delete();
+        if ($module === 'brands') {
+            app(\App\Services\BrandVideo::class)->deleteUnused($entry->video, null);
+        }
 
         return redirect()->route('admin.catalog.index', $module)->with('success', 'Data berhasil dihapus.');
     }
