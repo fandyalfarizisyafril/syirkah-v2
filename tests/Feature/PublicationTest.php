@@ -50,10 +50,10 @@ class PublicationTest extends TestCase
     public function test_new_page_redirect_navigation_seo_and_empty_states(): void
     {
         $this->get('/industri')->assertStatus(301)->assertRedirect('/publikasi');
-        $response = $this->get('/publikasi')->assertOk()->assertSee('Transparansi dan informasi perusahaan.')
-            ->assertSee('Dokumen legalitas belum tersedia untuk ditampilkan.')
+        $response = $this->get('/publikasi')->assertOk()->assertSee('Informasi dan dokumentasi perusahaan.')
+            ->assertSee('Media belum tersedia.')
             ->assertSee('Publikasi perusahaan belum tersedia.')
-            ->assertSee('<title>Publikasi &amp; Legalitas | PT. Syirkah Mandiri Artomoro</title>', false)
+            ->assertSee('<title>Publikasi &amp; Media | PT. Syirkah Mandiri Artomoro</title>', false)
             ->assertSee('href="'.url('/publikasi').'"', false);
         $this->assertStringContainsString('no-store', $response->headers->get('Cache-Control'));
         $this->get('/sitemap.xml')->assertSee(url('/publikasi'))->assertDontSee('<loc>'.url('/industri').'</loc>', false);
@@ -210,7 +210,8 @@ class PublicationTest extends TestCase
         $data['document'] = $this->pdf();
         $this->post('/admin/publications', $data + ['legal_confirmation' => '1'])->assertSessionHasNoErrors();
         $entry = Publication::sole();
-        $this->get('/publikasi')->assertSee($entry->title);
+        $this->get('/publikasi')->assertDontSee($entry->title);
+        $this->get('/publikasi/'.$entry->id.'/preview')->assertOk();
         unset($data['document']);
         $this->put('/admin/publications/'.$entry->id, $data)->assertSessionHasErrors('legal_confirmation');
         $this->put('/admin/publications/'.$entry->id, array_replace($data, ['status' => 'draft']))->assertSessionHasNoErrors();
@@ -222,9 +223,10 @@ class PublicationTest extends TestCase
         $company = $this->document(['title' => 'SK Kemenkumham Pengesahan', 'category' => 'perusahaan', 'status' => 'published', 'published_at' => now()]);
         $draft = $this->document(['title' => 'Dokumen Belum Disetujui', 'category' => 'legalitas']);
         $this->get('/publikasi')->assertOk()
-            ->assertViewHas('legalities', fn ($entries) => $entries->values()->modelKeys() === [$legal->id])
             ->assertViewHas('publications', fn ($entries) => $entries->values()->modelKeys() === [$company->id])
-            ->assertSee($legal->title)->assertSee($company->title)->assertDontSee($draft->title);
+            ->assertDontSee($legal->title)->assertSee($company->title)->assertDontSee($draft->title);
+        $this->assertDatabaseHas('publications', ['id' => $legal->id, 'category' => 'legalitas', 'status' => 'published']);
+        Storage::disk('publications')->assertExists($legal->file_path);
         $this->assertSame('perusahaan', $company->fresh()->category);
     }
 

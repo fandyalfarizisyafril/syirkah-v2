@@ -1,4 +1,12 @@
 {
+  "_external-link-CLGr6LhX.js": {
+    "file": "assets/external-link-CLGr6LhX.js",
+    "name": "external-link"
+  },
+  "_gallery-6zqr4E1W.css": {
+    "file": "assets/gallery-6zqr4E1W.css",
+    "src": "_gallery-6zqr4E1W.css"
+  },
   "_industrial-partner-DyL699jU.js": {
     "file": "assets/industrial-partner-DyL699jU.js",
     "name": "industrial-partner"
@@ -7,8 +15,12 @@
     "file": "assets/lucide-DstTJpr5.js",
     "name": "lucide"
   },
-  "_trash-3sjl502V.js": {
-    "file": "assets/trash-3sjl502V.js",
+  "_plus-CTdGIUZh.js": {
+    "file": "assets/plus-CTdGIUZh.js",
+    "name": "plus"
+  },
+  "_trash-BveoQv_I.js": {
+    "file": "assets/trash-BveoQv_I.js",
     "name": "trash"
   },
   "resources/css/about.css": {
@@ -76,25 +88,28 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-D8G4kJr_.js",
+    "file": "assets/app-DopB5rif.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
       "_lucide-DstTJpr5.js",
       "_industrial-partner-DyL699jU.js",
-      "_trash-3sjl502V.js"
+      "_trash-BveoQv_I.js",
+      "_plus-CTdGIUZh.js",
+      "_external-link-CLGr6LhX.js"
     ]
   },
   "resources/js/brand-editor.js": {
-    "file": "assets/brand-editor-cmwMghJ6.js",
+    "file": "assets/brand-editor-DMGUPU4z.js",
     "name": "brand-editor",
     "src": "resources/js/brand-editor.js",
     "isEntry": true,
     "imports": [
       "_lucide-DstTJpr5.js",
       "resources/js/brand-video.js",
-      "_trash-3sjl502V.js"
+      "_trash-BveoQv_I.js",
+      "_plus-CTdGIUZh.js"
     ]
   },
   "resources/js/brand-video.js": {
@@ -104,6 +119,29 @@
     "isEntry": true,
     "css": [
       "assets/brand-video-BxDTNFC-.css"
+    ]
+  },
+  "resources/js/gallery-editor.js": {
+    "file": "assets/gallery-editor-Dj30hnpe.js",
+    "name": "gallery-editor",
+    "src": "resources/js/gallery-editor.js",
+    "isEntry": true,
+    "css": [
+      "assets/gallery-6zqr4E1W.css"
+    ]
+  },
+  "resources/js/gallery.js": {
+    "file": "assets/gallery-BfJion2e.js",
+    "name": "gallery",
+    "src": "resources/js/gallery.js",
+    "isEntry": true,
+    "imports": [
+      "_lucide-DstTJpr5.js",
+      "_external-link-CLGr6LhX.js",
+      "_plus-CTdGIUZh.js"
+    ],
+    "css": [
+      "assets/gallery-6zqr4E1W.css"
     ]
   },
   "resources/js/product-details.js": {

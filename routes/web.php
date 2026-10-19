@@ -26,6 +26,9 @@ Route::prefix('publikasi')->name('publications.')->group(function () {
     Route::get('/{publication}/thumbnail', [PublicationController::class, 'file'])->whereNumber('publication')->name('thumbnail');
     Route::get('/{publication}/unduh', [PublicationController::class, 'file'])->whereNumber('publication')->name('download');
 });
+Route::get('/publikasi/galeri', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
+Route::get('/publikasi/media/{medium}/file', [\App\Http\Controllers\GalleryController::class, 'file'])->whereNumber('medium')->name('gallery.file');
+Route::get('/publikasi/media/{medium}/poster', [\App\Http\Controllers\GalleryController::class, 'file'])->whereNumber('medium')->name('gallery.poster');
 Route::get('/industri/{slug}', [PublicController::class, 'directory'])->name('industries.show');
 Route::get('/kontak', [PublicController::class, 'contact'])->name('contact');
 Route::post('/inquiry', [InquiryController::class, 'store'])->middleware('throttle:inquiry')->name('inquiry.store');
@@ -49,6 +52,16 @@ Route::prefix('admin')->group(function () {
         Route::middleware('can:manage-settings')->group(function () {
             Route::get('/settings', [DashboardController::class, 'settings'])->name('settings');
             Route::put('/settings', [DashboardController::class, 'updateSettings'])->name('settings.update');
+        });
+        Route::prefix('gallery')->middleware('can:manage-content')->name('gallery.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\GalleryController::class, 'index'])->name('index');
+            Route::get('/create', [\App\Http\Controllers\Admin\GalleryController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\Admin\GalleryController::class, 'store'])->name('store');
+            Route::get('/{medium}/edit', [\App\Http\Controllers\Admin\GalleryController::class, 'edit'])->whereNumber('medium')->name('edit');
+            Route::put('/{medium}', [\App\Http\Controllers\Admin\GalleryController::class, 'update'])->whereNumber('medium')->name('update');
+            Route::delete('/{medium}', [\App\Http\Controllers\Admin\GalleryController::class, 'destroy'])->whereNumber('medium')->name('destroy');
+            Route::get('/{medium}/file', [\App\Http\Controllers\GalleryController::class, 'file'])->whereNumber('medium')->name('file');
+            Route::get('/{medium}/poster', [\App\Http\Controllers\GalleryController::class, 'file'])->whereNumber('medium')->name('poster');
         });
         Route::prefix('hero')->middleware('can:manage-content')->name('hero.')->group(function () {
             Route::get('/', [HeroController::class, 'index'])->name('index');

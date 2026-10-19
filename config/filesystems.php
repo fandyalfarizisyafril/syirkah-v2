@@ -30,6 +30,14 @@ return [
 
     'disks' => [
 
+        'gallery' => [
+            'driver' => 'local',
+            'root' => storage_path('app/gallery'),
+            'visibility' => 'private',
+            'serve' => false,
+            'throw' => true,
+        ],
+
         'publications' => [
             'driver' => 'local',
             'root' => storage_path('app/publications'),
