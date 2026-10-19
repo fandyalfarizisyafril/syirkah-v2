@@ -54,7 +54,7 @@ class BrandPortfolioTest extends TestCase
     public function test_portfolio_is_not_used_on_detail_or_other_public_pages(): void
     {
         $brand = Brand::factory()->create();
-        foreach (['/', '/tentang-kami', '/produk', '/publikasi', '/kontak', '/admin/login', route('brands.show', $brand->slug)] as $path) {
+        foreach (['/', '/tentang-kami', '/produk', '/publikasi/perusahaan', '/publikasi/media', '/kontak', '/admin/login', route('brands.show', $brand->slug)] as $path) {
             $this->get($path)->assertOk()->assertDontSee('class="brand-portfolio"', false);
         }
         $this->get(route('brands.show', $brand->slug))->assertSee($brand->name)->assertSee('Jelajahi produk');

@@ -65,7 +65,7 @@ class ProductCatalogTest extends TestCase
     {
         $product = Product::factory()->create();
         $this->get(route('products.index'))->assertSee('class="catalog-page"', false);
-        foreach (['/', '/tentang-kami', '/brand', '/publikasi', '/admin/login', $product->url,
+        foreach (['/', '/tentang-kami', '/brand', '/publikasi/perusahaan', '/publikasi/media', '/admin/login', $product->url,
             route('products.category', $product->category->slug), route('brands.show', $product->brand->slug)] as $url) {
             $this->get($url)->assertOk()->assertDontSee('class="catalog-page"', false);
         }

@@ -17,7 +17,7 @@ class GalleryFeed
             ->selectRaw("id, 'gallery' as origin, sort_order, created_at as media_date");
         $rows = DB::query()->fromSub($gallery->unionAll($brands), 'media_feed')
             ->orderByRaw('COALESCE(sort_order, 2147483647)')->orderByDesc('media_date')->orderBy('origin')->orderByDesc('id')
-            ->simplePaginate(12, ['*'], 'media_page', $page);
+            ->simplePaginate(8, ['*'], 'media_page', $page);
         $keys = collect($rows->items());
         $brandModels = Brand::whereIn('id', $keys->where('origin', 'brand')->pluck('id'))->get()->keyBy('id');
         $galleryModels = GalleryMedia::whereIn('id', $keys->where('origin', 'gallery')->pluck('id'))->get()->keyBy('id');

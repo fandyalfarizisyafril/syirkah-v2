@@ -1,9 +1,58 @@
 import '../css/gallery.css';
-import { createIcons, Play, Video, Image, X, Plus, ExternalLink } from 'lucide';
+import { createIcons, Play, Video, Image, X, ArrowDown, ExternalLink } from 'lucide';
+
+// Decode one still frame without playback; release the decoder/network on every exit.
+const capturePreview = (url, signal) => new Promise(resolve => {
+    const video = document.createElement('video');
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'metadata';
+    let settled = false;
+    let capturing = false;
+    let seekTime;
+    const finish = blob => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeout);
+        signal.removeEventListener('abort', abort);
+        video.onloadedmetadata = video.onloadeddata = video.onseeked = video.onerror = null;
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+        resolve(blob);
+    };
+    const abort = () => finish(null);
+    const timeout = setTimeout(abort, 12000);
+    const capture = () => {
+        if (settled || capturing || video.readyState < 2 || seekTime === undefined || video.seeking || Math.abs(video.currentTime - seekTime) > .05) return;
+        capturing = true;
+        try {
+            const scale = Math.min(1, 640 / video.videoWidth, 640 / video.videoHeight);
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.max(1, Math.round(video.videoWidth * scale));
+            canvas.height = Math.max(1, Math.round(video.videoHeight * scale));
+            const context = canvas.getContext('2d');
+            if (!context) return abort();
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(finish, 'image/jpeg', .8);
+        } catch { abort(); }
+    };
+    video.onloadedmetadata = () => {
+        if (!Number.isFinite(video.duration) || video.duration <= 0 || !video.videoWidth || !video.videoHeight || video.videoWidth * video.videoHeight > 33554432) return abort();
+        seekTime = Math.min(1, video.duration / 2);
+        video.currentTime = seekTime;
+        capture();
+    };
+    video.onloadeddata = video.onseeked = capture;
+    video.onerror = abort;
+    signal.addEventListener('abort', abort, { once: true });
+    if (signal.aborted) return abort();
+    video.src = url;
+});
 
 const section = document.querySelector('[data-gallery]');
 if (section) {
-    const icons = () => createIcons({ icons: { Play, Video, Image, X, Plus, ExternalLink }, root: section });
+    const icons = () => createIcons({ icons: { Play, Video, Image, X, ArrowDown, ExternalLink }, root: section });
     const grid = section.querySelector('[data-gallery-grid]');
     const dialog = section.querySelector('[data-gallery-dialog]');
     const viewer = dialog.querySelector('[data-gallery-viewer]');
@@ -29,12 +78,75 @@ if (section) {
     };
     const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(layout); };
     const sizing = 'ResizeObserver' in window ? new ResizeObserver(schedule) : null;
+    const previewed = new WeakSet();
+    const pendingPreviews = new Map();
+    const visiblePreviews = new Set();
+    const previewUrls = new Set();
+    let activePreview;
+    let suspended = false;
+    const previewsAllowed = () => !navigator.connection?.saveData && !['slow-2g', '2g'].includes(navigator.connection?.effectiveType);
+    const pumpPreviews = async () => {
+        if (activePreview || suspended || document.hidden || dialog.open || !previewsAllowed()) return;
+        const next = [...pendingPreviews].find(([target]) => visiblePreviews.has(target));
+        if (!next) return;
+        const [target, item] = next;
+        pendingPreviews.delete(target);
+        visiblePreviews.delete(target);
+        previewObserver.unobserve(target);
+        const job = new AbortController();
+        activePreview = job;
+        target.dataset.frameState = 'loading';
+        try {
+            const blob = await capturePreview(item.url, job.signal);
+            if (!blob || job.signal.aborted) return;
+            const url = URL.createObjectURL(blob);
+            previewUrls.add(url);
+            const img = document.createElement('img');
+            img.alt = '';
+            img.src = url;
+            await img.decode();
+            if (job.signal.aborted || !target.isConnected) {
+                URL.revokeObjectURL(url);
+                previewUrls.delete(url);
+                return;
+            }
+            // Keep the existing card footprint even if stored dimensions differ from the file.
+            target.dataset.framePreview = '';
+            img.dataset.galleryFrame = '';
+            target.insertBefore(img, target.querySelector('.gallery-play'));
+            target.dataset.frameState = 'ready';
+        } catch {
+            // Missing files, unsupported codecs, and blocked canvas reads retain the icon.
+        } finally {
+            if (job.signal.aborted) previewed.delete(target);
+            if (target.dataset.frameState !== 'ready') target.dataset.frameState = 'fallback';
+            activePreview = null;
+            pumpPreviews();
+        }
+    };
+    const previewObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+        for (const entry of entries) {
+            if (entry.isIntersecting) visiblePreviews.add(entry.target);
+            else visiblePreviews.delete(entry.target);
+        }
+        pumpPreviews();
+    }, { rootMargin: '0px', threshold: .01 }) : null;
+    const watchPreview = link => {
+        if (!previewObserver || !previewsAllowed()) return;
+        const target = link.querySelector('.gallery-thumbnail');
+        if (!target || previewed.has(target) || target.querySelector('img:not([hidden])')) return;
+        const item = JSON.parse(link.dataset.galleryItem);
+        if (item.source !== 'mp4' || new URL(item.url, location.href).origin !== location.origin) return;
+        previewed.add(target);
+        pendingPreviews.set(target, item);
+        previewObserver.observe(target);
+    };
     const prepare = () => {
         icons();
         grid?.querySelectorAll('[data-gallery-thumbnail]').forEach(img => {
             if (img.dataset.ready) return;
             img.dataset.ready = '1';
-            const failed = () => { img.hidden = true; schedule(); };
+            const failed = () => { img.hidden = true; schedule(); watchPreview(img.closest('[data-gallery-item]')); };
             img.addEventListener('error', failed);
             img.addEventListener('load', schedule);
             if (img.complete && !img.naturalWidth) failed();
@@ -45,6 +157,7 @@ if (section) {
             [...grid.children].forEach(card => sizing.observe(card));
             layout();
         }
+        grid?.querySelectorAll('[data-gallery-item]').forEach(watchPreview);
     };
     prepare();
     section.addEventListener('click', event => {
@@ -101,6 +214,7 @@ if (section) {
         if (video) { video.pause(); video.removeAttribute('src'); video.load(); }
         viewer.replaceChildren();
         trigger?.focus({ preventScroll: true });
+        pumpPreviews();
     });
     const more = section.querySelector('[data-gallery-more]');
     more?.addEventListener('click', async event => {
@@ -136,6 +250,17 @@ if (section) {
             grid?.removeAttribute('aria-busy');
         }
     });
-    window.addEventListener('pagehide', () => { sizing?.disconnect(); cancelAnimationFrame(frame); controller?.abort(); if (dialog.open) dialog.close(); });
-    window.addEventListener('pageshow', event => { if (event.persisted) prepare(); });
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) pumpPreviews(); });
+    window.addEventListener('pagehide', event => {
+        suspended = true;
+        activePreview?.abort();
+        previewObserver?.disconnect();
+        for (const target of pendingPreviews.keys()) previewed.delete(target);
+        pendingPreviews.clear();
+        visiblePreviews.clear();
+        if (!event.persisted) { previewUrls.forEach(url => URL.revokeObjectURL(url)); previewUrls.clear(); }
+        sizing?.disconnect(); cancelAnimationFrame(frame); controller?.abort();
+        if (dialog.open) dialog.close();
+    });
+    window.addEventListener('pageshow', event => { if (event.persisted) { suspended = false; prepare(); } });
 }

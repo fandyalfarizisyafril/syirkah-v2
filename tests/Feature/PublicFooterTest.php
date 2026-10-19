@@ -27,7 +27,7 @@ class PublicFooterTest extends TestCase
         $this->seed(CatalogSeeder::class);
         Category::factory()->create(['name' => 'Private Category', 'status' => 'draft']);
         $settings = Setting::values();
-        foreach (['/', '/tentang-kami', '/produk', '/brand', '/publikasi', '/kontak', '/privasi'] as $path) {
+        foreach (['/', '/tentang-kami', '/produk', '/brand', '/publikasi/perusahaan', '/publikasi/media', '/kontak', '/privasi'] as $path) {
             $xpath = $this->footer($path);
             $this->assertSame(1, $xpath->query('//footer')->length);
             $footerText = $xpath->query('//footer')->item(0)->textContent;

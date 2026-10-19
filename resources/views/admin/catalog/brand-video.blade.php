@@ -18,9 +18,9 @@
     <div data-video-fields>
         <x-field name="video_title" label="Judul video (opsional)" :value="$entry->video['title'] ?? ''" maxlength="200"/>
         <x-field name="video_description" type="textarea" label="Deskripsi video (opsional)" :value="$entry->video['description'] ?? ''" maxlength="1500" rows="3"/>
-        <x-field name="video_poster" type="file" label="Poster video (JPG, PNG, WebP; maks. 4 MB)" accept=".jpg,.jpeg,.png,.webp"/>
+        <x-field name="video_poster" type="file" label="Poster / thumbnail video (opsional; JPG, PNG, WebP; maks. 4 MB)" accept=".jpg,.jpeg,.png,.webp"/>
+        <img class="admin-preview" data-video-poster-preview @if(!empty($entry->video['poster'])) src="{{ asset('storage/'.$entry->video['poster']) }}" @else hidden @endif alt="Poster video {{ $entry->name }}" width="180" height="140">
         @if(!empty($entry->video['poster']))
-            <img class="admin-preview" src="{{ asset('storage/'.$entry->video['poster']) }}" alt="Poster video {{ $entry->name }}" width="180" height="140">
             <label class="check-field"><input type="checkbox" name="remove_video_poster" value="1" @checked(old('remove_video_poster'))>Hapus poster</label>
         @endif
         <input type="hidden" name="video_width" value="{{ old('video_width', $entry->video['width'] ?? 16) }}">

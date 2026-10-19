@@ -9,6 +9,118 @@ const viewports = [
 ];
 
 test.describe('publication media gallery', () => {
+    test('missing MP4 posters decode one lazy frame without changing masonry or existing posters', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 320 });
+        const requests = [];
+        page.on('request', request => { if (/\/brand\/[^/]+\/video/.test(request.url())) requests.push(request.url()); });
+        await page.addInitScript(() => {
+            window.maxPreviewDecoders = 0;
+            new MutationObserver(() => { window.maxPreviewDecoders = Math.max(window.maxPreviewDecoders, document.querySelectorAll('[data-frame-state="loading"]').length); })
+                .observe(document, { subtree: true, attributes: true, attributeFilter: ['data-frame-state'] });
+        });
+        await page.goto('/publikasi/media');
+        await page.waitForTimeout(300);
+        expect(requests).toEqual([]);
+        const pending = await page.locator('[data-gallery-item]').evaluateAll(links => links.map(link => JSON.parse(link.dataset.galleryItem)).filter(item => item.source === 'mp4' && !item.thumbnail));
+        expect(pending.length).toBeGreaterThan(0);
+        for (const item of pending) {
+            const card = page.locator(`[data-gallery-key="${item.key}"]`);
+            const before = await card.evaluate(el => [el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight]);
+            await card.scrollIntoViewIfNeeded();
+            const img = card.locator('[data-gallery-frame]');
+            await expect(img).toBeVisible({ timeout: 15000 });
+            await expect(img).toHaveAttribute('src', /^blob:/);
+            const pixels = await img.evaluate(el => {
+                const canvas = document.createElement('canvas'); canvas.width = 80; canvas.height = 45;
+                const context = canvas.getContext('2d'); context.drawImage(el, 0, 0, 80, 45);
+                const colors = [...context.getImageData(0, 0, 80, 45).data].filter((_, i) => i % 4 !== 3);
+                return Math.max(...colors) - Math.min(...colors);
+            });
+            expect(pixels).toBeGreaterThan(10);
+            expect(await card.evaluate(el => [el.offsetLeft, el.offsetTop, el.offsetWidth, el.offsetHeight])).toEqual(before);
+            await card.locator('.gallery-play').click();
+            await expect(page.locator('dialog video')).toBeVisible();
+            await expect(page.locator('dialog video')).toHaveJSProperty('paused', true);
+            await page.keyboard.press('Escape');
+            await expect(page.locator('dialog video')).toHaveCount(0);
+        }
+        expect(await page.evaluate(() => window.maxPreviewDecoders)).toBe(1);
+        const count = requests.length;
+        await page.evaluate(() => scrollTo(0, 0));
+        await page.locator('[data-gallery-grid]').scrollIntoViewIfNeeded();
+        await page.waitForTimeout(300);
+        expect(requests.length).toBe(count);
+        const posted = await page.locator('[data-gallery-item]').evaluateAll(links => links.map(link => JSON.parse(link.dataset.galleryItem)).filter(item => item.source === 'mp4' && item.thumbnail).map(item => item.url));
+        expect(requests.some(url => posted.includes(url))).toBe(false);
+    });
+
+    test('MP4 preview errors and data-saving mode keep the existing fallback usable', async ({ page, browser, baseURL }) => {
+        await page.route('**/brand/*/video', route => route.abort());
+        await page.goto('/publikasi/media');
+        const item = await page.locator('[data-gallery-item]').evaluateAll(links => links.map(link => JSON.parse(link.dataset.galleryItem)).find(item => item.source === 'mp4' && !item.thumbnail));
+        const card = page.locator(`[data-gallery-key="${item.key}"]`);
+        await card.scrollIntoViewIfNeeded();
+        await expect(card.locator('[data-frame-state]')).toHaveAttribute('data-frame-state', 'fallback');
+        await expect(card.locator('[data-gallery-frame]')).toHaveCount(0);
+        await expect(card.locator('.gallery-play')).toBeVisible();
+        const context = await browser.newContext();
+        await context.addInitScript(() => Object.defineProperty(navigator, 'connection', { value: { saveData: true } }));
+        const saving = await context.newPage(); const requests = [];
+        saving.on('request', request => { if (/\/brand\/[^/]+\/video/.test(request.url())) requests.push(request.url()); });
+        await saving.goto(baseURL + '/publikasi/media');
+        await saving.locator(`[data-gallery-key="${item.key}"]`).scrollIntoViewIfNeeded();
+        await saving.waitForTimeout(300);
+        expect(requests).toEqual([]);
+        await expect(saving.locator(`[data-gallery-key="${item.key}"] .gallery-play`)).toBeVisible();
+        await context.close();
+    });
+
+    test('publication dropdown, separate pages, legacy URL and keyboard navigation', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 1000 });
+        await page.goto('/publikasi');
+        await expect(page).toHaveURL(/\/publikasi\/perusahaan$/);
+        await expect(page.locator('h1')).toHaveText('Publikasi Perusahaan');
+        await expect(page.locator('[data-gallery-grid]')).toHaveCount(0);
+        const dropdown = page.locator('[data-publications-nav]');
+        const summary = dropdown.locator('summary');
+        const media = dropdown.getByRole('link', { name: 'Media', exact: true });
+        await summary.hover();
+        await expect(summary).toHaveAttribute('aria-expanded', 'true');
+        await media.click();
+        await expect(page).toHaveURL(/\/publikasi\/media$/);
+        await expect(page.locator('h1')).toHaveText('Galeri & Media');
+        await expect(page.locator('#publications-title')).toHaveCount(0);
+        await expect(summary).toHaveClass(/active/);
+        await summary.focus();
+        await page.keyboard.press('ArrowDown');
+        await expect(dropdown.getByRole('link', { name: 'Publikasi Perusahaan' })).toBeFocused();
+        await page.keyboard.press('ArrowDown');
+        await expect(media).toBeFocused();
+        await expect(media).toHaveAttribute('aria-current', 'page');
+        await page.keyboard.press('Escape');
+        await expect(summary).toHaveAttribute('aria-expanded', 'false');
+        await expect(summary).toBeFocused();
+        await page.keyboard.press('Enter');
+        await expect(media).toBeVisible();
+        await page.locator('h1').click();
+        await expect(media).not.toBeVisible();
+        for (const width of [768, 390, 375]) {
+            await page.setViewportSize({ width, height: 900 });
+            await page.getByRole('button', { name: 'Buka navigasi' }).click();
+            await summary.click();
+            await expect(media).toBeVisible();
+            await summary.click();
+            await expect(media).not.toBeVisible();
+            await summary.click();
+            await page.keyboard.press('Escape');
+            await expect(page.locator('#primary-nav')).toBeVisible();
+            await expect(media).not.toBeVisible();
+            await page.keyboard.press('Escape');
+            await expect(page.locator('#primary-nav')).not.toBeVisible();
+            expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)).toBe(false);
+        }
+    });
+
     test('CMS gallery editor previews uploads and switches sources without saving data', async ({ page, baseURL }) => {
         const preview = JSON.parse(execFileSync('php', ['-r', `
 require 'vendor/autoload.php';
@@ -18,9 +130,10 @@ Illuminate\\Support\\Facades\\URL::forceRootUrl(getenv('GALLERY_TEST_URL'));
 view()->share('errors', new Illuminate\\Support\\ViewErrorBag);
 Illuminate\\Support\\Facades\\Auth::setUser((new App\\Models\\User)->forceFill(['name'=>'Gallery Preview','role'=>'editor']));
 $brand = App\\Models\\Brand::where('slug', 'bredel')->first();
-echo json_encode(['html'=>app(App\\Http\\Controllers\\Admin\\GalleryController::class)->create()->render(), 'video'=>($brand->video['path'] ?? null) ? Illuminate\\Support\\Facades\\Storage::disk('public')->path($brand->video['path']) : null]);
+echo json_encode(['html'=>app(App\\Http\\Controllers\\Admin\\GalleryController::class)->create()->render(), 'brandHtml'=>$brand ? app(App\\Http\\Controllers\\Admin\\CatalogController::class)->form('brands', $brand->id)->render() : null, 'video'=>($brand->video['path'] ?? null) ? Illuminate\\Support\\Facades\\Storage::disk('public')->path($brand->video['path']) : null]);
         `], { encoding: 'utf8', env: { ...process.env, GALLERY_TEST_URL: baseURL } }));
         await page.route('**/__gallery_editor_preview', route => route.fulfill({ contentType: 'text/html', body: preview.html }));
+        await page.route('**/__brand_poster_preview', route => route.fulfill({ contentType: 'text/html', body: preview.brandHtml }));
         await page.route('https://www.youtube-nocookie.com/**', route => route.fulfill({ contentType: 'text/html', body: '<p>Embed boundary test</p>' }));
         const errors = [];
         page.on('pageerror', error => errors.push(error.message));
@@ -33,6 +146,9 @@ echo json_encode(['html'=>app(App\\Http\\Controllers\\Admin\\GalleryController::
         await expect(page.locator('[name=width]')).not.toHaveValue('16');
         await page.locator('#media_file').setInputFiles([]);
         await page.locator('#source').selectOption('mp4');
+        await page.locator('#poster').setInputFiles('public/images/company-logo.png');
+        await expect(page.locator('[data-gallery-poster-preview]')).toBeVisible();
+        await expect(page.locator('[data-gallery-poster-preview]')).toHaveAttribute('src', /^blob:/);
         if (preview.video) {
             await page.locator('#media_file').setInputFiles(preview.video);
             await expect(page.locator('[data-gallery-preview] video')).toBeVisible();
@@ -50,6 +166,13 @@ echo json_encode(['html'=>app(App\\Http\\Controllers\\Admin\\GalleryController::
             await page.setViewportSize({ width, height: 900 });
             expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)).toBe(false);
         }
+        if (preview.brandHtml) {
+            await page.goto('/__brand_poster_preview');
+            await page.locator('#video_poster').setInputFiles('public/images/company-logo.png');
+            await expect(page.locator('[data-video-poster-preview]')).toBeVisible();
+            await expect(page.locator('[data-video-poster-preview]')).toHaveAttribute('src', /^blob:/);
+            await expect(page.locator('[data-video-preview] video')).toHaveAttribute('poster', /^blob:/);
+        }
         expect(errors).toEqual([]);
     });
 
@@ -58,8 +181,8 @@ echo json_encode(['html'=>app(App\\Http\\Controllers\\Admin\\GalleryController::
         const videoRequests = [];
         page.on('pageerror', error => errors.push(error.message));
         page.on('request', request => { if (/\/brand\/[^/]+\/video/.test(request.url())) videoRequests.push(request.url()); });
-        await page.goto('/publikasi');
-        await expect(page.getByRole('heading', { name: 'Informasi dan dokumentasi perusahaan.' })).toBeVisible();
+        await page.goto('/publikasi/media');
+        await expect(page.getByRole('heading', { name: 'Galeri & Media', level: 1 })).toBeVisible();
         await expect(page.locator('#legal-title')).toHaveCount(0);
         const grid = page.locator('[data-gallery-grid]');
         for (const [width, columns] of [[1440, 3], [1280, 3], [768, 2], [390, 1], [375, 1]]) {
@@ -77,7 +200,8 @@ echo json_encode(['html'=>app(App\\Http\\Controllers\\Admin\\GalleryController::
             });
             expect(layout).toEqual({ overflow: false, overlap: false, distorted: false });
         }
-        expect(videoRequests).toEqual([]);
+        const automaticUrls = await page.locator('[data-gallery-item]').evaluateAll(links => links.map(link => JSON.parse(link.dataset.galleryItem)).filter(item => item.source === 'mp4' && !item.thumbnail).map(item => item.url));
+        expect(videoRequests.every(url => automaticUrls.includes(url))).toBe(true);
         const videos = page.locator('[data-gallery-item]').filter({ has: page.locator('.gallery-play') });
         if (await videos.count()) {
             await videos.first().click();
@@ -93,10 +217,13 @@ echo json_encode(['html'=>app(App\\Http\\Controllers\\Admin\\GalleryController::
 
     test('photo and YouTube lightboxes, thumbnail fallback, and load-more work without database writes', async ({ page }) => {
         // Browser-only fixtures reuse an existing image; no media is inserted into the CMS.
-        await page.route('**/publikasi', async route => {
+        await page.route('**/publikasi/media', async route => {
             const response = await route.fetch();
             const html = await response.text();
-            await route.fulfill({ response, body: html.replace('<div class="gallery-more">', '<div class="gallery-more"><a href="#gallery-title" data-gallery-more data-next="/__gallery_test_page">Muat Lebih Banyak</a>') });
+            const body = html.includes('data-gallery-more')
+                ? html.replace(/data-next="[^"]*"/, 'data-next="/__gallery_test_page"')
+                : html.replace('<div class="gallery-more">', '<div class="gallery-more"><a href="#gallery-title" data-gallery-more data-next="/__gallery_test_page">Muat Lebih Banyak</a>');
+            await route.fulfill({ response, body });
         });
         const fixture = (key, source, extra) => {
             const item = { key, source, title: 'Browser fixture', description: '', width: 536, height: 154, url: '/images/company-logo.png', thumbnail: '/images/company-logo.png', ...extra };
@@ -106,7 +233,7 @@ echo json_encode(['html'=>app(App\\Http\\Controllers\\Admin\\GalleryController::
         await page.route('**/__gallery_test_page', route => route.fulfill({ json: { html: fixture('test-photo', 'photo', {}) + fixture('test-youtube', 'youtube', { youtube_id: 'M7lc1UVf-VE', url: 'https://www.youtube.com/watch?v=M7lc1UVf-VE', thumbnail: '/__missing_gallery_thumbnail' }), next: null } }));
         await page.route('**/__missing_gallery_thumbnail', route => route.fulfill({ status: 404, body: '' }));
         await page.route('https://www.youtube-nocookie.com/**', route => route.fulfill({ contentType: 'text/html', body: '<p>Embed boundary test</p>' }));
-        await page.goto('/publikasi');
+        await page.goto('/publikasi/media');
         await page.locator('[data-gallery-more]').click();
         await expect(page.locator('[data-gallery-key="test-photo"]')).toBeVisible();
         await expect(page.locator('[data-gallery-more]')).not.toBeVisible();
@@ -124,13 +251,13 @@ echo json_encode(['html'=>app(App\\Http\\Controllers\\Admin\\GalleryController::
     test('gallery is readable without JavaScript and respects reduced motion', async ({ browser, baseURL }) => {
         const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
         const page = await context.newPage();
-        await page.goto(baseURL + '/publikasi');
+        await page.goto(baseURL + '/publikasi/media');
         await expect(page.locator('[data-gallery-grid]')).toHaveCSS('column-count', '1');
         for (const link of await page.locator('[data-gallery-item]').all()) await expect(link).toBeVisible();
         await context.close();
         const reduced = await browser.newContext({ reducedMotion: 'reduce' });
         const motionPage = await reduced.newPage();
-        await motionPage.goto(baseURL + '/publikasi');
+        await motionPage.goto(baseURL + '/publikasi/media');
         for (const card of await motionPage.locator('.gallery-card').all()) await expect(card).toHaveCSS('opacity', '1');
         await reduced.close();
     });

@@ -15,13 +15,11 @@ class PublicationController extends Controller
         'X-Robots-Tag' => 'noindex, noarchive',
     ];
 
-    public function index(Request $request, PublicationStorage $storage, \App\Services\GalleryFeed $feed)
+    public function index(PublicationStorage $storage)
     {
-        $filters = $request->validate(['media_page' => 'nullable|integer|min:1|max:100000']);
         $documents = Publication::published()->ordered()->get()->filter(fn ($entry) => $storage->exists($entry->file_path));
 
         return response()->view('public.publications.index', [
-            'gallery' => $feed->page($filters['media_page'] ?? 1),
             'publications' => $documents->where('category', 'perusahaan'),
         ])->withHeaders(array_diff_key(self::HEADERS, ['X-Robots-Tag' => true]));
     }

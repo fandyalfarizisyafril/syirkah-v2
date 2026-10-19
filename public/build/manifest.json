@@ -3,9 +3,9 @@
     "file": "assets/external-link-CLGr6LhX.js",
     "name": "external-link"
   },
-  "_gallery-6zqr4E1W.css": {
-    "file": "assets/gallery-6zqr4E1W.css",
-    "src": "_gallery-6zqr4E1W.css"
+  "_gallery-BmCpi8q8.css": {
+    "file": "assets/gallery-BmCpi8q8.css",
+    "src": "_gallery-BmCpi8q8.css"
   },
   "_industrial-partner-DyL699jU.js": {
     "file": "assets/industrial-partner-DyL699jU.js",
@@ -15,12 +15,8 @@
     "file": "assets/lucide-DstTJpr5.js",
     "name": "lucide"
   },
-  "_plus-CTdGIUZh.js": {
-    "file": "assets/plus-CTdGIUZh.js",
-    "name": "plus"
-  },
-  "_trash-BveoQv_I.js": {
-    "file": "assets/trash-BveoQv_I.js",
+  "_trash-3sjl502V.js": {
+    "file": "assets/trash-3sjl502V.js",
     "name": "trash"
   },
   "resources/css/about.css": {
@@ -33,7 +29,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-BlOUnY9b.css",
+    "file": "assets/app-Bq6-5SQW.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -88,28 +84,26 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-DopB5rif.js",
+    "file": "assets/app-DywsBr0-.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
       "_lucide-DstTJpr5.js",
       "_industrial-partner-DyL699jU.js",
-      "_trash-BveoQv_I.js",
-      "_plus-CTdGIUZh.js",
+      "_trash-3sjl502V.js",
       "_external-link-CLGr6LhX.js"
     ]
   },
   "resources/js/brand-editor.js": {
-    "file": "assets/brand-editor-DMGUPU4z.js",
+    "file": "assets/brand-editor-2INADE62.js",
     "name": "brand-editor",
     "src": "resources/js/brand-editor.js",
     "isEntry": true,
     "imports": [
       "_lucide-DstTJpr5.js",
       "resources/js/brand-video.js",
-      "_trash-BveoQv_I.js",
-      "_plus-CTdGIUZh.js"
+      "_trash-3sjl502V.js"
     ]
   },
   "resources/js/brand-video.js": {
@@ -122,26 +116,25 @@
     ]
   },
   "resources/js/gallery-editor.js": {
-    "file": "assets/gallery-editor-Dj30hnpe.js",
+    "file": "assets/gallery-editor-BCXKkbzj.js",
     "name": "gallery-editor",
     "src": "resources/js/gallery-editor.js",
     "isEntry": true,
     "css": [
-      "assets/gallery-6zqr4E1W.css"
+      "assets/gallery-BmCpi8q8.css"
     ]
   },
   "resources/js/gallery.js": {
-    "file": "assets/gallery-BfJion2e.js",
+    "file": "assets/gallery-B-nnBXhU.js",
     "name": "gallery",
     "src": "resources/js/gallery.js",
     "isEntry": true,
     "imports": [
       "_lucide-DstTJpr5.js",
-      "_external-link-CLGr6LhX.js",
-      "_plus-CTdGIUZh.js"
+      "_external-link-CLGr6LhX.js"
     ],
     "css": [
-      "assets/gallery-6zqr4E1W.css"
+      "assets/gallery-BmCpi8q8.css"
     ]
   },
   "resources/js/product-details.js": {

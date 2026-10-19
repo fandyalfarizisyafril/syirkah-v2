@@ -93,7 +93,7 @@ class ProductDetailPresentationTest extends TestCase
         foreach ($links as $link) {
             $this->assertNotSame(route('products.category', $category->slug), $link->getAttribute('href'));
         }
-        foreach (['/', '/produk', '/brand', '/tentang-kami', '/publikasi', '/admin/login'] as $path) {
+        foreach (['/', '/produk', '/brand', '/tentang-kami', '/publikasi/perusahaan', '/publikasi/media', '/admin/login'] as $path) {
             $this->get($path)->assertOk()->assertDontSee('technical-detail-page');
         }
     }

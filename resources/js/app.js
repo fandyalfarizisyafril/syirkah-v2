@@ -1,10 +1,10 @@
-import { createIcons, ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save, Eye, EyeOff, Info } from 'lucide';
+import { createIcons, ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, ChevronDown, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save, Eye, EyeOff, Info } from 'lucide';
 import { initHeroCarousel } from './hero-carousel';
 import { initBrandMarquee } from './brand-marquee';
 import { initCategoryCarousel } from './category-carousel';
 import { initIndustrialPartner } from './industrial-partner';
 
-const icons = { ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save, Eye, EyeOff, Info };
+const icons = { ArrowUpRight, ArrowRight, ArrowLeft, Search, Menu, MapPin, Check, MessageCircle, Phone, Mail, Download, ChevronLeft, ChevronRight, ChevronDown, RotateCcw, PackageSearch, ExternalLink, LogOut, LayoutDashboard, Layers, Package, BadgeCheck, Factory, Inbox, Settings, Plus, Pencil, Trash2, Save, Eye, EyeOff, Info };
 const renderIcons = () => createIcons({ icons });
 renderIcons();
 
@@ -30,13 +30,52 @@ document.querySelectorAll('[data-industrial-partner]').forEach(initIndustrialPar
 
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('#primary-nav');
+const publicationsNav = nav?.querySelector('[data-publications-nav]');
+let publicationsCloseTimer;
+const closePublications = () => {
+    clearTimeout(publicationsCloseTimer);
+    if (publicationsNav) publicationsNav.open = false;
+};
+if (publicationsNav) {
+    const summary = publicationsNav.querySelector('summary');
+    summary.setAttribute('aria-expanded', String(publicationsNav.open));
+    const links = [...publicationsNav.querySelectorAll('a')];
+    publicationsNav.addEventListener('toggle', () => summary.setAttribute('aria-expanded', String(publicationsNav.open)));
+    publicationsNav.addEventListener('pointerenter', event => {
+        clearTimeout(publicationsCloseTimer);
+        if (event.pointerType === 'mouse' && matchMedia('(min-width:901px) and (hover:hover)').matches) publicationsNav.open = true;
+    });
+    publicationsNav.addEventListener('pointerleave', () => {
+        publicationsCloseTimer = setTimeout(() => {
+            if (matchMedia('(min-width:901px)').matches && !publicationsNav.contains(document.activeElement)) closePublications();
+        }, 180);
+    });
+    publicationsNav.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && publicationsNav.open) {
+            event.preventDefault();
+            event.stopPropagation();
+            closePublications();
+            summary.focus();
+        } else if (['ArrowDown', 'ArrowUp'].includes(event.key)) {
+            event.preventDefault();
+            publicationsNav.open = true;
+            const current = links.indexOf(document.activeElement);
+            const next = event.key === 'ArrowDown' ? (current + 1) % links.length : (current < 0 ? links.length - 1 : (current - 1 + links.length) % links.length);
+            links[next].focus();
+        }
+    });
+    document.addEventListener('click', event => { if (!publicationsNav.contains(event.target)) closePublications(); });
+    document.addEventListener('focusin', event => { if (!publicationsNav.contains(event.target)) closePublications(); });
+}
 const closeMenu = () => {
+    closePublications();
     nav?.classList.remove('is-open');
     toggle?.setAttribute('aria-expanded', 'false');
     toggle?.setAttribute('aria-label', 'Buka navigasi');
 };
 toggle?.addEventListener('click', () => {
     const open = nav.classList.toggle('is-open');
+    if (!open) closePublications();
     toggle.setAttribute('aria-expanded', String(open));
     toggle.setAttribute('aria-label', open ? 'Tutup navigasi' : 'Buka navigasi');
 });

@@ -77,7 +77,7 @@ class PublicController extends Controller
 
     public function sitemap()
     {
-        $urls = [url('/'), url('/tentang-kami'), url('/produk'), url('/brand'), url('/publikasi'), url('/kontak'), url('/privasi')];
+        $urls = [url('/'), url('/tentang-kami'), url('/produk'), url('/brand'), route('publications.index'), route('media.index'), url('/kontak'), url('/privasi')];
         foreach (['products.category' => Category::class, 'brands.show' => Brand::class, 'industries.show' => Industry::class] as $route => $model) {
             foreach ($model::published()->get() as $entry) {
                 $urls[] = route($route, $entry->slug);

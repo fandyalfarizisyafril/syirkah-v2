@@ -7,6 +7,8 @@
 .gallery-thumbnail:not(:has(img:not([hidden]))) { aspect-ratio:var(--media-ratio,4 / 3); }
 .gallery-thumbnail img { position:relative; display:block; width:100%; height:auto; object-fit:contain; }
 .gallery-thumbnail img[hidden] { display:none; }
+.gallery-thumbnail[data-frame-preview] { aspect-ratio:var(--media-ratio,4 / 3); }
+.gallery-thumbnail img[data-gallery-frame] { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
 .gallery-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--muted); }
 .gallery-fallback .icon { width:40px; height:40px; }
 .gallery-play { position:absolute; bottom:20px; right:20px; display:flex; align-items:center; justify-content:center; width:48px; height:48px; border-radius:50%; background:white; color:var(--primary); box-shadow:0 1px 4px #0002; }
@@ -19,6 +21,14 @@
 .gallery-open:hover h3 { color:var(--primary); }
 .gallery-open:focus-visible { outline:2px solid var(--primary); outline-offset:5px; border-radius:6px; }
 .gallery-more { text-align:center; margin-top:24px; }
+.gallery-more-link { display:inline-flex; align-items:center; justify-content:center; gap:12px; min-height:44px; color:var(--primary); font-size:14px; font-weight:600; text-decoration:none; transition:color 200ms ease; }
+.gallery-more-arrow { display:inline-flex; align-items:center; justify-content:center; flex:none; width:40px; height:40px; border:1px solid currentColor; border-radius:50%; transition:transform 200ms ease; }
+.gallery-more-arrow .icon { width:18px; height:18px; }
+.gallery-more-link:hover { color:var(--primary-dark); }
+.gallery-more-link:hover .gallery-more-arrow { transform:translateY(2px); }
+.gallery-more-link:focus-visible { outline:2px solid var(--primary); outline-offset:5px; }
+.gallery-more-link[aria-disabled=true] { opacity:.6; cursor:wait; }
+@media(prefers-reduced-motion:reduce) { .gallery-more-link, .gallery-more-arrow { transition:none; } .gallery-more-link:hover .gallery-more-arrow { transform:none; } }
 .gallery-more [hidden], [data-gallery-editor] [hidden] { display:none; }
 .gallery-more [role=status] { font-size:14px; color:var(--muted); margin:12px 0 0; }
 .gallery-dialog { padding:24px; margin:auto; width:min(960px,calc(100% - 32px)); max-height:calc(100dvh - 32px); border:1px solid var(--border); border-radius:8px; color:var(--primary-dark); background:white; overflow:auto; overscroll-behavior:contain; }

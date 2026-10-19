@@ -50,13 +50,17 @@ class PublicationTest extends TestCase
     public function test_new_page_redirect_navigation_seo_and_empty_states(): void
     {
         $this->get('/industri')->assertStatus(301)->assertRedirect('/publikasi');
-        $response = $this->get('/publikasi')->assertOk()->assertSee('Informasi dan dokumentasi perusahaan.')
-            ->assertSee('Media belum tersedia.')
+        $this->get('/publikasi')->assertStatus(301)->assertRedirect('/publikasi/perusahaan');
+        $response = $this->get('/publikasi/perusahaan')->assertOk()->assertSee('Publikasi Perusahaan')
+            ->assertDontSee('data-gallery-grid', false)
             ->assertSee('Publikasi perusahaan belum tersedia.')
-            ->assertSee('<title>Publikasi &amp; Media | PT. Syirkah Mandiri Artomoro</title>', false)
-            ->assertSee('href="'.url('/publikasi').'"', false);
+            ->assertSee('<title>Publikasi Perusahaan | PT. Syirkah Mandiri Artomoro</title>', false)
+            ->assertSee('href="'.url('/publikasi/perusahaan').'"', false);
         $this->assertStringContainsString('no-store', $response->headers->get('Cache-Control'));
-        $this->get('/sitemap.xml')->assertSee(url('/publikasi'))->assertDontSee('<loc>'.url('/industri').'</loc>', false);
+        $this->get('/sitemap.xml')->assertSee(url('/publikasi/perusahaan'))->assertSee(url('/publikasi/media'))
+            ->assertDontSee('<loc>'.url('/publikasi').'</loc>', false)->assertDontSee('<loc>'.url('/industri').'</loc>', false);
+        $this->get('/publikasi/media')->assertOk()->assertSee('MEDIA GALLERY')->assertSee('Media belum tersedia.')
+            ->assertSee('href="'.url('/publikasi/media').'"', false)->assertDontSee('id="publications-title"', false);
         $this->get('/')->assertSee('href="'.route('publications.index').'"', false)->assertDontSee('href="'.url('/industri').'"', false);
     }
 
@@ -100,20 +104,20 @@ class PublicationTest extends TestCase
         foreach (['preview', 'file', 'thumbnail', 'unduh'] as $endpoint) {
             $this->get('/publikasi/'.$entry->id.'/'.$endpoint)->assertNotFound();
         }
-        $this->get('/publikasi')->assertDontSee($entry->title);
+        $this->get('/publikasi/perusahaan')->assertDontSee($entry->title);
         $this->get('/storage/'.$original)->assertForbidden();
         $this->get('/storage/publications/'.$original)->assertForbidden();
         $this->put('/admin/publications/'.$entry->id, $this->data(['status' => 'published', 'allow_download' => '1']))->assertSessionHasNoErrors();
         $this->assertNotNull($entry->fresh()->published_at);
         $firstDate = $entry->fresh()->published_at;
-        $this->get('/publikasi')->assertSee($entry->title)->assertSee(route('publications.download', $entry), false);
+        $this->get('/publikasi/perusahaan')->assertSee($entry->title)->assertSee(route('publications.download', $entry), false);
         $this->get('/publikasi/'.$entry->id.'/preview')->assertOk()->assertSee('<object', false);
         $file = $this->get('/publikasi/'.$entry->id.'/file')->assertOk()->assertHeader('X-Content-Type-Options', 'nosniff');
         $this->assertStringStartsWith('inline;', $file->headers->get('Content-Disposition'));
         $this->assertStringContainsString('no-store', $file->headers->get('Cache-Control'));
         $this->get('/publikasi/'.$entry->id.'/unduh')->assertDownload('demo.pdf');
         $this->put('/admin/publications/'.$entry->id, $this->data(['status' => 'published', 'title' => 'Judul Baru', 'description' => 'Deskripsi Baru']))->assertSessionHasNoErrors();
-        $this->get('/publikasi')->assertSee('Judul Baru')->assertSee('Deskripsi Baru')->assertDontSee(route('publications.download', $entry), false);
+        $this->get('/publikasi/perusahaan')->assertSee('Judul Baru')->assertSee('Deskripsi Baru')->assertDontSee(route('publications.download', $entry), false);
         $this->get('/publikasi/'.$entry->id.'/unduh')->assertForbidden();
         $this->assertEquals($firstDate, $entry->fresh()->published_at);
         $this->put('/admin/publications/'.$entry->id, $this->data(['document' => $this->pdf('replacement.pdf'), 'status' => 'published']))->assertSessionHasNoErrors();
@@ -126,7 +130,7 @@ class PublicationTest extends TestCase
         foreach (['preview', 'file', 'thumbnail', 'unduh'] as $endpoint) {
             $this->get('/publikasi/'.$entry->id.'/'.$endpoint)->assertNotFound();
         }
-        $this->get('/publikasi')->assertDontSee($entry->title);
+        $this->get('/publikasi/perusahaan')->assertDontSee($entry->title);
         $this->actingAs($user)->delete('/admin/publications/'.$entry->id)->assertRedirect('/admin/publications');
         $this->assertDatabaseMissing('publications', ['id' => $entry->id]);
         Storage::disk('publications')->assertMissing($replacement);
@@ -139,11 +143,11 @@ class PublicationTest extends TestCase
             foreach (['preview', 'file', 'thumbnail', 'unduh'] as $endpoint) {
                 $this->get('/publikasi/'.$entry->id.'/'.$endpoint)->assertNotFound();
             }
-            $this->get('/publikasi')->assertDontSee($entry->title);
+            $this->get('/publikasi/perusahaan')->assertDontSee($entry->title);
         }
         $entry = $this->document(['status' => 'published', 'published_at' => now()]);
         Storage::disk('publications')->delete($entry->file_path);
-        $this->get('/publikasi')->assertDontSee($entry->title);
+        $this->get('/publikasi/perusahaan')->assertDontSee($entry->title);
         $this->get('/publikasi/'.$entry->id.'/file')->assertNotFound();
         $this->get('/publikasi/'.$entry->id.'/preview')->assertNotFound();
         $this->get('/search?q=unique-private-document')->assertDontSee('publications.preview');
@@ -166,7 +170,7 @@ class PublicationTest extends TestCase
         $this->put('/admin/publications/'.$entry->id, array_replace($data, ['published_at' => '']))->assertSessionHasNoErrors();
         $this->assertSame('2026-10-13 15:49:00', $entry->fresh()->getRawOriginal('published_at'));
         $this->app['auth']->forgetGuards();
-        $this->get('/publikasi')->assertOk()->assertSee($entry->title);
+        $this->get('/publikasi/perusahaan')->assertOk()->assertSee($entry->title);
         $this->get('/publikasi/'.$entry->id.'/file')->assertOk();
     }
 
@@ -181,10 +185,10 @@ class PublicationTest extends TestCase
         $this->assertSame('2026-10-13 17:00:00', $entry->getRawOriginal('published_at'));
         $this->get('/admin/publications')->assertSee('Terjadwal')->assertSee('14 Oct 2026 00:00 WIB');
         $this->app['auth']->forgetGuards();
-        $this->get('/publikasi')->assertDontSee($entry->title);
+        $this->get('/publikasi/perusahaan')->assertDontSee($entry->title);
         $this->get('/publikasi/'.$entry->id.'/file')->assertNotFound();
         $this->travelTo(Carbon::parse('2026-10-13 17:00:00', 'UTC'));
-        $this->get('/publikasi')->assertSee($entry->title)->assertSee('datetime="2026-10-14"', false);
+        $this->get('/publikasi/perusahaan')->assertSee($entry->title)->assertSee('datetime="2026-10-14"', false);
         $this->get('/publikasi/'.$entry->id.'/file')->assertOk();
     }
 
@@ -198,7 +202,7 @@ class PublicationTest extends TestCase
         $entry = Publication::sole();
         $this->assertSame('2026-10-13 15:50:00', $entry->getRawOriginal('published_at'));
         $this->get('/admin/publications/'.$entry->id.'/edit')->assertSee('value="2026-10-13T22:50"', false);
-        $this->get('/publikasi')->assertSee($entry->title);
+        $this->get('/publikasi/perusahaan')->assertSee($entry->title);
     }
 
     public function test_legal_publication_requires_confirmation_each_time(): void
@@ -210,7 +214,7 @@ class PublicationTest extends TestCase
         $data['document'] = $this->pdf();
         $this->post('/admin/publications', $data + ['legal_confirmation' => '1'])->assertSessionHasNoErrors();
         $entry = Publication::sole();
-        $this->get('/publikasi')->assertDontSee($entry->title);
+        $this->get('/publikasi/perusahaan')->assertDontSee($entry->title);
         $this->get('/publikasi/'.$entry->id.'/preview')->assertOk();
         unset($data['document']);
         $this->put('/admin/publications/'.$entry->id, $data)->assertSessionHasErrors('legal_confirmation');
@@ -222,7 +226,7 @@ class PublicationTest extends TestCase
         $legal = $this->document(['title' => 'Dokumen Disetujui', 'category' => 'legalitas', 'status' => 'published', 'published_at' => now()]);
         $company = $this->document(['title' => 'SK Kemenkumham Pengesahan', 'category' => 'perusahaan', 'status' => 'published', 'published_at' => now()]);
         $draft = $this->document(['title' => 'Dokumen Belum Disetujui', 'category' => 'legalitas']);
-        $this->get('/publikasi')->assertOk()
+        $this->get('/publikasi/perusahaan')->assertOk()
             ->assertViewHas('publications', fn ($entries) => $entries->values()->modelKeys() === [$company->id])
             ->assertDontSee($legal->title)->assertSee($company->title)->assertDontSee($draft->title);
         $this->assertDatabaseHas('publications', ['id' => $legal->id, 'category' => 'legalitas', 'status' => 'published']);
@@ -275,7 +279,7 @@ class PublicationTest extends TestCase
         $this->put('/admin/publications/'.$entry->id, $this->data(['status' => 'published', 'remove_thumbnail' => '1']))->assertSessionHasNoErrors();
         Storage::disk('publications')->assertMissing($thumbnail);
         $this->get('/publikasi/'.$entry->id.'/thumbnail')->assertNotFound();
-        $this->get('/publikasi')->assertSee(route('publications.file', $entry), false);
+        $this->get('/publikasi/perusahaan')->assertSee(route('publications.file', $entry), false);
     }
 
     public function test_path_traversal_in_storage_metadata_is_rejected_and_names_are_safe(): void
@@ -313,7 +317,7 @@ class PublicationTest extends TestCase
         $this->assertDatabaseCount('publications', 4);
         $this->assertSame('Edited Demo', $demo->fresh()->title);
         $this->assertCount(4, Storage::disk('publications')->allFiles());
-        $this->get('/publikasi')->assertSee('Edited Demo')->assertDontSee('Contoh Dokumen Administrasi')->assertDontSee('Contoh Materi Publikasi');
+        $this->get('/publikasi/perusahaan')->assertSee('Edited Demo')->assertDontSee('Contoh Dokumen Administrasi')->assertDontSee('Contoh Materi Publikasi');
         $pdf = Storage::disk('publications')->get($demo->file_path);
         $this->assertStringContainsString('BUKAN DOKUMEN RESMI', $pdf);
         $this->assertStringContainsString('xref', $pdf);
@@ -332,11 +336,11 @@ class PublicationTest extends TestCase
         $this->actingAs($this->admin());
         $this->put('/admin/publications/'.$legal->id, $this->data(['category' => 'legalitas', 'status' => 'published', 'legal_confirmation' => '1']))->assertSessionHasErrors('status');
         $this->app['env'] = 'production';
-        $this->get('/publikasi')->assertDontSee($demo->title);
+        $this->get('/publikasi/perusahaan')->assertDontSee($demo->title);
         $this->get('/publikasi/'.$demo->id.'/file')->assertNotFound();
         (new PublicationDemoSeeder)->run();
         $this->assertDatabaseCount('publications', 3);
-        $this->get('/publikasi')->assertDontSee($demo->title);
+        $this->get('/publikasi/perusahaan')->assertDontSee($demo->title);
     }
 
     public function test_publication_writes_have_csrf_protection(): void

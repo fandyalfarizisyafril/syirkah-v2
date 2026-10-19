@@ -6,6 +6,10 @@ if (form) {
     const file = form.querySelector('#media_file');
     const youtube = form.querySelector('#youtube_url');
     const poster = form.querySelector('#poster');
+    const posterPreview = form.querySelector('[data-gallery-poster-preview]');
+    const savedPoster = posterPreview.getAttribute('src');
+    const savedYoutube = youtube.value;
+    const removePoster = form.querySelector('[name=remove_poster]');
     const preview = form.querySelector('[data-gallery-preview]');
     const error = form.querySelector('[data-gallery-preview-error]');
     const saved = preview.innerHTML;
@@ -23,11 +27,27 @@ if (form) {
             return /^[\w-]{11}$/.test(id ?? '') ? id : null;
         } catch { return null; }
     };
+    const renderPoster = () => {
+        const unchanged = source.value === form.dataset.savedSource && !file.files[0] && youtube.value === savedYoutube;
+        const id = source.value === 'youtube' ? idFromUrl(youtube.value) : null;
+        const src = posterUrl || (!removePoster?.checked && unchanged ? savedPoster : null) || (id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null);
+        posterPreview.hidden = !src;
+        if (src) posterPreview.src = src;
+        else posterPreview.removeAttribute('src');
+        const video = preview.querySelector('video');
+        if (video) {
+            if (src) video.poster = src;
+            else video.removeAttribute('poster');
+        }
+    };
+    posterPreview.addEventListener('error', () => { posterPreview.hidden = true; });
+    removePoster?.addEventListener('change', renderPoster);
     const render = () => {
         preview.querySelector('video')?.pause();
         if (fileUrl) URL.revokeObjectURL(fileUrl);
         fileUrl = null;
         preview.replaceChildren();
+        renderPoster();
         error.hidden = true;
         file.disabled = source.value === 'youtube';
         youtube.disabled = source.value !== 'youtube';
@@ -69,6 +89,7 @@ if (form) {
         } else if (source.value === form.dataset.savedSource) {
             preview.innerHTML = saved;
         }
+        renderPoster();
     };
     source.addEventListener('change', render);
     file.addEventListener('change', render);
@@ -76,8 +97,7 @@ if (form) {
     poster.addEventListener('change', () => {
         if (posterUrl) URL.revokeObjectURL(posterUrl);
         posterUrl = poster.files[0] ? URL.createObjectURL(poster.files[0]) : null;
-        const video = preview.querySelector('video');
-        if (video) { if (posterUrl) video.poster = posterUrl; else video.removeAttribute('poster'); }
+        renderPoster();
     });
     window.addEventListener('pagehide', () => { if (fileUrl) URL.revokeObjectURL(fileUrl); if (posterUrl) URL.revokeObjectURL(posterUrl); });
     render();

@@ -11,7 +11,8 @@
         <div class="field"><label for="source">Jenis media *</label><select id="source" name="source" required>@foreach(['photo' => 'Foto', 'mp4' => 'Video Perusahaan - MP4', 'youtube' => 'Video Perusahaan - YouTube'] as $value => $label)<option value="{{ $value }}" @selected(old('source', $entry->source) === $value)>{{ $label }}</option>@endforeach</select>@error('source')<p class="field-error">{{ $message }}</p>@enderror</div>
         <div data-gallery-file><x-field name="media_file" type="file" label="File media (foto maks. 8 MB; MP4 maks. 50 MB)" accept=".jpg,.jpeg,.png,.webp,.mp4"/></div>
         <div data-gallery-youtube><x-field name="youtube_url" type="url" label="URL YouTube (HTTPS)" :value="$entry->youtube_id ? 'https://www.youtube.com/watch?v='.$entry->youtube_id : ''" maxlength="500"/></div>
-        <div data-gallery-poster><x-field name="poster" type="file" label="Poster video (opsional; JPG, PNG, WebP; maks. 4 MB)" accept=".jpg,.jpeg,.png,.webp"/>
+        <div data-gallery-poster><x-field name="poster" type="file" label="Poster / thumbnail video (opsional; JPG, PNG, WebP; maks. 4 MB)" accept=".jpg,.jpeg,.png,.webp"/>
+            <img class="admin-preview" data-gallery-poster-preview @if($entry->poster_path) src="{{ route('admin.gallery.poster', $entry) }}" @else hidden @endif alt="Poster video" width="180" height="140">
             @if($entry->poster_path)<label class="check-field"><input type="checkbox" name="remove_poster" value="1" @checked(old('remove_poster'))>Hapus poster</label>@endif
         </div>
         <input type="hidden" name="width" value="{{ old('width', $entry->width ?? 16) }}"><input type="hidden" name="height" value="{{ old('height', $entry->height ?? 9) }}">

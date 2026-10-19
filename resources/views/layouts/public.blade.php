@@ -35,9 +35,16 @@
         </a>
         <button class="icon-button menu-toggle" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="primary-nav" title="Navigasi"><x-icon name="menu"/></button>
         <nav id="primary-nav" class="primary-nav" aria-label="Navigasi utama">
-            @foreach(['home' => 'Beranda', 'about' => 'Tentang Kami', 'products.index' => 'Produk', 'brands.index' => 'Brand', 'publications.index' => 'Publikasi'] as $route => $label)
+            @foreach(['home' => 'Beranda', 'about' => 'Tentang Kami', 'products.index' => 'Produk', 'brands.index' => 'Brand'] as $route => $label)
                 <a href="{{ route($route) }}" @class(['active' => request()->routeIs(str_replace('.index', '.*', $route))]) @if(request()->routeIs(str_replace('.index', '.*', $route))) aria-current="page" @endif>{{ $label }}</a>
             @endforeach
+            <details class="publications-nav" data-publications-nav>
+                <summary @class(['publications-nav-toggle', 'active' => request()->routeIs('publications.*', 'media.*')]) aria-controls="publications-submenu">Publikasi <x-icon name="chevron-down"/></summary>
+                <div class="publications-submenu" id="publications-submenu">
+                    <a href="{{ route('publications.index') }}" @class(['active' => request()->routeIs('publications.*')]) @if(request()->routeIs('publications.*')) aria-current="page" @endif>Publikasi Perusahaan</a>
+                    <a href="{{ route('media.index') }}" @class(['active' => request()->routeIs('media.*')]) @if(request()->routeIs('media.*')) aria-current="page" @endif>Media</a>
+                </div>
+            </details>
             <a href="{{ route('search') }}" class="icon-button" aria-label="Cari" title="Cari"><x-icon name="search"/></a>
             <a class="button small" href="{{ route('contact') }}">Request Inquiry <x-icon name="arrow-up-right"/></a>
         </nav>

@@ -20,12 +20,14 @@ Route::get('/brand/{slug}/video', \App\Http\Controllers\BrandVideoController::cl
 Route::get('/brand/{slug}', [PublicController::class, 'directory'])->name('brands.show');
 Route::redirect('/industri', '/publikasi', 301)->name('industries.index');
 Route::prefix('publikasi')->name('publications.')->group(function () {
-    Route::get('/', [PublicationController::class, 'index'])->name('index');
+    Route::redirect('/', '/publikasi/perusahaan', 301);
+    Route::get('/perusahaan', [PublicationController::class, 'index'])->name('index');
     Route::get('/{publication}/preview', [PublicationController::class, 'preview'])->whereNumber('publication')->name('preview');
     Route::get('/{publication}/file', [PublicationController::class, 'file'])->whereNumber('publication')->name('file');
     Route::get('/{publication}/thumbnail', [PublicationController::class, 'file'])->whereNumber('publication')->name('thumbnail');
     Route::get('/{publication}/unduh', [PublicationController::class, 'file'])->whereNumber('publication')->name('download');
 });
+Route::get('/publikasi/media', [\App\Http\Controllers\GalleryController::class, 'page'])->name('media.index');
 Route::get('/publikasi/galeri', [\App\Http\Controllers\GalleryController::class, 'index'])->name('gallery.index');
 Route::get('/publikasi/media/{medium}/file', [\App\Http\Controllers\GalleryController::class, 'file'])->whereNumber('medium')->name('gallery.file');
 Route::get('/publikasi/media/{medium}/poster', [\App\Http\Controllers\GalleryController::class, 'file'])->whereNumber('medium')->name('gallery.poster');

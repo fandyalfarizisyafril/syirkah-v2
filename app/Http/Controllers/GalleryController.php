@@ -10,6 +10,15 @@ use Illuminate\Support\Facades\Storage;
 
 class GalleryController extends Controller
 {
+    public function page(Request $request, GalleryFeed $feed)
+    {
+        $data = $request->validate(['media_page' => 'nullable|integer|min:1|max:100000']);
+
+        return response()->view('public.gallery.index', [
+            'gallery' => $feed->page($data['media_page'] ?? 1),
+        ])->header('Cache-Control', 'private, no-store');
+    }
+
     public function index(Request $request, GalleryFeed $feed)
     {
         $data = $request->validate(['media_page' => 'nullable|integer|min:1|max:100000']);

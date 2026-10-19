@@ -75,10 +75,10 @@ class GalleryTest extends TestCase
         Storage::disk('gallery')->assertExists($path);
         $this->assertFalse(Storage::disk('public')->exists($path));
         $this->get(route('gallery.file', $entry))->assertNotFound();
-        $this->get('/publikasi')->assertDontSee($entry->title);
+        $this->get('/publikasi/media')->assertDontSee($entry->title);
         $this->get(route('admin.gallery.file', $entry))->assertOk()->assertHeader('Content-Type', 'image/png');
         $this->put('/admin/gallery/'.$entry->id, $this->data(['status' => 'published']))->assertSessionHasNoErrors();
-        $this->get('/publikasi')->assertSee($entry->title)->assertSee(route('gallery.file', $entry), false);
+        $this->get('/publikasi/media')->assertSee($entry->title)->assertSee(route('gallery.file', $entry), false);
         $response = $this->get(route('gallery.file', $entry))->assertOk()->assertHeader('X-Content-Type-Options', 'nosniff');
         $this->assertStringContainsString('no-store', $response->headers->get('Cache-Control'));
         $this->put('/admin/gallery/'.$entry->id, $this->data(['status' => 'published', 'title' => 'Foto baru', 'media_file' => UploadedFile::fake()->image('new.jpg', 800, 450)]))->assertSessionHasNoErrors();
@@ -101,13 +101,13 @@ class GalleryTest extends TestCase
         $paths = [$entry->file_path, $entry->poster_path];
         $this->get(route('gallery.file', $entry), ['Range' => 'bytes=0-15'])->assertStatus(206)->assertHeader('Content-Length', '16');
         $this->get(route('gallery.poster', $entry))->assertOk();
-        $this->get('/publikasi')->assertSee('--media-ratio:464 / 832', false)->assertDontSee('<video', false);
+        $this->get('/publikasi/media')->assertSee('--media-ratio:464 / 832', false)->assertDontSee('<video', false);
         $this->put('/admin/gallery/'.$entry->id, $this->data(['source' => 'youtube', 'status' => 'published', 'youtube_url' => 'https://youtu.be/M7lc1UVf-VE', 'title' => '<script>bad</script>']))->assertSessionHasNoErrors();
         Storage::disk('gallery')->assertMissing($paths);
         $entry->refresh();
         $this->assertNull($entry->file_path);
         $this->assertSame('M7lc1UVf-VE', $entry->youtube_id);
-        $this->get('/publikasi')->assertSee('&lt;script&gt;bad&lt;/script&gt;', false)->assertDontSee('<script>bad</script>', false);
+        $this->get('/publikasi/media')->assertSee('&lt;script&gt;bad&lt;/script&gt;', false)->assertDontSee('<script>bad</script>', false);
         $this->get(route('gallery.file', $entry))->assertNotFound();
         $this->get(route('gallery.poster', $entry))->assertNotFound();
         $this->put('/admin/gallery/'.$entry->id, $this->data(['source' => 'photo']))->assertSessionHasErrors('media_file');
@@ -137,15 +137,48 @@ class GalleryTest extends TestCase
         $path = 'catalog/brand-videos/11111111-1111-4111-8111-111111111111.mp4';
         Storage::disk('public')->put($path, 'video fixture');
         $brand = Brand::create(['name' => 'Bredel', 'slug' => 'bredel', 'status' => 'published', 'sort_order' => 0, 'video' => ['source' => 'mp4', 'path' => $path, 'width' => 464, 'height' => 832, 'title' => 'Bredel video']]);
-        $this->get('/publikasi')->assertSee('Bredel video')->assertSee(route('brands.video', 'bredel'), false);
+        $this->get('/publikasi/media')->assertSee('Bredel video')->assertSee(route('brands.video', 'bredel'), false);
         $this->assertDatabaseCount('gallery_media', 0);
         $brand->update(['video' => ['source' => 'youtube', 'youtube_id' => 'M7lc1UVf-VE', 'title' => 'Video pengganti']]);
-        $this->get('/publikasi')->assertSee('Video pengganti')->assertDontSee('Bredel video');
+        $this->get('/publikasi/media')->assertSee('Video pengganti')->assertDontSee('Bredel video');
         $brand->update(['status' => 'draft']);
         $this->get('/publikasi/galeri')->assertDontSee('Video pengganti');
         $brand->update(['status' => 'published', 'video' => null]);
-        $this->get('/publikasi')->assertSee('Media belum tersedia.');
+        $this->get('/publikasi/media')->assertSee('Media belum tersedia.');
         Storage::disk('public')->assertExists($path);
+    }
+
+    public function test_existing_poster_fields_update_gallery_without_changing_video_files(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => 'editor']));
+        $this->post('/admin/gallery', $this->data(['source' => 'mp4', 'status' => 'published', 'media_file' => $this->mp4()]))->assertSessionHasNoErrors();
+        $entry = GalleryMedia::sole();
+        $path = $entry->file_path;
+        $bytes = Storage::disk('gallery')->get($path);
+        $this->put('/admin/gallery/'.$entry->id, $this->data(['source' => 'mp4', 'status' => 'published', 'poster' => UploadedFile::fake()->image('poster.jpg')]))->assertSessionHasNoErrors();
+        $entry->refresh();
+        $poster = $entry->poster_path;
+        $this->assertSame($path, $entry->file_path);
+        $this->assertSame($bytes, Storage::disk('gallery')->get($path));
+        $this->assertSame(route('gallery.poster', $entry), app(GalleryFeed::class)->medium($entry)['thumbnail']);
+        $this->put('/admin/gallery/'.$entry->id, $this->data(['source' => 'mp4', 'status' => 'published', 'remove_poster' => 1]))->assertSessionHasNoErrors();
+        Storage::disk('gallery')->assertMissing($poster);
+        Storage::disk('gallery')->assertExists($path);
+
+        $brand = Brand::factory()->create(['status' => 'published']);
+        $route = route('admin.catalog.update', ['brands', $brand->id]);
+        $data = ['name' => $brand->name, 'slug' => $brand->slug, 'status' => 'published', 'sort_order' => 0, 'video_source' => 'mp4'];
+        $this->put($route, $data + ['video_file' => $this->mp4()])->assertSessionHasNoErrors();
+        $video = $brand->fresh()->video;
+        $this->put($route, $data + ['video_poster' => UploadedFile::fake()->image('brand-poster.jpg')])->assertSessionHasNoErrors();
+        $brand->refresh();
+        $this->assertSame($video['path'], $brand->video['path']);
+        $this->assertSame(asset('storage/'.$brand->video['poster']), app(GalleryFeed::class)->brand($brand)['thumbnail']);
+        $this->get('/publikasi/media')->assertSee(asset('storage/'.$brand->video['poster']), false);
+        $this->get('/publikasi/perusahaan')->assertDontSee('data-gallery-item', false);
+        $this->put($route, $data + ['remove_video_poster' => 1])->assertSessionHasNoErrors();
+        Storage::disk('public')->assertExists($video['path']);
+        $this->assertNull(app(GalleryFeed::class)->brand($brand->fresh())['thumbnail']);
     }
 
     public function test_mixed_feed_order_load_more_and_missing_file_fallback(): void
@@ -154,14 +187,19 @@ class GalleryTest extends TestCase
             $this->youtube(['title' => 'Video '.$i, 'created_at' => now()->subMinutes(14 - $i)]);
         }
         $first = $this->youtube(['title' => 'Prioritas manual', 'sort_order' => 0]);
+        $brand = Brand::factory()->create(['status' => 'published', 'sort_order' => 1, 'video' => ['source' => 'youtube', 'youtube_id' => 'M7lc1UVf-VE']]);
         $this->youtube(['title' => 'Private', 'status' => 'draft']);
         $page = app(GalleryFeed::class)->page();
-        $this->assertCount(12, $page['items']);
+        $this->assertCount(8, $page['items']);
         $this->assertSame('gallery-'.$first->id, $page['items']->first()['key']);
+        $this->assertTrue($page['items']->contains('key', 'brand-'.$brand->id));
         $this->assertSame(2, $page['next']);
-        $this->get('/publikasi')->assertSee('Muat Lebih Banyak')->assertDontSee('Private');
+        $this->get('/publikasi/media')->assertSee('Muat Lebih Banyak')->assertDontSee('Private');
         $response = $this->getJson('/publikasi/galeri?media_page=2')->assertOk()->assertJsonPath('next', null);
-        $this->assertSame(3, substr_count($response->json('html'), 'data-gallery-key='));
+        $this->assertSame(8, substr_count($response->json('html'), 'data-gallery-key='));
+        $second = app(GalleryFeed::class)->page(2);
+        $this->assertCount(16, $page['items']->concat($second['items'])->unique('key'));
+        $this->get('/publikasi/media?media_page=2')->assertDontSee('data-gallery-more', false);
         $this->getJson('/publikasi/galeri?media_page=-1')->assertUnprocessable();
         $entry = $this->youtube(['poster_path' => 'media/22222222-2222-4222-8222-222222222222.jpg']);
         $this->assertStringContainsString('i.ytimg.com', app(GalleryFeed::class)->medium($entry)['thumbnail']);
