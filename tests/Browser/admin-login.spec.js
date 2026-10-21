@@ -10,7 +10,7 @@ for (const [width, height] of [[1440, 900], [1024, 768], [768, 1024], [390, 844]
         await expect(page.locator('input:not([type=hidden])')).toHaveCount(2);
         await expect(page.locator('input[name=_token]')).toHaveCount(1);
         await expect(page.locator('form')).toHaveAttribute('action', /\/admin\/login$/);
-        await expect(page.locator('.cms-login-logo')).toHaveAttribute('src', /\/images\/company-logo-footer.png$/);
+        await expect(page.locator('.cms-login-logo')).toHaveAttribute('src', /\/images\/company-logo-footer\.png\?v=6dd1990c40fd$/);
         await expect(page.locator('.cms-login-logo')).toHaveAttribute('alt', 'SMART - Equipment & Parts Solutions');
         const shell = await page.locator('.cms-login-shell').boundingBox();
         const brand = await page.locator('.cms-login-brand').boundingBox();

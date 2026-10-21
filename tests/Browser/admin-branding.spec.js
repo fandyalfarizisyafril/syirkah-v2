@@ -57,6 +57,6 @@ test('admin branding matches the public signature and preserves header actions',
     await publicPage.close();
     await header.getByRole('button', { name: 'Keluar' }).click();
     await expect(page).toHaveURL(/\/admin\/login$/);
-    await expect(page.locator('.cms-login-logo')).toHaveAttribute('src', /\/images\/company-logo-footer.png$/);
+    await expect(page.locator('.cms-login-logo')).toHaveAttribute('src', /\/images\/company-logo-footer\.png\?v=6dd1990c40fd$/);
     expect(errors).toEqual([]);
 });

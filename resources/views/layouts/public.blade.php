@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', $settings['meta_title'])</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/company-logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/company-logo.png') }}?v=20261021">
     <meta name="description" content="@yield('description', $settings['meta_description'])">
     <link rel="canonical" href="{{ url()->current() }}">
     <meta property="og:title" content="@yield('title', $settings['meta_title'])">
@@ -55,7 +55,7 @@
     <div class="container smart-footer-main">
         <div class="smart-footer-brand">
             <a href="{{ route('home') }}" class="smart-footer-logo" aria-label="{{ $settings['company_name'] }}, beranda">
-                <img src="{{ asset('images/company-logo-footer.png') }}" alt="SMART - Equipment & Parts Solutions" width="500" height="500" loading="lazy">
+                <img src="{{ asset('images/company-logo-footer.png') }}?v=6dd1990c40fd" alt="SMART - Equipment & Parts Solutions" width="500" height="500" loading="lazy">
             </a>
             <p class="smart-footer-company">{{ $settings['company_name'] }}</p>
             <p class="smart-footer-tagline">{{ $settings['tagline'] }}</p>

@@ -15,7 +15,7 @@
         <div class="cms-login-streaks" aria-hidden="true"><span></span><span></span><span></span></div>
         <div class="cms-login-identity">
             <span class="cms-login-logo-viewport">
-                <img src="{{ asset('images/company-logo-footer.png') }}" alt="SMART - Equipment & Parts Solutions" width="500" height="500" class="cms-login-logo">
+                <img src="{{ asset('images/company-logo-footer.png') }}?v=6dd1990c40fd" alt="SMART - Equipment & Parts Solutions" width="500" height="500" class="cms-login-logo">
             </span>
         </div>
         <div class="cms-login-welcome">
